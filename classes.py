@@ -1,4 +1,6 @@
 print("hello buddy!")
+import numpy as np
+
 
 
 class Layer():  # Une classe
