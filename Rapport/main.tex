@@ -1,8 +1,56 @@
- 
-\setupbodyfont[pagella]
- 
-\starttext
-Hallo Folke!
+% Set the main language to French
+\mainlanguage[fr]
 
+\setupbodyfont[10pt]
+
+\setupindenting[no]
+
+\setuppagenumbering[state=start, location={fotter,middle}]
+\setupuserpagenumber[state=start]
+
+% Allow for colors
+\setupcolors[state=start]
+
+% ToC and LoF setups
+\setupheadtext[content=Table of contents, figures=List of figures]
+% alternative=c, space to the page number is filled with dots
+
+\setuplist[section]
+   [width=5mm,
+    after={\blank[small]},
+    style=bold,
+    color=red]
+
+\setuplist[subsection]
+   [margin=10mm,
+    width=1.8em]
+
+\setuplist[figure]
+   [distance=-1em,
+    numberstyle=bold,
+    after={\blank[small]}]
+
+\setuphead[subject]
+   [style=\tfb\it,
+    align=middle,
+    after={\blank[1cm]}]
+
+\setuphead[section]
+   [style=\tfb\bf]
+
+\setuphead[subsection]
+   [style=\tfa\bf]
+
+\setupcaption[graphic]
+   [spaceafter=.8cm, spacebefore=1mm]
+
+\starttext
 \input intro.tex
+
+\completecontent
+
+\input 1.tex
+\input 2.tex
+\input 3.tex
+\input conc.tex
 \stoptext
