@@ -198,6 +198,14 @@ utilitydata.structures.sections.collected={
   ["separatorset"]="default",
   ["set"]="all",
  },
+ {
+  ["block"]="bodypart",
+  ["conversionset"]="default",
+  ["language"]="en",
+  ["numbers"]=17,
+  ["separatorset"]="default",
+  ["set"]="all",
+ },
 }
 
 if not utilitydata.structures then utilitydata.structures = { } end
@@ -220,7 +228,7 @@ utilitydata.structures.counters.collected={
   { 0 },
  },
  ["formula"]={
-  { 0, 5 },
+  { 0, 9 },
  },
  ["graphic"]={
   { 0, 0 },
@@ -262,8 +270,8 @@ if not utilitydata.structures.lists then utilitydata.structures.lists = { } end
 
 utilitydata.structures.lists.collected={
  {
-  ["metadata"]=17,
-  ["numberdata"]=19,
+  ["metadata"]=18,
+  ["numberdata"]=20,
   ["references"]={
    ["block"]="bodypart",
    ["internal"]=1,
@@ -276,8 +284,8 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=20,
-  ["numberdata"]=22,
+  ["metadata"]=21,
+  ["numberdata"]=23,
   ["references"]={
    ["block"]="bodypart",
    ["internal"]=2,
@@ -291,8 +299,8 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=23,
-  ["numberdata"]=24,
+  ["metadata"]=24,
+  ["numberdata"]=25,
   ["references"]={
    ["block"]="bodypart",
    ["internal"]=3,
@@ -305,8 +313,8 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=25,
-  ["numberdata"]=26,
+  ["metadata"]=26,
+  ["numberdata"]=27,
   ["references"]={
    ["block"]="bodypart",
    ["internal"]=4,
@@ -319,8 +327,8 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=25,
-  ["numberdata"]=27,
+  ["metadata"]=26,
+  ["numberdata"]=28,
   ["references"]={
    ["block"]="bodypart",
    ["internal"]=5,
@@ -333,8 +341,8 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=25,
-  ["numberdata"]=28,
+  ["metadata"]=26,
+  ["numberdata"]=29,
   ["references"]={
    ["block"]="bodypart",
    ["internal"]=6,
@@ -347,8 +355,8 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=25,
-  ["numberdata"]=29,
+  ["metadata"]=26,
+  ["numberdata"]=30,
   ["references"]={
    ["block"]="bodypart",
    ["internal"]=7,
@@ -361,8 +369,8 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=25,
-  ["numberdata"]=30,
+  ["metadata"]=26,
+  ["numberdata"]=31,
   ["references"]={
    ["block"]="bodypart",
    ["internal"]=8,
@@ -375,8 +383,8 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=25,
-  ["numberdata"]=31,
+  ["metadata"]=26,
+  ["numberdata"]=32,
   ["references"]={
    ["block"]="bodypart",
    ["internal"]=9,
@@ -389,8 +397,8 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=23,
-  ["numberdata"]=32,
+  ["metadata"]=24,
+  ["numberdata"]=33,
   ["references"]={
    ["block"]="bodypart",
    ["internal"]=10,
@@ -403,9 +411,9 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=33,
-  ["numberdata"]=35,
-  ["prefixdata"]=36,
+  ["metadata"]=34,
+  ["numberdata"]=36,
+  ["prefixdata"]=37,
   ["references"]={
    ["internal"]=11,
    ["realpage"]=4,
@@ -415,8 +423,8 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=25,
-  ["numberdata"]=37,
+  ["metadata"]=26,
+  ["numberdata"]=38,
   ["references"]={
    ["block"]="bodypart",
    ["internal"]=12,
@@ -429,9 +437,9 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=38,
-  ["numberdata"]=39,
-  ["prefixdata"]=36,
+  ["metadata"]=39,
+  ["numberdata"]=40,
+  ["prefixdata"]=37,
   ["references"]={
    ["internal"]=13,
    ["realpage"]=6,
@@ -444,8 +452,8 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=40,
-  ["numberdata"]=41,
+  ["metadata"]=41,
+  ["numberdata"]=42,
   ["references"]={
    ["block"]="bodypart",
    ["internal"]=14,
@@ -454,31 +462,93 @@ utilitydata.structures.lists.collected={
   },
   ["titledata"]={
    ["label"]="subsubsection",
-   ["title"]="Multiple channels",
+   ["title"]="Where is the convolution?",
   },
  },
  {
-  ["metadata"]=40,
-  ["numberdata"]=42,
+  ["metadata"]=43,
+  ["numberdata"]=45,
+  ["prefixdata"]=37,
   ["references"]={
-   ["block"]="bodypart",
    ["internal"]=15,
    ["realpage"]=6,
+   ["reference"]="contconv",
+   ["section"]=10,
+   ["view"]="fit",
+  },
+ },
+ {
+  ["metadata"]=43,
+  ["numberdata"]=47,
+  ["prefixdata"]=37,
+  ["references"]={
+   ["internal"]=16,
+   ["realpage"]=6,
+   ["reference"]="discconv",
+   ["section"]=10,
+   ["view"]="fit",
+  },
+ },
+ {
+  ["metadata"]=43,
+  ["numberdata"]=49,
+  ["prefixdata"]=37,
+  ["references"]={
+   ["internal"]=17,
+   ["realpage"]=7,
+   ["reference"]="twodim-discconv",
+   ["section"]=10,
+   ["view"]="fit",
+  },
+ },
+ {
+  ["metadata"]=43,
+  ["numberdata"]=51,
+  ["prefixdata"]=37,
+  ["references"]={
+   ["internal"]=18,
+   ["realpage"]=7,
+   ["reference"]="twodim-discconv-finite",
+   ["section"]=10,
+   ["view"]="fit",
+  },
+ },
+ {
+  ["metadata"]=41,
+  ["numberdata"]=52,
+  ["references"]={
+   ["block"]="bodypart",
+   ["internal"]=19,
+   ["realpage"]=7,
    ["section"]=11,
   },
   ["titledata"]={
    ["label"]="subsubsection",
-   ["title"]="Altering the stride",
+   ["title"]="Multiple channels",
   },
  },
  {
-  ["metadata"]=40,
-  ["numberdata"]=43,
+  ["metadata"]=41,
+  ["numberdata"]=53,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=16,
-   ["realpage"]=6,
+   ["internal"]=20,
+   ["realpage"]=7,
    ["section"]=12,
+  },
+  ["titledata"]={
+   ["label"]="subsubsection",
+   ["title"]="The stride",
+  },
+ },
+ {
+  ["metadata"]=41,
+  ["numberdata"]=54,
+  ["references"]={
+   ["block"]="bodypart",
+   ["internal"]=21,
+   ["realpage"]=7,
+   ["section"]=13,
   },
   ["titledata"]={
    ["label"]="subsubsection",
@@ -486,27 +556,27 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=25,
-  ["numberdata"]=44,
+  ["metadata"]=26,
+  ["numberdata"]=55,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=17,
+   ["internal"]=22,
    ["realpage"]=7,
-   ["section"]=13,
+   ["section"]=14,
   },
   ["titledata"]={
    ["label"]="subsection",
-   ["title"]="The pooling layer",
+   ["title"]="The pooling \\quote {neuron}",
   },
  },
  {
-  ["metadata"]=25,
-  ["numberdata"]=45,
+  ["metadata"]=26,
+  ["numberdata"]=56,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=18,
+   ["internal"]=23,
    ["realpage"]=7,
-   ["section"]=14,
+   ["section"]=15,
   },
   ["titledata"]={
    ["label"]="subsection",
@@ -514,13 +584,13 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=23,
-  ["numberdata"]=46,
+  ["metadata"]=24,
+  ["numberdata"]=57,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=19,
+   ["internal"]=24,
    ["realpage"]=7,
-   ["section"]=15,
+   ["section"]=16,
   },
   ["titledata"]={
    ["label"]="section",
@@ -528,13 +598,13 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=23,
-  ["numberdata"]=47,
+  ["metadata"]=24,
+  ["numberdata"]=58,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=20,
+   ["internal"]=25,
    ["realpage"]=7,
-   ["section"]=16,
+   ["section"]=17,
   },
   ["titledata"]={
    ["label"]="section",
@@ -550,50 +620,50 @@ utilitydata.structures.pages.collected={
  {
   ["block"]="bodypart",
   ["number"]=1,
-  ["numberdata"]=48,
-  ["prefixdata"]=49,
+  ["numberdata"]=59,
+  ["prefixdata"]=60,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=2,
-  ["numberdata"]=48,
-  ["prefixdata"]=49,
+  ["numberdata"]=59,
+  ["prefixdata"]=60,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=3,
-  ["numberdata"]=48,
-  ["prefixdata"]=49,
+  ["numberdata"]=59,
+  ["prefixdata"]=60,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=4,
-  ["numberdata"]=48,
-  ["prefixdata"]=49,
+  ["numberdata"]=59,
+  ["prefixdata"]=60,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=5,
-  ["numberdata"]=48,
-  ["prefixdata"]=49,
+  ["numberdata"]=59,
+  ["prefixdata"]=60,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=6,
-  ["numberdata"]=48,
-  ["prefixdata"]=49,
+  ["numberdata"]=59,
+  ["prefixdata"]=60,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=7,
-  ["numberdata"]=48,
-  ["prefixdata"]=49,
+  ["numberdata"]=59,
+  ["prefixdata"]=60,
   ["state"]="start",
  },
 }
@@ -671,6 +741,7 @@ utilitydata.job.packed={
   { 0, 0, 2, 1, 1 },
   { 0, 0, 2, 1, 2 },
   { 0, 0, 2, 1, 3 },
+  { 0, 0, 2, 1, 4 },
   { 0, 0, 2, 2 },
   { 0, 0, 2, 3 },
   { 0, 0, 3 },
@@ -689,7 +760,7 @@ utilitydata.job.packed={
    ["conversionset"]="default",
    ["hidenumber"]=true,
    ["language"]="en",
-   ["numbers"]=18,
+   ["numbers"]=19,
    ["separatorset"]="default",
    ["set"]="all",
   },
@@ -707,7 +778,7 @@ utilitydata.job.packed={
    ["conversionset"]="default",
    ["hidenumber"]=true,
    ["language"]="en",
-   ["numbers"]=21,
+   ["numbers"]=22,
    ["separatorset"]="default",
    ["set"]="all",
   },
@@ -802,7 +873,7 @@ utilitydata.job.packed={
   {
    ["conversionset"]="formula",
    ["counter"]="formula",
-   ["numbers"]=34,
+   ["numbers"]=35,
   },
   {
    ["connector"]=".",
@@ -827,7 +898,7 @@ utilitydata.job.packed={
   {
    ["conversionset"]="number",
    ["counter"]="figure",
-   ["numbers"]=34,
+   ["numbers"]=35,
   },
   {
    ["catcodes"]=8,
@@ -844,6 +915,37 @@ utilitydata.job.packed={
    ["numbers"]=10,
    ["separatorset"]="default",
    ["set"]="all",
+  },
+  {
+   ["catcodes"]=8,
+   ["coding"]="tex",
+   ["kind"]="formula",
+   ["level"]=5,
+   ["name"]="formula",
+  },
+  { 5 },
+  {
+   ["conversionset"]="formula",
+   ["counter"]="formula",
+   ["numbers"]=44,
+  },
+  { 6 },
+  {
+   ["conversionset"]="formula",
+   ["counter"]="formula",
+   ["numbers"]=46,
+  },
+  { 7 },
+  {
+   ["conversionset"]="formula",
+   ["counter"]="formula",
+   ["numbers"]=48,
+  },
+  { 8 },
+  {
+   ["conversionset"]="formula",
+   ["counter"]="formula",
+   ["numbers"]=50,
   },
   {
    ["block"]="bodypart",
@@ -890,6 +992,14 @@ utilitydata.job.packed={
    ["conversionset"]="default",
    ["language"]="en",
    ["numbers"]=16,
+   ["separatorset"]="default",
+   ["set"]="all",
+  },
+  {
+   ["block"]="bodypart",
+   ["conversionset"]="default",
+   ["language"]="en",
+   ["numbers"]=17,
    ["separatorset"]="default",
    ["set"]="all",
   },

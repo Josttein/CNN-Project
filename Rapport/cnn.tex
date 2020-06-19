@@ -117,6 +117,42 @@ F(i',j') = {\rm activation} \left( \sum_{i = 1}^{vM} \sum_{j = 1}^{hM} \Bigl( K(
 \stopcombination
 \stopplacefigure
 
+\startsubsubsection[title=Where is the convolution?]
+In mathematics, the convolution operation is denoted by $*$ and the convolution $s$ of two functions $k$ and $m$ (itself a function) is defined as
+
+\startplaceformula[reference=contconv]
+\startformula
+s(t) = (k * m)(t) = \int_{{-}\infty}^{{+}\infty} k(x) \cdot m(t-x) \, {\rm d}x
+\stopformula
+\stopplaceformula
+\startplaceformula[reference=discconv]
+\startformula
+s(i) = (k * m)(i) = \sum_{j = {-}\infty}^{{+}\infty} k(j) \cdot m(i-j)
+\stopformula
+\stopplaceformula
+
+For continuous (eq.~\in[contconv]) and discrete (eq.~\in[discconv]) functions respectivly.
+On a computer, we are in practice always working with discrete convolutions so for us the convolution of interest is eq.~\in[discconv].
+If we make the functions $k$ and $m$ two dimentional---they take two indexes as an input---their convolution also becomes two dimentional.
+
+\startplaceformula[reference=twodim-discconv]
+\startformula
+s(\color[red]{i}, \color[blue]{i}) = (k * m)(\color[red]{i}, \color[blue]{i}) = \sum_{\color[red]{j} = {-}\infty}^{{+}\infty} \sum_{\color[blue]{j} = {-}\infty}^{{+}\infty} k(\color[red]{j}, \color[blue]{j}) \cdot m(\color[red]{i}-\color[red]{j}, \color[blue]{i} - \color[blue]{j})
+\stopformula
+\stopplaceformula
+
+An assumption that we make when working with finite objects on a computer, is that the parts of the object that does not exists are zero.
+Meaning that a finite array can be thought of as an infinte array where all the entries outside of the corresponding finite array are zero.
+Pluging such an array into our convolution operation reduces the infinite summation to a finite one.
+
+\startplaceformula[reference=twodim-discconv-finite]
+\startformula
+s(\color[red]{i}, \color[blue]{i}) = (k * m)(\color[red]{i}, \color[blue]{i}) = \sum_{\color[red]{j} = 1}^{v} \sum_{\color[blue]{j} = 1}^{h} k(\color[red]{j}, \color[blue]{j}) \cdot m(\color[red]{i}-\color[red]{j}, \color[blue]{i} - \color[blue]{j})
+\stopformula
+\stopplaceformula
+
+\stopsubsubsection
+
 \startsubsubsection[title=Multiple channels]
 Let us now add some channels to this neuron.
 We will denote the number of channels byb $nC$.
@@ -131,14 +167,16 @@ F(i',j') = {\rm activation} \left( \sum_{i = 1}^{vM} \sum_{j = 1}^{hM} \left( \s
 \stopplaceformula
 \stopsubsubsection
 
-\startsubsubsection[title=Altering the stride]
+\startsubsubsection[title=The stride]
 What the stride is and the effects of altering it.
 \stopsubsubsection
 
 \startsubsubsection[title=Zero padding]
 \stopsubsubsection
 
-\startsubsection[title=The pooling layer]
+
+
+\startsubsection[title=The pooling \quote{neuron}]
 {\em Downsampling} and purpose of downsampling.
 Noise reduction and computational reduction.
 \stopsubsection
