@@ -220,7 +220,7 @@ utilitydata.structures.counters.collected={
   { 0 },
  },
  ["formula"]={
-  { 0, 0 },
+  { 0, 2 },
  },
  ["graphic"]={
   { 0, 0 },
@@ -413,7 +413,7 @@ utilitydata.structures.lists.collected={
   },
   ["titledata"]={
    ["label"]="subsection",
-   ["title"]="The convolutional layer",
+   ["title"]="The convolutional neuron",
   },
  },
  {
@@ -493,7 +493,7 @@ utilitydata.structures.lists.collected={
   ["references"]={
    ["block"]="bodypart",
    ["internal"]=17,
-   ["realpage"]=6,
+   ["realpage"]=7,
    ["section"]=14,
   },
   ["titledata"]={
@@ -512,7 +512,7 @@ utilitydata.structures.lists.collected={
   },
   ["titledata"]={
    ["label"]="section",
-   ["title"]="Implementation",
+   ["title"]="Python Implementation",
   },
  },
  {

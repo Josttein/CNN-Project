@@ -8,7 +8,7 @@ Otherwise the neuron does not fire.
 In a classical multilayer percepetron network this is implemented in the following way.
 Each neuron contains a vector of weights, a bias and an activation function.
 The input to the neuron---which must be a vector of equal length to the neuron's own weight vector---is combined with the neuron's weight vector using the dot product.
-The neuron's bias is added onto the result which in turn is passed to the activation function which determines if the neuron \quote{fires} or not.
+The neuron's bias is added onto the result which in turn is passed to the activation function which finally determines if the neuron \quote{fires} or not.
 
 Using several layers of neurons one can achive quite remarkable results using this implementation of a neural network.
 However, a multilayer percepetron is inherently limited.
@@ -21,49 +21,78 @@ This procedure eliminates some of the pixel relations in the image.
 To deduce this, consider the process of reconstructing a flattend image.
 If the image's dimentions prior to being flattend is not known, it is impossible, without the aid of pattern recognition, to reconstruct the image and be sure the reconstruction is equal to the original image.
 
-To remedy this problem, there is a simple solution.
+To fix this problem, we can use a \quote{simple} solution.
 Instead of having the neuron contain a vector of weights, let it have an array of weights.
-Changing the neuron's vector of weights into an array of weights also necessitates a change in the operation used to combine the weights with the input (which in a multilayer percepetron is the dot product).
+If we change the neuron's vector of weights into an array, we also need to change the operation that is used to combine the weights with the input (which in a neuron of a multilayer percepetron is the dot product).
 There are two things to consider here.
-The purpose of the weights is to look for features or {\em patterns} in the input and the operation must reflect this purpose of the weights.
-Furthermore, the result of the operation should be a single number which, in a sense, representes the neurons \quote{initial} confidence that the feature is looking for is present in the input.
+The purpose of the weights is to look for features or {\em patterns} in the input---by emphasizing or deemphasizing certain aspects---and the operation must reflect this purpose of the weights.
+Furthermore, the result of the operation should be a single number which, in a sense, representes the neurons \quote{initial} confidence that the feature it is looking for is present in the input.
 The operation which does both of these things is the {\em Hadamard product}.
 The Hadamard product can be viewed as an extension of the dot product to two dimentional arrays.
 It combines two arrays---of the same dimentions---by multiplying corresponding entries together and summing the results.
 Which is precisly what the dot product does with two vectors.
 
-We can even take this a step further to allow the neuron to treat inputs of not only a single two dimentional array but several two dimentional arrays.
+The Hadamard product (${\rm Hp}$) of two matricies $A,B$ with entries $a_{i,j},b_{i,j}$ of equal dimentions is
+\startplaceformula
+\startformula
+{\rm Hp}(A,B) = \sum_{j} \sum_{i} a_{i,j} \cdot b_{i,j}
+\stopformula
+\stopplaceformula
+
+\indentation
+Another thing we need to take into account is the dimentions of our new weight array.
+If we were to proceed analogically to how a multilayer percepetron works, the array should have the same size as the input to the neuron.
+\quote{Connecting} each value in the input to an individual weight in the neuron.
+But this approach means that each neuron, in principle, looks for a single feature in the entire input at once.
+A more refined approach, is to let the neuron's weight array be smaller in size than its input.
+Instead of applying the weight array (using the Hadamard product) to the entire input at once, we apply it (still using the Hadamard product) to portions of the input seperately.
+Intuitivly, this means that the weight arrays are \quote{scanned} across the entire input image.
+This allows the neuron to be trained to look for a single feature, such as a \quote{sharp edge} or a \quote{round corner}, in multiple areas of the input.
+The result of this method will no longer be a single number representing how \quote{initialy} confident the neuron is that a particular feature is present in the input {\em\bf as a whole}.
+Rather, the result becomes a {\em feature map}.
+Another two dimentional array which representes how \quote{initialy} confident the neuron is that a particular feature is present in {\em\bf specific locations} of the input.
+
+Going one step further, we can allow the neuron to treat inputs of not only a single two dimentional array, but several two dimentional arrays.
 A typical example where the input would consists of several interlinked two dimentional arrays is RGB images.
 An RGB image consists of three arrays of pixel values (numbers) that desribe how red, green and blue an image is in each pixel.
-The number of two dimentional arrays present in the input is known as the number of {\em channels} the input has.
+The number of interlinked two dimentional arrays present in the input, is known as the number of {\em channels} that the input has.
 In order for our neuron to treat inputs with more than one channel we let the neuron have as many channels as the input.
-That is to say, wwe equip the neuron with as many weight arrays as there are channels in the input.
-The weight array in each channel is combined with the inputs array in the same channel using the Hadamard product.
-The results of these individual Hadamard products is then combined to form the \quote{final} Hadamard product---the neurons \quote{initial} confidence that the feature is looking for is present in the input.
+That is to say, we equip the neuron with a weight array for each channel in the input.
+For each channel the weight arrays are applied to the input (using Hadamard) and the result in each channel is combined to form a final single feature map.
 
 A neural network which makes use of layers of neurons of this kind, is a convolutional neural network.
-Why it is called a convolutional neural network will be explained in the next section.
+The multi-channel two dimentional arrays of weights inside each such neuron is called the neuron's {\em kernel} or {\em filter}.
+Why are these neural networks called convolutional neural networks?
+That will be explained in the next section.
+
+\startsubsection[title=The convolutional neuron]
+Let us start this section with a simple convolutional neuron.
+The neuron's kernel consists of a single weight matrix (one channel), some bias and some activation function.
+Consequently, the input that this neuron accepts is any one channel two dimentional array of size greater than its kernel.
+The process of calcuating the neurons \quote{initial} confidence that the feature it is looking for is present in the input is illustrated by Figure~\in[conv-operation] on page~\at[conv-operation].
+Figure~\in[conv-operation] illustrates how the kernel \quote{scans} the entire input array to compute the feature map.
+The entries in the feature map are then summed to 
+
+Using this figure and the introduction to this section we can construct the formula for the feature map.
+The feature map, kernel and input is (for now) all two dimentional arrays 
 
 
-Using this slightly more complicated implementation of a neuron, the neural network is able to treat inputs of one more two dimentional arrays directly (for each array present in the )
-A network which contains layers of these kinds of neurons, is a convolutional neural network.
+The feature map is a two dimentional array which we will denote $F$, the individual entries are dentoed $f(i,j)$ where $i$ is the row and $j$ the column.
+The kernel is also a two dimentional array which we will denote $K$, the individual entries are denoted $K(i,j)$ where $c$ is the channel.
+The input is, same as the kernel, a multidimensional array which we will denote $M$, the individual entries are denoted $M(i,j,c)$.
+The horisontal lengths and vertical lengths of the kernel and input will be denoted using a $h$ and $v$ prefixes (e.g.\ $hK$ is the horisontal length of the kernel).
+A typical MINST image of dimentions $28{\rm x}28$ will have $hM = vM = 28$.
+The number of channels in the input and kernel will be dentoed by $nC$.
+The bias term is denoted $b$.
+As we can see from Figure~\in[conv-operation], the formula for an individual entry in the feature map is
+
+\startplaceformula
+\startformula
+f(i',j') = \sum_{c = 1}^{nC} \sum_{j = 1}^{vK} \sum_{i = 1}^{hK} \Bigl( K(i,j,c) \cdot M(i' + i,j' + j, c) \Bigr) + b
+\stopformula
+\stopplaceformula
 
 
-A convolutional neural network implements the very same idea, a neuron which looks for features and decides to fire, but with a more complicated implementation.
-The benefit of this more complicated implementation is that it allows the network to preserve spatial information in its input.
-Consider again a normal multilayer percepetron.
-These networks work with inputs that are vectors of numbers.
-In order for these networks to accept inputs that are multi-dimentional arrays, rather than one-dimentional vectors, the input first has to be \quote{flattened} before it is passed on to the network.
-Using the MINST database of handwritten digits stored as $28{\rm x}28$ grayscale images as an example, for a multilayer percepetron to process such an input the image first has to be flattend to a $28 \cdot 28=784$ long vector.
-
-A \quote{convolutional neuron} does not have this limitation, it can treat a multidimensional input directly.
-The idea is to replace the simple neuron of a multilayer percepetron---made up of a weight vector and a bias---with a \quote{kernel} or \quote{filter}.
-The kernel contains a multidimensional array of weights, instead of a simple vector, and a bias.
-Instead of \quote{looking} at a vector of inputs, the kernel can look at an array of inputs which allows it to \quote{look} for features that can only be properly described by a full array rather than a flattened vector.
-Necessarly, such a \quote{convolutional neuron} requires a different mathematical operation to do the \quote{looking for feature} job of the neuron.
-The operation that is used is a convolution hence the name, convolutional neural network.
-
-\startsubsection[title=The convolutional layer]
 A convolutional layer consists of three parts: the input (a multidimensional array), the kernel (also a multidimensional array with a bias term) and the output which is called a {\em feature map}.
 The layers forward operation is
 \startformula
@@ -95,19 +124,7 @@ In the case where the input has multiple channels---as is the case in Figure~\in
 The kernel has to an have equal amount of channels as its input.
 Each channel is scanned seperately and their values are added together.
 
-Let's us derive the proper mathematical formulation for calculating the feature map.
-The feature map is a two dimentional array which we will denote $F$, the individual entries are dentoed $f(i,j)$ where $i$ is the row and $j$ the column.
-The kernel is a multidimensional array which we will denote $K$, the individual entries are denoted $K(i,j,c)$ where $c$ is the channel.
-The input is, same as the kernel, a multidimensional array which we will denote $M$, the individual entries are denoted $M(i,j,c)$.
-The horisontal lengths and vertical lengths of the kernel and input will be denoted using a $h$ and $v$ prefixes (e.g.\ $hK$ is the horisontal length of the kernel).
-A typical MINST image of dimentions $28{\rm x}28$ will have $hM = vM = 28$.
-The number of channels in the input and kernel will be dentoed by $nC$.
-The bias term is denoted $b$.
-As we can see from Figure~\in[conv-operation], the formula for an individual entry in the feature map is
 
-\startformula
-f(i',j') = \sum_{c = 1}^{nC} \sum_{j = 1}^{vK} \sum_{i = 1}^{hK} \Bigl( K(i,j,c) \cdot M(i' + i,j' + j, c) \Bigr) + b
-\stopformula
 \stopsubsection
 
 Go on \dots
