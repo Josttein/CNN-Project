@@ -33,7 +33,7 @@ It combines two arrays---of the same dimentions---by multiplying corresponding e
 Which is precisly what the dot product does with two vectors.
 
 The Hadamard product (${\rm Hp}$) of two matricies $A,B$ with entries $a_{i,j},b_{i,j}$ of equal dimentions is
-\startplaceformula
+\startplaceformula[reference=hdprod]
 \startformula
 {\rm Hp}(A,B) = \sum_{j} \sum_{i} a_{i,j} \cdot b_{i,j}
 \stopformula
@@ -71,36 +71,35 @@ The neuron's kernel consists of a single weight matrix (one channel), some bias 
 Consequently, the input that this neuron accepts is any one channel two dimentional array of size greater than its kernel.
 The process of calcuating the neurons \quote{initial} confidence that the feature it is looking for is present in the input is illustrated by Figure~\in[conv-operation] on page~\at[conv-operation].
 Figure~\in[conv-operation] illustrates how the kernel \quote{scans} the entire input array to compute the feature map.
-The entries in the feature map are then summed to 
-
-Using this figure and the introduction to this section we can construct the formula for the feature map.
-The feature map, kernel and input is (for now) all two dimentional arrays 
-
-
-The feature map is a two dimentional array which we will denote $F$, the individual entries are dentoed $f(i,j)$ where $i$ is the row and $j$ the column.
-The kernel is also a two dimentional array which we will denote $K$, the individual entries are denoted $K(i,j)$ where $c$ is the channel.
-The input is, same as the kernel, a multidimensional array which we will denote $M$, the individual entries are denoted $M(i,j,c)$.
+Let us construct the general formula for this feature map.
+We will denote the feature map, kernel and input as $F$, $K$ and $M$ respectivly.
+They are two dimentional arrays and their individual entries will be denoted as $F(i,j)$ where $i$ is the row number and $j$ the column (e.g.\ $M(2,3)$ is the entry in the second row, third column of $M$).
 The horisontal lengths and vertical lengths of the kernel and input will be denoted using a $h$ and $v$ prefixes (e.g.\ $hK$ is the horisontal length of the kernel).
-A typical MINST image of dimentions $28{\rm x}28$ will have $hM = vM = 28$.
-The number of channels in the input and kernel will be dentoed by $nC$.
-The bias term is denoted $b$.
-As we can see from Figure~\in[conv-operation], the formula for an individual entry in the feature map is
+A typical MNIST image of dimentions $28{\rm x}28$ as the input, will have $hM = vM = 28$.
+The entries in the inital $\color[red]{F}$ are produced by applying the Hadamard product (eq.~\in[hdprod]) to each area of dimentions $hK{\rm x}vK$.
+Thus the entry at row $i'$ and column $j'$ is
 
 \startplaceformula
 \startformula
-f(i',j') = \sum_{c = 1}^{nC} \sum_{j = 1}^{vK} \sum_{i = 1}^{hK} \Bigl( K(i,j,c) \cdot M(i' + i,j' + j, c) \Bigr) + b
+\color[red]{F}(i',j') = \sum_{i = 1}^{vM} \sum_{j = 1}^{hM} K(i,j) \cdot M(i' + i, j + j')
 \stopformula
 \stopplaceformula
 
+If we add a bias $b$ to this filter, the formula becomes
 
-A convolutional layer consists of three parts: the input (a multidimensional array), the kernel (also a multidimensional array with a bias term) and the output which is called a {\em feature map}.
-The layers forward operation is
+\startplaceformula
 \startformula
-{\rm feature\ map} = {\rm Convolution}\,({\rm input}, {\rm kernel}) + {\rm bias}
+\color[red]{F}(i',j') = \sum_{i = 1}^{vM} \sum_{j = 1}^{hM} \Bigl( K(i,j) \cdot M(i' + i, j + j') + b \Bigr)
 \stopformula
-Figure~\in[conv-operation] on page~\at[conv-operation] illustrates how the feature map is calculated using the kernel and a input.
-The kernel \quote{scans} the input and produces a number based upon how confident it is that a certain feature is present at the area it is looking at.
-The bias is added onto this number which produces the final number placed in the feature map.
+\stopplaceformula
+
+Lastly, the final output feature map $F$ of the filter is produced by sending all of these entries through an activation function.
+
+\startplaceformula
+\startformula
+F(i',j') = {\rm activation} \left( \sum_{i = 1}^{vM} \sum_{j = 1}^{hM} \Bigl( K(i,j) \cdot M(i' + i, j + j') + b \Bigr) \right)
+\stopformula
+\stopplaceformula
 
 \startplacefigure[reference=conv-operation,
                    title={The basic forward operation of a convolutional layer},
@@ -118,19 +117,19 @@ The bias is added onto this number which produces the final number placed in the
 \stopcombination
 \stopplacefigure
 
+\startsubsubsection[title=Multiple channels]
+Let us now add some channels to this neuron.
+We will denote the number of channels byb $nC$.
+The input and kernel are now multi-channel arrays, their individual entries will be denoted as $K(i,j,c)$.
+We have to add the contribution of each channel to the final feature map but we only add the bias once.
+Which means that we end up with the following formula
 
-
-In the case where the input has multiple channels---as is the case in Figure~\in[conv-operation]---each input is a sequence of arrays.
-The kernel has to an have equal amount of channels as its input.
-Each channel is scanned seperately and their values are added together.
-
-
-\stopsubsection
-
-Go on \dots
-
-\startsubsection[title=Multiple channels]
-\stopsubsection
+\startplaceformula
+\startformula
+F(i',j') = {\rm activation} \left( \sum_{i = 1}^{vM} \sum_{j = 1}^{hM} \left( \sum_{c = 1}^{nC} \Bigl( K(i,j,c) \cdot M(i' + i, j + j',c) \right) + b \right)
+\stopformula
+\stopplaceformula
+\stopsubsubsection
 
 \startsubsubsection[title=Altering the stride]
 What the stride is and the effects of altering it.
