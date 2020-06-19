@@ -1,0 +1,72 @@
+\startsection[title=Classical Neural Networks ({\small Multilayer Perceptron})]
+NN can be used for solving a wide array of problems in computer science, arguably the most common of which lies in computer vision.
+ As such, for the purpose of demonstration, we will explain the structural motivation of a typical NN, the Multi-Layered Perceptron (MLP), in the context of computer vision.  
+
+Say for instance you have an image containing an animal and you want to identify what animal it is, or to classify the image using a NN.
+The network itself can then be considered a function with a number of inputs equal to the number of pixels in the image times three in the case of an RGB.
+The number of outputs is in this case the number of animal types.
+This is obviously an extremely complicated function and finding the exact function is near impossible.
+A more intelligent approach is to approximate f with composition of several easily computed functions, such as linear functions (affine) (Figure 1).
+The structured is loosely based on neuroscience, hence neurons, weights, biases.
+A simple network might consist of two such layers with Y number of neurons each.
+This means (Y) number of adjustable parameters! With the structure defined, we have yet to determine the parameters.
+This is where the training phase enters.  
+
+\startsubsection[title=Training phase]
+The idea is simple. We start out with a large dataset with classified examples, called a training set and we adjust our network to fit these data.
+The hope is then that the network will be able to classify new images with these same parameters.
+In order to quantify the performance of the NN during the training phase, we introduce a cost function.
+Knowing the desired output with the corresponding input, we look to minimize this cost function by adjusting the parameters of the NN i.e. its weights and biases.
+This can be seen as an optimization problem with thousands of inputs (in our case, Y weights and biases).
+For demonstration purposes, we will explain the concept of gradient descent, an intuitive and common optimization algorithm.  
+\stopsubsection
+
+\startsubsection[title=Optimization using gradient descent]
+We have a function f that we want to minimize while avoiding calculating all its possible values.
+The gradient of f is an operation that tells us which inputs to adjust and by what weight to adjust them in order to increase f by as much as possible in a given point.
+Visually, it can be considered the direction in the input space that increases the output the most.
+In our case, we want to decrease f by as much as possible so, assuming f is continuous, we take the negative value of the gradient.
+As such, the gradient descent algorithm consists of, at each iteration, calculating f and gradf, adjusting the input by “stepping in the direction of gradf” (Figure 2) and repeating until we have found a local minimum or until the value of f is sufficiently low.  
+
+In the context of training a neural network, we have yet to introduce a way to calculate this crucial gradient of the cost function.
+To do so, we first need to determine a mathematical expression of the neural network itself.
+In fact, the network typically consists of more than just linear functions. 
+\stopsubsection
+ 
+
+\startsubsection[title=Activation function] 
+There are a few different motivations behind an activation function.
+Firstly, it introduces non-linearity to a problem that is manifestly not linear.
+For optimization purposes, we also want this function to be continuous.
+Better still if we know the expression of its derivate.
+Both the sigmoid function defined as _ and the arctan function have the desired properties, though the simple ReLU (Figure 3) is shown to be more efficient for optimization (source) and thus more common in practice. 
+\stopsubsection
+
+\startsubsection[title=Softmax, loss and cost function ]
+Before evaluating a loss function, we transform the output layer in a way that their values are positive and their sum is equal to 1.
+In this way, each value in the output layer can be interpreted as the probability that a given input is classified as such.
+While in the training phase, we obviously know the desired output to each input, thus we want that specific “neuron” to have a value close to 1, and all the others to be close to 0.
+The loss function, which quantifies “how close” the network’s guess is to a given output, can have different definitions depending on the problem.
+A common loss function is the so called ilogit defined as _ .
+In order to quantify how well the network performs on the entire training set, we want to evaluate the loss function on each data-input.
+The cost function can then be defined as _.
+Or the average of losses.
+\stopsubsection
+
+\startsubsection[title=Forward propagation]
+We now have an expression for each component in the neural network.
+Let’s see how they are assembled in the forward propagation (Figure 4).
+\stopsubsection
+ 
+\startsubsection[title=Backward propogation]
+Backward propagation, finding the gradient. 
+As previously mentioned, the NN can be seen as a composition of functions of several functions of which we can easily find the derivate.
+Intuitively, in order to find the gradient of the cost function with respect to the weights and biases, we can just apply the chain rule (Figure 5).
+As we can see, the output layer is dependent on its preceding layer, weights and biases, which, in turn, depends on the previous parameters.
+This creates a cascade of gradients calculated from the output- to the input layer, hence the name backward propagation.  
+
+After iterating over the training set, we now have the gradients needed for the optimization algorithm, which in turn allows us to adjust the weights and biases in order to, iteration by iteration, reach a local minimum.
+In practice, this approach performs relatively well, though there are improvements to be made.
+In the following chapters, we will examine how convolutional neural networks differs from the classic MLP. 
+\stopsubsection
+\stopsection

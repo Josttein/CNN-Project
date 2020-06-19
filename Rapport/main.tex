@@ -1,9 +1,9 @@
 % Set the main language to French
-\mainlanguage[fr]
+\mainlanguage[en]
 
 \setupbodyfont[10pt]
 
-\setupindenting[no]
+\setupindenting[yes, medium]
 
 \setuppagenumbering[state=start, location={fotter,middle}]
 \setupuserpagenumber[state=start]
@@ -12,7 +12,7 @@
 \setupcolors[state=start]
 
 % ToC and LoF setups
-\setupheadtext[content=Table of contents, figures=List of figures]
+\setupheadtext[content=Table of contents]
 % alternative=c, space to the page number is filled with dots
 
 \setuplist[section]
@@ -25,10 +25,9 @@
    [margin=10mm,
     width=1.8em]
 
-\setuplist[figure]
-   [distance=-1em,
-    numberstyle=bold,
-    after={\blank[small]}]
+\setuplist[subsubsection]
+   [margin=15mm,
+    width=2.8em]
 
 \setuphead[subject]
    [style=\tfb\it,
@@ -41,16 +40,17 @@
 \setuphead[subsection]
    [style=\tfa\bf]
 
-\setupcaption[graphic]
-   [spaceafter=.8cm, spacebefore=1mm]
+\setuphead[subsubsection]
+   [style=\tf\bf,
+    alternative=paragraph]
 
 \starttext
 \input intro.tex
 
-\completecontent
+\completecontent[alternative=c]
 
-\input 1.tex
-\input 2.tex
-\input 3.tex
+\input nn.tex
+\input cnn.tex
+\input imp.tex
 \input conc.tex
 \stoptext
