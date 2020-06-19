@@ -69,35 +69,51 @@ That will be explained in the next section.
 Let us start this section with a simple convolutional neuron.
 The neuron's kernel consists of a single weight matrix (one channel), some bias and some activation function.
 Consequently, the input that this neuron accepts is any one channel two dimentional array of size greater than its kernel.
-The process of calcuating the neurons \quote{initial} confidence that the feature it is looking for is present in the input is illustrated by Figure~\in[conv-operation] on page~\at[conv-operation].
-Figure~\in[conv-operation] illustrates how the kernel \quote{scans} the entire input array to compute the feature map.
-Let us construct the general formula for this feature map.
-We will denote the feature map, kernel and input as $F$, $K$ and $M$ respectivly.
-They are two dimentional arrays and their individual entries will be denoted as $F(i,j)$ where $i$ is the row number and $j$ the column (e.g.\ $M(2,3)$ is the entry in the second row, third column of $M$).
-The horisontal lengths and vertical lengths of the kernel and input will be denoted using a $h$ and $v$ prefixes (e.g.\ $hK$ is the horisontal length of the kernel).
-A typical MNIST image of dimentions $28{\rm x}28$ as the input, will have $hM = vM = 28$.
-The entries in the inital $\color[red]{F}$ are produced by applying the Hadamard product (eq.~\in[hdprod]) to each area of dimentions $hK{\rm x}vK$.
-Thus the entry at row $i'$ and column $j'$ is
 
-\startplaceformula
+The process of calcuating the neurons \quote{initial} confidence that the feature it is looking for is present in the input, is illustrated by Figure~\in[conv-operation] on page~\at[conv-operation].
+Figure~\in[conv-operation] shows how the kernel \quote{scans} the entire input array to compute the feature map.
+Let us construct the general formula for this feature map.
+
+We will denote the feature map, kernel and input as $F$, $K$ and $M$ respectivly.
+They are two dimentional arrays and their individual entries will be denoted as $F(i,j)$ where $i$ is the row index and $j$ the column index.
+The indexes will all start at zero (e.g.\ $M(1,2)$ is the entry in the second row, third column of $M$. $M(0,0)$ is the {\em first} entry).
+Horisontal and vertical lengths of arrays will be denoted by $h$ and $v$ with the associated array as a subscript (e.g.\ $h_K$ is the horisontal length of the kernel).
+A typical MNIST image of dimentions $28{\rm x}28$ as the input, will have $h_M = v_M = 28$, its indexes will range in $[0 \, .. \, v_M - 1] \times [0 \, .. \, h_M - 1]$.
+
+Let us say that the kernel scans its input one column or one row at a time.
+In which case, the output feature map will have dimentions
+
+\startplaceformula[reference=dimen-feature-1]
 \startformula
-\color[red]{F}(i',j') = \sum_{i = 1}^{vM} \sum_{j = 1}^{hM} K(i,j) \cdot M(i' + i, j + j')
+h_F = h_M - h_K + 1
+\stopformula
+\startformula
+v_F = v_M - v_K + 1
+\stopformula
+\stopplaceformula
+
+The entries in the inital $F^*$ (before activation) are produced by applying the Hadamard product (Eq.~(\in[hdprod])) to each area of dimentions $h_K\,{\rm x}\,v_K$ in the input.
+Thus the entry at row $\color[red]{i} \in [0 \, .. \, v_F - 1]$ and column $\color[red]{j} \in [0 \, .. \, h_F - 1]$ is computed as
+
+\startplaceformula[reference=devel-feature-1]
+\startformula
+F^*(\color[red]{i},\color[red]{j}) = \sum_{\color[blue]{i} = 0}^{v_K - 1} \sum_{\color[blue]{j} = 0}^{h_K - 1} K(\color[blue]{i},\color[blue]{j}) \cdot M(\color[red]{i} + \color[blue]{i}, \color[red]{j} + \color[blue]{j})
 \stopformula
 \stopplaceformula
 
 If we add a bias $b$ to this filter, the formula becomes
 
-\startplaceformula
+\startplaceformula[reference=devel-feature-2]
 \startformula
-\color[red]{F}(i',j') = \sum_{i = 1}^{vM} \sum_{j = 1}^{hM} \Bigl( K(i,j) \cdot M(i' + i, j + j') + b \Bigr)
+F^*(\color[red]{i},\color[red]{j}) = \sum_{\color[blue]{i} = 0}^{v_K - 1} \sum_{\color[blue]{j} = 0}^{h_M - 1} \Bigl( K(\color[blue]{i},\color[blue]{j}) \cdot M(\color[red]{i} + \color[blue]{i}, \color[red]{j} + \color[blue]{j}) + b \Bigr)
 \stopformula
 \stopplaceformula
 
-Lastly, the final output feature map $F$ of the filter is produced by sending all of these entries through an activation function.
+Lastly, the final output feature map $(F)$ of the filter is produced by sending all of these entries through an activation function (ReLU or sigmoid in practice).
 
-\startplaceformula
+\startplaceformula[reference=devel-feature-3]
 \startformula
-F(i',j') = {\rm activation} \left( \sum_{i = 1}^{vM} \sum_{j = 1}^{hM} \Bigl( K(i,j) \cdot M(i' + i, j + j') + b \Bigr) \right)
+F(\color[red]{i},\color[red]{j}) = {\rm activation} \left( \sum_{\color[blue]{i} = 0}^{v_K - 1} \sum_{\color[blue]{j} = 0}^{h_M - 1} \Bigl( K(\color[blue]{i},\color[blue]{j}) \cdot M(\color[red]{i} + \color[blue]{i}, \color[red]{j} + \color[blue]{j}) + b \Bigr) \right)
 \stopformula
 \stopplaceformula
 
@@ -118,51 +134,99 @@ F(i',j') = {\rm activation} \left( \sum_{i = 1}^{vM} \sum_{j = 1}^{hM} \Bigl( K(
 \stopplacefigure
 
 \startsubsubsection[title=Where is the convolution?]
-In mathematics, the convolution operation is denoted by $*$ and the convolution $s$ of two functions $k$ and $m$ (itself a function) is defined as
+In mathematics, the convolution operation is denoted by $*$ and the convolution $s$ (itself a function) of two functions $k$ and $m$ is defined as
 
-\startplaceformula[reference=contconv]
+\startplaceformula[reference=cont-conv]
 \startformula
 s(t) = (k * m)(t) = \int_{{-}\infty}^{{+}\infty} k(x) \cdot m(t-x) \, {\rm d}x
 \stopformula
 \stopplaceformula
-\startplaceformula[reference=discconv]
+\startplaceformula[reference=disc-conv]
 \startformula
-s(i) = (k * m)(i) = \sum_{j = {-}\infty}^{{+}\infty} k(j) \cdot m(i-j)
+s(\color[red]{i}) = (k * m)(\color[red]{i}) = \sum_{\color[blue]{i} = {-}\infty}^{{+}\infty} k(\color[blue]{i}) \cdot m(\color[red]{i}-\color[blue]{i})
 \stopformula
 \stopplaceformula
 
-For continuous (eq.~\in[contconv]) and discrete (eq.~\in[discconv]) functions respectivly.
-On a computer, we are in practice always working with discrete convolutions so for us the convolution of interest is eq.~\in[discconv].
-If we make the functions $k$ and $m$ two dimentional---they take two indexes as an input---their convolution also becomes two dimentional.
+For continuous (Eq.~(\in[cont-conv])) and discrete (Eq.~(\in[disc-conv])) functions respectivly.
+On a computer, we are in practice always working with discrete convolutions so for us the convolution of interest is Eq.~(\in[disc-conv]).
+If we make the functions $k$ and $m$ two dimentional---they take two arguments as an input---their convolution also becomes two dimentional.
 
-\startplaceformula[reference=twodim-discconv]
+\startplaceformula[reference=twodim-disc-conv]
 \startformula
-s(\color[red]{i}, \color[blue]{i}) = (k * m)(\color[red]{i}, \color[blue]{i}) = \sum_{\color[red]{j} = {-}\infty}^{{+}\infty} \sum_{\color[blue]{j} = {-}\infty}^{{+}\infty} k(\color[red]{j}, \color[blue]{j}) \cdot m(\color[red]{i}-\color[red]{j}, \color[blue]{i} - \color[blue]{j})
+s(\color[red]{i}, \color[red]{j}) = (k * m)(\color[red]{i}, \color[red]{j}) = \sum_{\color[blue]{i} = {-}\infty}^{{+}\infty} \sum_{\color[blue]{j} = {-}\infty}^{{+}\infty} k(\color[blue]{i}, \color[blue]{j}) \cdot m(\color[red]{i}-\color[blue]{i}, \color[red]{j} - \color[blue]{j})
 \stopformula
 \stopplaceformula
 
-An assumption that we make when working with finite objects on a computer, is that the parts of the object that does not exists are zero.
-Meaning that a finite array can be thought of as an infinte array where all the entries outside of the corresponding finite array are zero.
-Pluging such an array into our convolution operation reduces the infinite summation to a finite one.
+\indentation
+Let us known say that $k$ and $m$ are two functions which index each an array of two dimentions.
+Meaning that the functions take two indexes as their input arguments.
+Let us further assume that $k$ and $m$'s arrays are zero at any index but for those contained in a small area.
+For $k$ that area is $[0 \, .. \, v_k - 1] \times [0 \, .. \, h_k - 1]$ and for $m$ it is $[0 \, .. \, v_m - 1] \times [0 \, .. \, h_m - 1]$.
+Where $h$ (horisontal length) and $v$ (vertical length)---of both subscripts---are natural non-zero numbers.
+In this case, the convolution of $k$ and $m$ reduces to
 
-\startplaceformula[reference=twodim-discconv-finite]
+\startplaceformula[reference=twodim-disc-conv-finite]
 \startformula
-s(\color[red]{i}, \color[blue]{i}) = (k * m)(\color[red]{i}, \color[blue]{i}) = \sum_{\color[red]{j} = 1}^{v} \sum_{\color[blue]{j} = 1}^{h} k(\color[red]{j}, \color[blue]{j}) \cdot m(\color[red]{i}-\color[red]{j}, \color[blue]{i} - \color[blue]{j})
+s(\color[red]{i}, \color[red]{j}) = (k * m)(\color[red]{i}, \color[red]{j}) = \sum_{\color[blue]{i} = 0}^{v_k - 1} \sum_{\color[blue]{j} = 0}^{h_k - 1} k(\color[blue]{i}, \color[blue]{j}) \cdot m(\color[red]{i}-\color[blue]{i}, \color[red]{j} - \color[blue]{j})
 \stopformula
 \stopplaceformula
 
+Where $\color[red]{i} \in [0 \, .. \, v_m - 1]$ and $\color[red]{j} \in [0 \, .. \, h_m - 1]$.
+
+The resemblance to Eq.~(\in[devel-feature-1]) is already apparent but there is a subtle difference.
+Eq.~(\in[twodim-disc-conv-finite]) subtracts the blue indices from the red ones while Eq.~(\in[devel-feature-1]) adds them together.
+The effect of subtracting instead of adding renders the convolution operation $*$ commutative.
+
+\startplaceformula[reference=conv-commute]
+\startformula
+\startmathalignment
+\NC (k * m)(\color[red]{i}, \color[red]{j}) \NC = (m * k)(\color[blue]{i}, \color[blue]{j}) \NR
+\NC \sum_{\color[blue]{i} = 0}^{v_k - 1} \sum_{\color[blue]{j} = 0}^{h_k - 1} k(\color[blue]{i}, \color[blue]{j}) \cdot m(\color[red]{i}-\color[blue]{i}, \color[red]{j} - \color[blue]{j}) \NC
+= \sum_{\color[red]{i} = 0}^{v_m - 1} \sum_{\color[red]{j} = 0}^{h_m - 1} m(\color[red]{i}, \color[red]{j}) \cdot k(\color[blue]{i}-\color[red]{i}, \color[blue]{j} - \color[red]{j}) \NR
+\stopmathalignment
+\stopformula
+\stopplaceformula
+
+\indentation
+Bringing the discussion back to neural networks, kernels and inputs---what is the effect of replacing the pluses in Eq.~(\in[devel-feature-1]) with minuses?
+Well at first glance it seems that you cannot do it as you would end up with indexes that are out of bounds for the input image $M$.
+But let us assume that $M$ behaves as $m$ meaning that it is zero everywhere where the indices are out of bounds.
+Suppose we have a kernel that has dimentions $h_K = v_K = 3$ and an input with dmientions $h_M = v_M = 5$, as in Figure~\in[conv-operation].
+Suppose we are computing $F$ at position $i = 5, j = 5$ i.e.\ $F(5,5)$.
+Notice how the top-left coordinate of $K$ pairs up with the bottom-right coordiante of the covered region of $M$
+\startformula
+K(0,0) \cdot M(5 - 0,5 - 0) = K(0,0) \cdot M(5,5)
+\stopformula
+And the top-right coordiante of $K$ pairs up with the bottom-left coordiante of the covered region of $M$
+\startformula
+K(0,2) \cdot M(5 - 0,5 - 2) = K(0,0) \cdot M(5,3)
+\stopformula
+Likewise, the bottom-left pairs with the top-right and the bottom-right pairs with the top-left.
+\startformula
+K(2,0) \cdot M(5 - 2,5 - 0) = K(2,0) \cdot M(3,5)
+\stopformula
+\startformula
+K(2,2) \cdot M(5 - 2,5 - 2) = K(0,0) \cdot M(3,3)
+\stopformula
+
+\indentation
+It appears that what you end with, is a kernel {\em flipped} about its horisontal and vertical axes.
+This means that flipping the kernel relative to the input, renders the computation of the feature map commutative.
+But this is a property that is usefull in mathematical contexts and less so for neural networks.
+It is Eq.~(\in[devel-feature-1]) that is commonly used in macine learning applications and the associated mathematical operations is actually what is called the {\em cross-correlation}.
+Despite this, neural networks that implement these kinds of neurons are called convolutional even if the underlying mathematical operations is more often than not a close relative of the proper convolution operation.
 \stopsubsubsection
 
 \startsubsubsection[title=Multiple channels]
 Let us now add some channels to this neuron.
-We will denote the number of channels byb $nC$.
+We will denote the number of channels by $nC$.
 The input and kernel are now multi-channel arrays, their individual entries will be denoted as $K(i,j,c)$.
 We have to add the contribution of each channel to the final feature map but we only add the bias once.
 Which means that we end up with the following formula
 
 \startplaceformula
 \startformula
-F(i',j') = {\rm activation} \left( \sum_{i = 1}^{vM} \sum_{j = 1}^{hM} \left( \sum_{c = 1}^{nC} \Bigl( K(i,j,c) \cdot M(i' + i, j + j',c) \right) + b \right)
+F(i',j') = {\rm activation} \left( \sum_{i = 1}^{v_K} \sum_{j = 1}^{hM} \left( \sum_{c = 1}^{nC} \Bigl( K(i,j,c) \cdot M(i' + i, j + j',c) \right) + b \right)
 \stopformula
 \stopplaceformula
 \stopsubsubsection

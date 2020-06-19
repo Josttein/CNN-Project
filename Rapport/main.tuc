@@ -228,7 +228,7 @@ utilitydata.structures.counters.collected={
   { 0 },
  },
  ["formula"]={
-  { 0, 9 },
+  { 0, 11 },
  },
  ["graphic"]={
   { 0, 0 },
@@ -249,10 +249,10 @@ utilitydata.structures.counters.collected={
   { 0, 0 },
  },
  ["realpage"]={
-  { 7 },
+  { 8 },
  },
  ["subpage"]={
-  { 7 },
+  { 8 },
  },
  ["table"]={
   { 0, 0 },
@@ -261,7 +261,7 @@ utilitydata.structures.counters.collected={
   { 0 },
  },
  ["userpage"]={
-  { 7 },
+  { 8 },
  },
 }
 
@@ -438,10 +438,22 @@ utilitydata.structures.lists.collected={
  },
  {
   ["metadata"]=39,
-  ["numberdata"]=40,
+  ["numberdata"]=41,
   ["prefixdata"]=37,
   ["references"]={
    ["internal"]=13,
+   ["realpage"]=5,
+   ["reference"]="dimen-feature-1",
+   ["section"]=9,
+   ["view"]="fit",
+  },
+ },
+ {
+  ["metadata"]=42,
+  ["numberdata"]=43,
+  ["prefixdata"]=37,
+  ["references"]={
+   ["internal"]=17,
    ["realpage"]=6,
    ["reference"]="conv-operation",
    ["section"]=9,
@@ -452,11 +464,47 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=41,
-  ["numberdata"]=42,
+  ["metadata"]=39,
+  ["numberdata"]=45,
+  ["prefixdata"]=37,
+  ["references"]={
+   ["internal"]=14,
+   ["realpage"]=6,
+   ["reference"]="devel-feature-1",
+   ["section"]=9,
+   ["view"]="fit",
+  },
+ },
+ {
+  ["metadata"]=39,
+  ["numberdata"]=47,
+  ["prefixdata"]=37,
+  ["references"]={
+   ["internal"]=15,
+   ["realpage"]=6,
+   ["reference"]="devel-feature-2",
+   ["section"]=9,
+   ["view"]="fit",
+  },
+ },
+ {
+  ["metadata"]=39,
+  ["numberdata"]=49,
+  ["prefixdata"]=37,
+  ["references"]={
+   ["internal"]=16,
+   ["realpage"]=6,
+   ["reference"]="devel-feature-3",
+   ["section"]=9,
+   ["view"]="fit",
+  },
+ },
+ {
+  ["metadata"]=50,
+  ["numberdata"]=51,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=14,
+   ["internal"]=18,
    ["realpage"]=6,
    ["section"]=10,
   },
@@ -466,60 +514,72 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=43,
-  ["numberdata"]=45,
+  ["metadata"]=52,
+  ["numberdata"]=54,
   ["prefixdata"]=37,
   ["references"]={
-   ["internal"]=15,
-   ["realpage"]=6,
-   ["reference"]="contconv",
-   ["section"]=10,
-   ["view"]="fit",
-  },
- },
- {
-  ["metadata"]=43,
-  ["numberdata"]=47,
-  ["prefixdata"]=37,
-  ["references"]={
-   ["internal"]=16,
-   ["realpage"]=6,
-   ["reference"]="discconv",
-   ["section"]=10,
-   ["view"]="fit",
-  },
- },
- {
-  ["metadata"]=43,
-  ["numberdata"]=49,
-  ["prefixdata"]=37,
-  ["references"]={
-   ["internal"]=17,
-   ["realpage"]=7,
-   ["reference"]="twodim-discconv",
-   ["section"]=10,
-   ["view"]="fit",
-  },
- },
- {
-  ["metadata"]=43,
-  ["numberdata"]=51,
-  ["prefixdata"]=37,
-  ["references"]={
-   ["internal"]=18,
-   ["realpage"]=7,
-   ["reference"]="twodim-discconv-finite",
-   ["section"]=10,
-   ["view"]="fit",
-  },
- },
- {
-  ["metadata"]=41,
-  ["numberdata"]=52,
-  ["references"]={
-   ["block"]="bodypart",
    ["internal"]=19,
    ["realpage"]=7,
+   ["reference"]="cont-conv",
+   ["section"]=10,
+   ["view"]="fit",
+  },
+ },
+ {
+  ["metadata"]=52,
+  ["numberdata"]=56,
+  ["prefixdata"]=37,
+  ["references"]={
+   ["internal"]=20,
+   ["realpage"]=7,
+   ["reference"]="disc-conv",
+   ["section"]=10,
+   ["view"]="fit",
+  },
+ },
+ {
+  ["metadata"]=52,
+  ["numberdata"]=58,
+  ["prefixdata"]=37,
+  ["references"]={
+   ["internal"]=21,
+   ["realpage"]=7,
+   ["reference"]="twodim-disc-conv",
+   ["section"]=10,
+   ["view"]="fit",
+  },
+ },
+ {
+  ["metadata"]=52,
+  ["numberdata"]=60,
+  ["prefixdata"]=37,
+  ["references"]={
+   ["internal"]=22,
+   ["realpage"]=7,
+   ["reference"]="twodim-disc-conv-finite",
+   ["section"]=10,
+   ["view"]="fit",
+  },
+ },
+ {
+  ["metadata"]=52,
+  ["numberdata"]=62,
+  ["prefixdata"]=37,
+  ["references"]={
+   ["internal"]=23,
+   ["realpage"]=7,
+   ["reference"]="conv-commute",
+   ["section"]=10,
+   ["view"]="fit",
+  },
+ },
+ {
+  ["metadata"]=50,
+  ["numberdata"]=63,
+  ["references"]={
+   ["block"]="bodypart",
+   ["internal"]=24,
+   ["realpage"]=8,
    ["section"]=11,
   },
   ["titledata"]={
@@ -528,12 +588,12 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=41,
-  ["numberdata"]=53,
+  ["metadata"]=50,
+  ["numberdata"]=64,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=20,
-   ["realpage"]=7,
+   ["internal"]=25,
+   ["realpage"]=8,
    ["section"]=12,
   },
   ["titledata"]={
@@ -542,12 +602,12 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=41,
-  ["numberdata"]=54,
+  ["metadata"]=50,
+  ["numberdata"]=65,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=21,
-   ["realpage"]=7,
+   ["internal"]=26,
+   ["realpage"]=8,
    ["section"]=13,
   },
   ["titledata"]={
@@ -557,11 +617,11 @@ utilitydata.structures.lists.collected={
  },
  {
   ["metadata"]=26,
-  ["numberdata"]=55,
+  ["numberdata"]=66,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=22,
-   ["realpage"]=7,
+   ["internal"]=27,
+   ["realpage"]=8,
    ["section"]=14,
   },
   ["titledata"]={
@@ -571,11 +631,11 @@ utilitydata.structures.lists.collected={
  },
  {
   ["metadata"]=26,
-  ["numberdata"]=56,
+  ["numberdata"]=67,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=23,
-   ["realpage"]=7,
+   ["internal"]=28,
+   ["realpage"]=8,
    ["section"]=15,
   },
   ["titledata"]={
@@ -585,11 +645,11 @@ utilitydata.structures.lists.collected={
  },
  {
   ["metadata"]=24,
-  ["numberdata"]=57,
+  ["numberdata"]=68,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=24,
-   ["realpage"]=7,
+   ["internal"]=29,
+   ["realpage"]=8,
    ["section"]=16,
   },
   ["titledata"]={
@@ -599,11 +659,11 @@ utilitydata.structures.lists.collected={
  },
  {
   ["metadata"]=24,
-  ["numberdata"]=58,
+  ["numberdata"]=69,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=25,
-   ["realpage"]=7,
+   ["internal"]=30,
+   ["realpage"]=8,
    ["section"]=17,
   },
   ["titledata"]={
@@ -620,50 +680,57 @@ utilitydata.structures.pages.collected={
  {
   ["block"]="bodypart",
   ["number"]=1,
-  ["numberdata"]=59,
-  ["prefixdata"]=60,
+  ["numberdata"]=70,
+  ["prefixdata"]=71,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=2,
-  ["numberdata"]=59,
-  ["prefixdata"]=60,
+  ["numberdata"]=70,
+  ["prefixdata"]=71,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=3,
-  ["numberdata"]=59,
-  ["prefixdata"]=60,
+  ["numberdata"]=70,
+  ["prefixdata"]=71,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=4,
-  ["numberdata"]=59,
-  ["prefixdata"]=60,
+  ["numberdata"]=70,
+  ["prefixdata"]=71,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=5,
-  ["numberdata"]=59,
-  ["prefixdata"]=60,
+  ["numberdata"]=70,
+  ["prefixdata"]=71,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=6,
-  ["numberdata"]=59,
-  ["prefixdata"]=60,
+  ["numberdata"]=70,
+  ["prefixdata"]=71,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=7,
-  ["numberdata"]=59,
-  ["prefixdata"]=60,
+  ["numberdata"]=70,
+  ["prefixdata"]=71,
+  ["state"]="start",
+ },
+ {
+  ["block"]="bodypart",
+  ["number"]=8,
+  ["numberdata"]=70,
+  ["prefixdata"]=71,
   ["state"]="start",
  },
 }
@@ -891,6 +958,19 @@ utilitydata.job.packed={
   {
    ["catcodes"]=8,
    ["coding"]="tex",
+   ["kind"]="formula",
+   ["level"]=4,
+   ["name"]="formula",
+  },
+  { 2 },
+  {
+   ["conversionset"]="formula",
+   ["counter"]="formula",
+   ["numbers"]=40,
+  },
+  {
+   ["catcodes"]=8,
+   ["coding"]="tex",
    ["kind"]="float",
    ["level"]=4,
    ["name"]="figure",
@@ -899,6 +979,24 @@ utilitydata.job.packed={
    ["conversionset"]="number",
    ["counter"]="figure",
    ["numbers"]=35,
+  },
+  { 3 },
+  {
+   ["conversionset"]="formula",
+   ["counter"]="formula",
+   ["numbers"]=44,
+  },
+  { 4 },
+  {
+   ["conversionset"]="formula",
+   ["counter"]="formula",
+   ["numbers"]=46,
+  },
+  { 5 },
+  {
+   ["conversionset"]="formula",
+   ["counter"]="formula",
+   ["numbers"]=48,
   },
   {
    ["catcodes"]=8,
@@ -923,29 +1021,35 @@ utilitydata.job.packed={
    ["level"]=5,
    ["name"]="formula",
   },
-  { 5 },
-  {
-   ["conversionset"]="formula",
-   ["counter"]="formula",
-   ["numbers"]=44,
-  },
   { 6 },
   {
    ["conversionset"]="formula",
    ["counter"]="formula",
-   ["numbers"]=46,
+   ["numbers"]=53,
   },
   { 7 },
   {
    ["conversionset"]="formula",
    ["counter"]="formula",
-   ["numbers"]=48,
+   ["numbers"]=55,
   },
   { 8 },
   {
    ["conversionset"]="formula",
    ["counter"]="formula",
-   ["numbers"]=50,
+   ["numbers"]=57,
+  },
+  { 9 },
+  {
+   ["conversionset"]="formula",
+   ["counter"]="formula",
+   ["numbers"]=59,
+  },
+  { 10 },
+  {
+   ["conversionset"]="formula",
+   ["counter"]="formula",
+   ["numbers"]=61,
   },
   {
    ["block"]="bodypart",
