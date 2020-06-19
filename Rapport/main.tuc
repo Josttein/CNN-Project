@@ -249,10 +249,10 @@ utilitydata.structures.counters.collected={
   { 0, 0 },
  },
  ["realpage"]={
-  { 8 },
+  { 9 },
  },
  ["subpage"]={
-  { 8 },
+  { 9 },
  },
  ["table"]={
   { 0, 0 },
@@ -261,7 +261,7 @@ utilitydata.structures.counters.collected={
   { 0 },
  },
  ["userpage"]={
-  { 8 },
+  { 9 },
  },
 }
 
@@ -588,11 +588,23 @@ utilitydata.structures.lists.collected={
   },
  },
  {
+  ["metadata"]=52,
+  ["numberdata"]=65,
+  ["prefixdata"]=37,
+  ["references"]={
+   ["internal"]=25,
+   ["realpage"]=8,
+   ["reference"]="devel-feature-4",
+   ["section"]=11,
+   ["view"]="fit",
+  },
+ },
+ {
   ["metadata"]=50,
-  ["numberdata"]=64,
+  ["numberdata"]=66,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=25,
+   ["internal"]=26,
    ["realpage"]=8,
    ["section"]=12,
   },
@@ -603,10 +615,10 @@ utilitydata.structures.lists.collected={
  },
  {
   ["metadata"]=50,
-  ["numberdata"]=65,
+  ["numberdata"]=67,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=26,
+   ["internal"]=27,
    ["realpage"]=8,
    ["section"]=13,
   },
@@ -617,10 +629,10 @@ utilitydata.structures.lists.collected={
  },
  {
   ["metadata"]=26,
-  ["numberdata"]=66,
+  ["numberdata"]=68,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=27,
+   ["internal"]=28,
    ["realpage"]=8,
    ["section"]=14,
   },
@@ -631,10 +643,10 @@ utilitydata.structures.lists.collected={
  },
  {
   ["metadata"]=26,
-  ["numberdata"]=67,
+  ["numberdata"]=69,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=28,
+   ["internal"]=29,
    ["realpage"]=8,
    ["section"]=15,
   },
@@ -645,10 +657,10 @@ utilitydata.structures.lists.collected={
  },
  {
   ["metadata"]=24,
-  ["numberdata"]=68,
+  ["numberdata"]=70,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=29,
+   ["internal"]=30,
    ["realpage"]=8,
    ["section"]=16,
   },
@@ -659,11 +671,11 @@ utilitydata.structures.lists.collected={
  },
  {
   ["metadata"]=24,
-  ["numberdata"]=69,
+  ["numberdata"]=71,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=30,
-   ["realpage"]=8,
+   ["internal"]=31,
+   ["realpage"]=9,
    ["section"]=17,
   },
   ["titledata"]={
@@ -680,57 +692,64 @@ utilitydata.structures.pages.collected={
  {
   ["block"]="bodypart",
   ["number"]=1,
-  ["numberdata"]=70,
-  ["prefixdata"]=71,
+  ["numberdata"]=72,
+  ["prefixdata"]=73,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=2,
-  ["numberdata"]=70,
-  ["prefixdata"]=71,
+  ["numberdata"]=72,
+  ["prefixdata"]=73,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=3,
-  ["numberdata"]=70,
-  ["prefixdata"]=71,
+  ["numberdata"]=72,
+  ["prefixdata"]=73,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=4,
-  ["numberdata"]=70,
-  ["prefixdata"]=71,
+  ["numberdata"]=72,
+  ["prefixdata"]=73,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=5,
-  ["numberdata"]=70,
-  ["prefixdata"]=71,
+  ["numberdata"]=72,
+  ["prefixdata"]=73,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=6,
-  ["numberdata"]=70,
-  ["prefixdata"]=71,
+  ["numberdata"]=72,
+  ["prefixdata"]=73,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=7,
-  ["numberdata"]=70,
-  ["prefixdata"]=71,
+  ["numberdata"]=72,
+  ["prefixdata"]=73,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=8,
-  ["numberdata"]=70,
-  ["prefixdata"]=71,
+  ["numberdata"]=72,
+  ["prefixdata"]=73,
+  ["state"]="start",
+ },
+ {
+  ["block"]="bodypart",
+  ["number"]=9,
+  ["numberdata"]=72,
+  ["prefixdata"]=73,
   ["state"]="start",
  },
 }
@@ -1058,6 +1077,12 @@ utilitydata.job.packed={
    ["numbers"]=11,
    ["separatorset"]="default",
    ["set"]="all",
+  },
+  { 11 },
+  {
+   ["conversionset"]="formula",
+   ["counter"]="formula",
+   ["numbers"]=64,
   },
   {
    ["block"]="bodypart",

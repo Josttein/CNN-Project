@@ -210,7 +210,7 @@ K(2,2) \cdot M(5 - 2,5 - 2) = K(0,0) \cdot M(3,3)
 \stopformula
 
 \indentation
-It appears that what you end with, is a kernel {\em flipped} about its horisontal and vertical axes.
+It appears that what you end with---is a kernel {\em flipped} about its horisontal and vertical axes.
 This means that flipping the kernel relative to the input, renders the computation of the feature map commutative.
 But this is a property that is usefull in mathematical contexts and less so for neural networks.
 It is Eq.~(\in[devel-feature-1]) that is commonly used in macine learning applications and the associated mathematical operations is actually what is called the {\em cross-correlation}.
@@ -218,15 +218,16 @@ Despite this, neural networks that implement these kinds of neurons are called c
 \stopsubsubsection
 
 \startsubsubsection[title=Multiple channels]
-Let us now add some channels to this neuron.
-We will denote the number of channels by $nC$.
-The input and kernel are now multi-channel arrays, their individual entries will be denoted as $K(i,j,c)$.
-We have to add the contribution of each channel to the final feature map but we only add the bias once.
-Which means that we end up with the following formula
+Let us return to Eq.~(\in[devel-feature-3]) for a minute and ask: what happens if we add some channels to the input?
+The number of channels we will denote by $C$.
+The input and kernel are now multi-channel arrays, their individual entries will be denoted as $K(i,j,c)$ with $c$ ranging in $[0 \, .. \, C - 1]$
+We have to add the contribution of each channel to the final feature map.
+But we only want to add the bias once.
+This results in the following modified formula
 
-\startplaceformula
+\startplaceformula[reference=devel-feature-4]
 \startformula
-F(i',j') = {\rm activation} \left( \sum_{i = 1}^{v_K} \sum_{j = 1}^{hM} \left( \sum_{c = 1}^{nC} \Bigl( K(i,j,c) \cdot M(i' + i, j + j',c) \right) + b \right)
+F(\color[red]{i},\color[red]{j}) = {\rm activation} \left( \sum_{\color[blue]{i} = 0}^{v_K - 1} \sum_{\color[blue]{j} = 0}^{h_K - 1} \left( \sum_{c = 0}^{C - 1} \Bigl( K(\color[blue]{i},\color[blue]{j},c) \cdot M(\color[red]{i} + \color[blue]{i}, \color[red]{j} + \color[blue]{j},c) \right) + b \right)
 \stopformula
 \stopplaceformula
 \stopsubsubsection
