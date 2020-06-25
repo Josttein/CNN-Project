@@ -228,7 +228,7 @@ utilitydata.structures.counters.collected={
   { 0 },
  },
  ["formula"]={
-  { 0, 11 },
+  { 0, 12 },
  },
  ["graphic"]={
   { 0, 0 },
@@ -614,12 +614,24 @@ utilitydata.structures.lists.collected={
   },
  },
  {
-  ["metadata"]=50,
-  ["numberdata"]=67,
+  ["metadata"]=52,
+  ["numberdata"]=68,
+  ["prefixdata"]=37,
   ["references"]={
-   ["block"]="bodypart",
    ["internal"]=27,
    ["realpage"]=8,
+   ["reference"]="devel-feature-5",
+   ["section"]=12,
+   ["view"]="fit",
+  },
+ },
+ {
+  ["metadata"]=50,
+  ["numberdata"]=69,
+  ["references"]={
+   ["block"]="bodypart",
+   ["internal"]=28,
+   ["realpage"]=9,
    ["section"]=13,
   },
   ["titledata"]={
@@ -629,11 +641,11 @@ utilitydata.structures.lists.collected={
  },
  {
   ["metadata"]=26,
-  ["numberdata"]=68,
+  ["numberdata"]=70,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=28,
-   ["realpage"]=8,
+   ["internal"]=29,
+   ["realpage"]=9,
    ["section"]=14,
   },
   ["titledata"]={
@@ -643,11 +655,11 @@ utilitydata.structures.lists.collected={
  },
  {
   ["metadata"]=26,
-  ["numberdata"]=69,
+  ["numberdata"]=71,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=29,
-   ["realpage"]=8,
+   ["internal"]=30,
+   ["realpage"]=9,
    ["section"]=15,
   },
   ["titledata"]={
@@ -657,11 +669,11 @@ utilitydata.structures.lists.collected={
  },
  {
   ["metadata"]=24,
-  ["numberdata"]=70,
+  ["numberdata"]=72,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=30,
-   ["realpage"]=8,
+   ["internal"]=31,
+   ["realpage"]=9,
    ["section"]=16,
   },
   ["titledata"]={
@@ -671,10 +683,10 @@ utilitydata.structures.lists.collected={
  },
  {
   ["metadata"]=24,
-  ["numberdata"]=71,
+  ["numberdata"]=73,
   ["references"]={
    ["block"]="bodypart",
-   ["internal"]=31,
+   ["internal"]=32,
    ["realpage"]=9,
    ["section"]=17,
   },
@@ -692,64 +704,64 @@ utilitydata.structures.pages.collected={
  {
   ["block"]="bodypart",
   ["number"]=1,
-  ["numberdata"]=72,
-  ["prefixdata"]=73,
+  ["numberdata"]=74,
+  ["prefixdata"]=75,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=2,
-  ["numberdata"]=72,
-  ["prefixdata"]=73,
+  ["numberdata"]=74,
+  ["prefixdata"]=75,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=3,
-  ["numberdata"]=72,
-  ["prefixdata"]=73,
+  ["numberdata"]=74,
+  ["prefixdata"]=75,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=4,
-  ["numberdata"]=72,
-  ["prefixdata"]=73,
+  ["numberdata"]=74,
+  ["prefixdata"]=75,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=5,
-  ["numberdata"]=72,
-  ["prefixdata"]=73,
+  ["numberdata"]=74,
+  ["prefixdata"]=75,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=6,
-  ["numberdata"]=72,
-  ["prefixdata"]=73,
+  ["numberdata"]=74,
+  ["prefixdata"]=75,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=7,
-  ["numberdata"]=72,
-  ["prefixdata"]=73,
+  ["numberdata"]=74,
+  ["prefixdata"]=75,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=8,
-  ["numberdata"]=72,
-  ["prefixdata"]=73,
+  ["numberdata"]=74,
+  ["prefixdata"]=75,
   ["state"]="start",
  },
  {
   ["block"]="bodypart",
   ["number"]=9,
-  ["numberdata"]=72,
-  ["prefixdata"]=73,
+  ["numberdata"]=74,
+  ["prefixdata"]=75,
   ["state"]="start",
  },
 }
@@ -1091,6 +1103,12 @@ utilitydata.job.packed={
    ["numbers"]=12,
    ["separatorset"]="default",
    ["set"]="all",
+  },
+  { 12 },
+  {
+   ["conversionset"]="formula",
+   ["counter"]="formula",
+   ["numbers"]=67,
   },
   {
    ["block"]="bodypart",

@@ -149,7 +149,7 @@ s(\color[red]{i}) = (k * m)(\color[red]{i}) = \sum_{\color[blue]{i} = {-}\infty}
 
 For continuous (Eq.~(\in[cont-conv])) and discrete (Eq.~(\in[disc-conv])) functions respectivly.
 On a computer, we are in practice always working with discrete convolutions so for us the convolution of interest is Eq.~(\in[disc-conv]).
-If we make the functions $k$ and $m$ two dimentional---they take two arguments as an input---their convolution also becomes two dimentional.
+If we make the functions $k$ and $m$ two dimentional---they take two arguments as their input---their convolution also becomes two dimentional.
 
 \startplaceformula[reference=twodim-disc-conv]
 \startformula
@@ -219,11 +219,11 @@ Despite this, neural networks that implement these kinds of neurons are called c
 
 \startsubsubsection[title=Multiple channels]
 Let us return to Eq.~(\in[devel-feature-3]) for a minute and ask: what happens if we add some channels to the input?
-The number of channels we will denote by $C$.
+Let us denote the number of channels by $C$.
 The input and kernel are now multi-channel arrays, their individual entries will be denoted as $K(i,j,c)$ with $c$ ranging in $[0 \, .. \, C - 1]$
-We have to add the contribution of each channel to the final feature map.
-But we only want to add the bias once.
-This results in the following modified formula
+To calculate the feature map when multiple channels are present, we have to take into account the contribution of each individual channel.
+We do this by simply adding them together.
+Since we only want to add the bias of the filter once per entry in the feature map, the resulting modified formula becomes
 
 \startplaceformula[reference=devel-feature-4]
 \startformula
@@ -234,8 +234,36 @@ F(\color[red]{i},\color[red]{j}) = {\rm activation} \left( \sum_{\color[blue]{i}
 
 \startsubsubsection[title=The stride]
 So far we have considered a feature map produced by scanning the kernel over the input one {\em step} at a time.
-But we could of course let the kernel take {\em longer} steps at a time. 
-What the stride is and the effects of altering it.
+As is demonstrated in Figure~\in[conv-operation] on page~\at[conv-operation].
+However, we could let the kernel take longer steps instead of moving just one row or one column at a time.
+The \quote{length} of each step that the kernel takes while moving over the input is what is known as the {\em stride}.
+Which we can further divide into the horisontal and vertical stride.
+
+What purpose does altering the stride serve?
+Well the first thing to notice is that increasing the stride reduces the size of the resulting feature map.
+Meaning that the computational intensity of the neuron is reduced.
+Which in actuallity is a side effect of the fact that the neuron, with a larger stride, studies less information in it is input.
+Which entials that it provides less information in its output.
+
+Processing less information can be both a good and a bad thing.
+It depends on the characteristics of the input data that the neuron is looking at.
+If it is judged that the size of the input data's features are larger than the neuron's kernel, then increasing the stride is justified.
+If this is not the case, then increasing the stride will almost certainly leave the network unable to correctly fullfil it's intended task.
+
+Let us now further develop Eq.~(\in[devel-feature-4]) to take into account variable strides and starting positions.
+We will denote the starting postion in the vertical and horisontal positions by $i_s$ and $j_s$ respectivly.
+$i_s$ and $j_s$ are of course are numbers in $[0 \, .. \, v_K - 1]$ and $[[0 \, .. \, h_K - 1]]$ respectivly.
+
+\startplaceformula[reference=devel-feature-5]
+\startformula
+F(\color[red]{x},\color[red]{y}) 
+= {\rm activation} \left( 
+\sum_{\color[blue]{i} = 0}^{v_K - 1}
+\sum_{\color[blue]{j} = 0}^{h_K - 1} \left( 
+\sum_{c = 0}^{C - 1} \Bigl( K(\color[blue]{i},\color[blue]{j},c) \cdot M(\color[red]{i} + \color[blue]{i}, \color[red]{j} + \color[blue]{j},c) \right)
++ b \right)
+\stopformula
+\stopplaceformula
 \stopsubsubsection
 
 \startsubsubsection[title=Zero padding]
