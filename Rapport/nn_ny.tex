@@ -16,10 +16,10 @@ These values can be seen as thresholds in order for a neuron to activate.
 Parallel neurons are joined in layers noted X.
 
 An MLP is a so-called fully connected neural network. 
-This means that each neuron in layer $X^(l)$, impacts the activation of each neuron in the following layer $X^(l+1)$.
+This means that each neuron in layer $X^{(l)}$, impacts the activation of each neuron in the following layer $X^{(l+1)}$.
 With these notations, the passage from layer to the next can be written
 \startformula
-X^(l+1) = WX^(l) + b
+X^{(l+1)} = WX^{(l)} + b
 \stopformula
   
 A simple network might consist of two such layers with Y number of neurons each.
@@ -55,17 +55,17 @@ In fact, the network typically consists of more than just linear functions.
 Up until now, we have introduced a transition from one layer to the next as a linear transformation. 
 The problems we want the network to solve are usually far from linear, which is why we introduce a non-linear activation function phi. We now have
 \startformula
-X^(l+1) = \phi(WX^(l) + b)
+X^{(l+1)} = \phi(WX^{(l)} + b)
 \stopformula
 There are different variants of activation functions. In some cases, we want to avoid too large values.  
 For optimization purposes, we also want the activation function to be derivable. 
 Both the sigmoid function defined as 
 \startformula
-\phi(x) = 1/(1+ e^-x) 
+\phi(x) = \frac{1}{1+ e^{-x}}
 \stopformula
 and the arctan function have these desired properties, though the simple ReLU defined as 
 \startformula
-\phi(x) = max(0,x) 
+\phi(x) = \max(0,x) 
 \stopformula
 is shown to be more efficient for optimization (source Goodfellow) and thus more common in practice.
 
@@ -76,19 +76,19 @@ Before evaluating a cost function, we transform the output layer in a way that t
 In this way, each value in the output layer can be interpreted as the probability that a given input is classified as such.
 This is done using the softmax function defined as
 \startformula
-\sigma(z_i) = exp(z_i)/\sum_{j=1}^k(exp(z_j) 
+\sigma(z_i) = \frac{\exp(z_i)}{\sum_{j=1}^k \exp(z_j)} 
 \stopformula
-where k is equal to the number of outputs. 
+where $k$ is equal to the number of outputs. 
  
 While in the training phase, we obviously know the desired output to each input, thus we want that specific neuron to have a value close to 1, and all the others to be close to 0. 
 The loss function, which quantifies “how close” the network’s guess is to a given output, can have different definitions depending on the problem.
 For instance, a common loss function that pairs well with the softmax function, is the negative log-likelihood defined as
 \startformula
-L_i = -log(y_i)
+L_i = -\log(y_i)
 \stopformula 
 
 In order to quantify how well the network performs on the entire training set, we want to evaluate the loss function on each data-input. 
-The cost function can then be defined as $\sum_{i=1}^n L_i]$. Or the sum of losses. 
+The cost function can then be defined as $\sum_{i=1}^n L_i$. Or the sum of losses. 
 \stopsubsection
 
 \startsubsection[title=Forward propagation]
