@@ -75,29 +75,53 @@ Figure~\in[conv-operation] shows how the kernel \quote{scans} the entire input a
 Let us construct the general formula for this feature map.
 
 We will denote the feature map, kernel and input as $F$, $K$ and $M$ respectivly.
-They are two dimentional arrays and their individual entries will be denoted as $F(i,j)$ where $i$ is the row index and $j$ the column index.
-The indexes will all start at zero (e.g.\ $M(1,2)$ is the entry in the second row, third column of $M$. $M(0,0)$ is the {\em first} entry).
-Horisontal and vertical lengths of arrays will be denoted by $h$ and $v$ with the associated array as a subscript (e.g.\ $h_K$ is the horisontal length of the kernel).
-A typical MNIST image of dimentions $28{\rm x}28$ as the input, will have $h_M = v_M = 28$, its indexes will range in $[0 \, .. \, v_M - 1] \times [0 \, .. \, h_M - 1]$.
+They are two dimentional arrays and their individual entries will be denoted as $F(x,y)$ where $x$ is the column index and $y$ the row index.
+The indexes will all start at zero (e.g.\ $M(1,2)$ is the entry in the second column, third row of $M$).
+There are many lengths involved in working with three seperate arrays, various lengths will here be denoted by $n$.
+A subscript, either $x$ or $y$, will indicate if it is a horisontal or vertical length and a subsequent argument will indicate which array the length belongs to.
+So for example, $n_x(M)$ is the horisontal length of the input array---the number of columns or x's in $M$.
 
-Let us say that the kernel scans its input one column or one row at a time.
-In which case, the output feature map will have dimentions
+If the input represents a typical MNIST image with dimentions $28{\rm x}28$, then $n_x(M) = 28$ and $n_y(M) = 28$.
+In this scenario, the indices of $M$ range in $[0 \, .. \, n_x(M) - 1] \times [0 \, .. \, n_y(M) - 1]$.
+
+Let us say that the kernel scans its input one column and one row at a time.
+In this scenario, the output feature map will have dimentions
 
 \startplaceformula[reference=dimen-feature-1]
 \startformula
-h_F = h_M - h_K + 1
-\stopformula
-\startformula
-v_F = v_M - v_K + 1
+\startmathalignment[n=1]
+\NC n_x(F) = n_x(M) - n_x(K) + 1 \NR
+\NC n_y(F) = n_y(M) - n_y(K) + 1 \NR
+\stopmathalignment
 \stopformula
 \stopplaceformula
 
-The entries in the inital $F^*$ (before activation) are produced by applying the Hadamard product (Eq.~(\in[hdprod])) to each area of dimentions $h_K\,{\rm x}\,v_K$ in the input.
-Thus the entry at row $\color[red]{i} \in [0 \, .. \, v_F - 1]$ and column $\color[red]{j} \in [0 \, .. \, h_F - 1]$ is computed as
+Let $\color[red]{x}$ and $\color[red]{y}$ denote the indices in the feature map.
+Let $\color[blue]{x}$ and $\color[blue]{y}$ denote the indices in the kernel.
+These indices range in the sets
+
+\startplaceformula
+\startformula
+\startmathalignment[n=2]
+\NC \color[red]{x} \in [0 \, .. \, n_x(F) - 1] \qquad \NC \color[red]{y} \in [0 \, .. \, n_y(F) - 1] \NR
+\NC \color[blue]{x} \in [0 \, .. \, n_x(K) - 1] \qquad \NC \color[blue]{y} \in [0 \, .. \, n_y(K) - 1] \NR
+\stopmathalignment
+\stopformula
+\stopplaceformula
+
+\indentation
+The entries in the inital $F_*$ (before activation) are produced by applying the Hadamard product (Eq.~(\in[hdprod])) to each area of dimentions $n_x(K)\,{\rm x}\,n_y(K)$ in the input.
+Which yields the following formula.
 
 \startplaceformula[reference=devel-feature-1]
 \startformula
-F^*(\color[red]{i},\color[red]{j}) = \sum_{\color[blue]{i} = 0}^{v_K - 1} \sum_{\color[blue]{j} = 0}^{h_K - 1} K(\color[blue]{i},\color[blue]{j}) \cdot M(\color[red]{i} + \color[blue]{i}, \color[red]{j} + \color[blue]{j})
+F_*(\color[red]{x},\color[red]{y})
+= 
+\sum_{\color[blue]{y}}^{} 
+\sum_{\color[blue]{x}}^{} 
+K(\color[blue]{x},\color[blue]{y})
+\cdot
+M(\color[red]{x} + \color[blue]{x}, \color[red]{y} + \color[blue]{y})
 \stopformula
 \stopplaceformula
 
@@ -105,15 +129,38 @@ If we add a bias $b$ to this filter, the formula becomes
 
 \startplaceformula[reference=devel-feature-2]
 \startformula
-F^*(\color[red]{i},\color[red]{j}) = \sum_{\color[blue]{i} = 0}^{v_K - 1} \sum_{\color[blue]{j} = 0}^{h_M - 1} \Bigl( K(\color[blue]{i},\color[blue]{j}) \cdot M(\color[red]{i} + \color[blue]{i}, \color[red]{j} + \color[blue]{j}) + b \Bigr)
+F_*(\color[red]{x},\color[red]{y})
+= 
+\sum_{\color[blue]{y}}^{} 
+\sum_{\color[blue]{x}}^{} 
+\Bigl(
+K(\color[blue]{x},\color[blue]{y})
+\cdot
+M(\color[red]{x} + \color[blue]{x}, \color[red]{y} + \color[blue]{y})
++
+b
+\Bigr)
 \stopformula
 \stopplaceformula
 
-Lastly, the final output feature map $(F)$ of the filter is produced by sending all of these entries through an activation function (ReLU or sigmoid in practice).
+Sending this formula throug an activation function such as ReLU or the sigmoid function, we obtain the final output feature.
 
 \startplaceformula[reference=devel-feature-3]
 \startformula
-F(\color[red]{i},\color[red]{j}) = {\rm activation} \left( \sum_{\color[blue]{i} = 0}^{v_K - 1} \sum_{\color[blue]{j} = 0}^{h_M - 1} \Bigl( K(\color[blue]{i},\color[blue]{j}) \cdot M(\color[red]{i} + \color[blue]{i}, \color[red]{j} + \color[blue]{j}) + b \Bigr) \right)
+F_*(\color[red]{x},\color[red]{y})
+= 
+{\rm activation}
+\left(
+\sum_{\color[blue]{y}}^{} 
+\sum_{\color[blue]{x}}^{} 
+\Bigl(
+K(\color[blue]{x},\color[blue]{y})
+\cdot
+M(\color[red]{x} + \color[blue]{x}, \color[red]{y} + \color[blue]{y})
++
+b
+\Bigr)
+\right)
 \stopformula
 \stopplaceformula
 
@@ -143,7 +190,7 @@ s(t) = (k * m)(t) = \int_{{-}\infty}^{{+}\infty} k(x) \cdot m(t-x) \, {\rm d}x
 \stopplaceformula
 \startplaceformula[reference=disc-conv]
 \startformula
-s(\color[red]{i}) = (k * m)(\color[red]{i}) = \sum_{\color[blue]{i} = {-}\infty}^{{+}\infty} k(\color[blue]{i}) \cdot m(\color[red]{i}-\color[blue]{i})
+s(\color[red]{x}) = (k * m)(\color[red]{x}) = \sum_{\color[blue]{x} = {-}\infty}^{{+}\infty} k(\color[blue]{x}) \cdot m(\color[red]{x}-\color[blue]{x})
 \stopformula
 \stopplaceformula
 
@@ -153,81 +200,82 @@ If we make the functions $k$ and $m$ two dimentional---they take two arguments a
 
 \startplaceformula[reference=twodim-disc-conv]
 \startformula
-s(\color[red]{i}, \color[red]{j}) = (k * m)(\color[red]{i}, \color[red]{j}) = \sum_{\color[blue]{i} = {-}\infty}^{{+}\infty} \sum_{\color[blue]{j} = {-}\infty}^{{+}\infty} k(\color[blue]{i}, \color[blue]{j}) \cdot m(\color[red]{i}-\color[blue]{i}, \color[red]{j} - \color[blue]{j})
+s(\color[red]{x}, \color[red]{y}) = (k * m)(\color[red]{x}, \color[red]{y}) =
+\sum_{\color[blue]{y} = {-}\infty}^{{+}\infty}
+\sum_{\color[blue]{x} = {-}\infty}^{{+}\infty}
+k(\color[blue]{x}, \color[blue]{y}) \cdot m(\color[red]{x}-\color[blue]{x}, \color[red]{y} - \color[blue]{y})
 \stopformula
 \stopplaceformula
 
 \indentation
-Let us known say that $k$ and $m$ are two functions which index each an array of two dimentions.
+Let us known say that $k$ and $m$ are two functions which each index an array of two dimentions.
 Meaning that the functions take two indexes as their input arguments.
 Let us further assume that $k$ and $m$'s arrays are zero at any index but for those contained in a small area.
-For $k$ that area is $[0 \, .. \, v_k - 1] \times [0 \, .. \, h_k - 1]$ and for $m$ it is $[0 \, .. \, v_m - 1] \times [0 \, .. \, h_m - 1]$.
-Where $h$ (horisontal length) and $v$ (vertical length)---of both subscripts---are natural non-zero numbers.
+For $k$ that area is $[0 \, .. \, n_x(k) - 1] \times [0 \, .. \, n_y(k) - 1]$ and for $m$ it is $[0 \, .. \, n_x(m) - 1] \times [0 \, .. \, n_y(m) - 1]$.
 In this case, the convolution of $k$ and $m$ reduces to
 
 \startplaceformula[reference=twodim-disc-conv-finite]
 \startformula
-s(\color[red]{i}, \color[red]{j}) = (k * m)(\color[red]{i}, \color[red]{j}) = \sum_{\color[blue]{i} = 0}^{v_k - 1} \sum_{\color[blue]{j} = 0}^{h_k - 1} k(\color[blue]{i}, \color[blue]{j}) \cdot m(\color[red]{i}-\color[blue]{i}, \color[red]{j} - \color[blue]{j})
+s(\color[red]{x}, \color[red]{y}) = (k * m)(\color[red]{x}, \color[red]{y}) = 
+\sum_{\color[blue]{y} = 0}^{n_y(k) - 1} 
+\sum_{\color[blue]{x} = 0}^{n_x(k) - 1} 
+k(\color[blue]{x}, \color[blue]{y}) \cdot m(\color[red]{x}-\color[blue]{x}, \color[red]{y} - \color[blue]{y})
 \stopformula
 \stopplaceformula
 
-Where $\color[red]{i} \in [0 \, .. \, v_m - 1]$ and $\color[red]{j} \in [0 \, .. \, h_m - 1]$.
+Where $\color[red]{x} \in [0 \, .. \, n_x(m) - 1]$ and $\color[red]{y} \in [0 \, .. \, n_y(m) - 1]$.
 
 The resemblance to Eq.~(\in[devel-feature-1]) is already apparent but there is a subtle difference.
 Eq.~(\in[twodim-disc-conv-finite]) subtracts the blue indices from the red ones while Eq.~(\in[devel-feature-1]) adds them together.
-The effect of subtracting instead of adding renders the convolution operation $*$ commutative.
+The effect of subtracting instead of adding renders the convolution operation $(*)$ commutative.
 
 \startplaceformula[reference=conv-commute]
 \startformula
 \startmathalignment
-\NC (k * m)(\color[red]{i}, \color[red]{j}) \NC = (m * k)(\color[blue]{i}, \color[blue]{j}) \NR
-\NC \sum_{\color[blue]{i} = 0}^{v_k - 1} \sum_{\color[blue]{j} = 0}^{h_k - 1} k(\color[blue]{i}, \color[blue]{j}) \cdot m(\color[red]{i}-\color[blue]{i}, \color[red]{j} - \color[blue]{j}) \NC
-= \sum_{\color[red]{i} = 0}^{v_m - 1} \sum_{\color[red]{j} = 0}^{h_m - 1} m(\color[red]{i}, \color[red]{j}) \cdot k(\color[blue]{i}-\color[red]{i}, \color[blue]{j} - \color[red]{j}) \NR
+\NC (k * m)(\color[red]{x}, \color[red]{y}) \NC = (m * k)(\color[blue]{x}, \color[blue]{y}) \NR
+\NC \sum_{\color[blue]{x}}^{} \sum_{\color[blue]{y}}^{} k(\color[blue]{x}, \color[blue]{y}) \cdot m(\color[red]{x}-\color[blue]{x}, \color[red]{y} - \color[blue]{y}) \NC
+= \sum_{\color[red]{x}}^{} \sum_{\color[red]{y}}^{} m(\color[red]{x}, \color[red]{y}) \cdot k(\color[blue]{x}-\color[red]{x}, \color[blue]{y} - \color[red]{y}) \NR
 \stopmathalignment
 \stopformula
 \stopplaceformula
 
 \indentation
-Bringing the discussion back to neural networks, kernels and inputs---what is the effect of replacing the pluses in Eq.~(\in[devel-feature-1]) with minuses?
+So what is the effect of replacing the pluses in Eq.~(\in[devel-feature-1]) with minuses?
 Well at first glance it seems that you cannot do it as you would end up with indexes that are out of bounds for the input image $M$.
 But let us assume that $M$ behaves as $m$ meaning that it is zero everywhere where the indices are out of bounds.
-Suppose we have a kernel that has dimentions $h_K = v_K = 3$ and an input with dmientions $h_M = v_M = 5$, as in Figure~\in[conv-operation].
-Suppose we are computing $F$ at position $i = 5, j = 5$ i.e.\ $F(5,5)$.
-Notice how the top-left coordinate of $K$ pairs up with the bottom-right coordiante of the covered region of $M$
-\startformula
-K(0,0) \cdot M(5 - 0,5 - 0) = K(0,0) \cdot M(5,5)
-\stopformula
-And the top-right coordiante of $K$ pairs up with the bottom-left coordiante of the covered region of $M$
-\startformula
-K(0,2) \cdot M(5 - 0,5 - 2) = K(0,0) \cdot M(5,3)
-\stopformula
-Likewise, the bottom-left pairs with the top-right and the bottom-right pairs with the top-left.
-\startformula
-K(2,0) \cdot M(5 - 2,5 - 0) = K(2,0) \cdot M(3,5)
-\stopformula
-\startformula
-K(2,2) \cdot M(5 - 2,5 - 2) = K(0,0) \cdot M(3,3)
-\stopformula
-
-\indentation
-It appears that what you end with---is a kernel {\em flipped} about its horisontal and vertical axes.
-This means that flipping the kernel relative to the input, renders the computation of the feature map commutative.
-But this is a property that is usefull in mathematical contexts and less so for neural networks.
+What you find if you visualize the computation of $F$ using Eq.~(\in[twodim-disc-conv-finite]), is that it is effectivly the same as using Eq.~(\in[devel-feature-1]) with the kernel flipped about its horisontal and vertical axes.
+Which in turn means that flipping the kernel relative to the input, renders the computation of the feature map commutative.
+But this is a property that is usefull in mathematical contexts and less so for computing neural networks.
 It is Eq.~(\in[devel-feature-1]) that is commonly used in macine learning applications and the associated mathematical operations is actually what is called the {\em cross-correlation}.
 Despite this, neural networks that implement these kinds of neurons are called convolutional even if the underlying mathematical operations is more often than not a close relative of the proper convolution operation.
 \stopsubsubsection
 
 \startsubsubsection[title=Multiple channels]
 Let us return to Eq.~(\in[devel-feature-3]) for a minute and ask: what happens if we add some channels to the input?
-Let us denote the number of channels by $C$.
-The input and kernel are now multi-channel arrays, their individual entries will be denoted as $K(i,j,c)$ with $c$ ranging in $[0 \, .. \, C - 1]$
+Let us denote the number of channels by $n_c$.
+The input and kernel are now multi-channel arrays, their individual entries will be denoted as $K(i,j,c)$ with $c$ ranging in $[0 \, .. \, n_c - 1]$
 To calculate the feature map when multiple channels are present, we have to take into account the contribution of each individual channel.
 We do this by simply adding them together.
 Since we only want to add the bias of the filter once per entry in the feature map, the resulting modified formula becomes
 
 \startplaceformula[reference=devel-feature-4]
 \startformula
-F(\color[red]{i},\color[red]{j}) = {\rm activation} \left( \sum_{\color[blue]{i} = 0}^{v_K - 1} \sum_{\color[blue]{j} = 0}^{h_K - 1} \left( \sum_{c = 0}^{C - 1} \Bigl( K(\color[blue]{i},\color[blue]{j},c) \cdot M(\color[red]{i} + \color[blue]{i}, \color[red]{j} + \color[blue]{j},c) \right) + b \right)
+F(\color[red]{x},\color[red]{y})
+=
+{\rm activation}
+\left( 
+\sum_{\color[blue]{y}}^{}
+\sum_{\color[blue]{x}}^{}
+\left(
+\sum_{c}^{}
+\Bigl(
+K(\color[blue]{x},\color[blue]{y},c)
+\cdot
+M(\color[red]{x} + \color[blue]{x}, \color[red]{y} + \color[blue]{y},c)
+\right)
++
+b
+\right)
 \stopformula
 \stopplaceformula
 \stopsubsubsection
@@ -237,36 +285,48 @@ So far we have considered a feature map produced by scanning the kernel over the
 As is demonstrated in Figure~\in[conv-operation] on page~\at[conv-operation].
 However, we could let the kernel take longer steps instead of moving just one row or one column at a time.
 The \quote{length} of each step that the kernel takes while moving over the input is what is known as the {\em stride}.
-Which we can further divide into the horisontal and vertical stride.
+Which we can further divide into the horisontal stride $s_x$ and vertical stride $s_y$.
 
 What purpose does altering the stride serve?
-Well the first thing to notice is that increasing the stride reduces the size of the resulting feature map.
-Meaning that the computational intensity of the neuron is reduced.
-Which in actuallity is a side effect of the fact that the neuron, with a larger stride, studies less information in it is input.
-Which entials that it provides less information in its output.
+Increasing the stride reduces the size of the resulting feature map since it is computed at fewer areas.
+Which has the net effect that the {\em computational complexity} of the neuron is reduced.
+However, it also means that the neuron studies its input less which can result in vital information in the input being overlooked.
+This is not a big problem as long as the features of the input is judged to be larger than the kernel that the neuron uses.
+So long as this is the case, increasing the stride of a neuron can significantly reduce its computational complexity without resulting in it no longer surving its purpose.
 
-Processing less information can be both a good and a bad thing.
-It depends on the characteristics of the input data that the neuron is looking at.
-If it is judged that the size of the input data's features are larger than the neuron's kernel, then increasing the stride is justified.
-If this is not the case, then increasing the stride will almost certainly leave the network unable to correctly fullfil it's intended task.
-
-Let us now further develop Eq.~(\in[devel-feature-4]) to take into account variable strides and starting positions.
-We will denote the starting postion in the vertical and horisontal positions by $i_s$ and $j_s$ respectivly.
-$i_s$ and $j_s$ are of course are numbers in $[0 \, .. \, v_K - 1]$ and $[[0 \, .. \, h_K - 1]]$ respectivly.
+Let us now further develop Eq.~(\in[devel-feature-4]) to take into account variable strides.
+It is as simple as multiplying the red indices with the strides.
 
 \startplaceformula[reference=devel-feature-5]
 \startformula
-F(\color[red]{x},\color[red]{y}) 
-= {\rm activation} \left( 
-\sum_{\color[blue]{i} = 0}^{v_K - 1}
-\sum_{\color[blue]{j} = 0}^{h_K - 1} \left( 
-\sum_{c = 0}^{C - 1} \Bigl( K(\color[blue]{i},\color[blue]{j},c) \cdot M(\color[red]{i} + \color[blue]{i}, \color[red]{j} + \color[blue]{j},c) \right)
-+ b \right)
+F(\color[red]{x},\color[red]{y})
+=
+{\rm activation}
+\left( 
+\sum_{\color[blue]{y}}^{}
+\sum_{\color[blue]{x}}^{}
+\left(
+\sum_{c}^{}
+\Bigl(
+K(\color[blue]{x},\color[blue]{y},c)
+\cdot
+M(\color[red]{x}s_x + \color[blue]{x}, \color[red]{y}s_y + \color[blue]{y},c)
+\right)
++
+b
+\right)
 \stopformula
 \stopplaceformula
 \stopsubsubsection
 
 \startsubsubsection[title=Zero padding]
+If we increase a neurons stride we can shrink the size of the resulting feature map.
+But it does not allow us to increase the size of the feature map!
+To do this, a techinque known as {\em zero padding} is used.
+Instead of working with the input {\em as is}, one or more extra outer rows and columns of zeros are added onto it before the kernel is scanned across it.
+This allows us to increase the size of the resulting feature map.
+
+This techinque is predominantly used to make the feature map have the same dimentions as the input image in applicatons where this is desirable.
 \stopsubsubsection
 
 

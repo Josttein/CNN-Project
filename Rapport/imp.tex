@@ -1,4 +1,143 @@
 \startsection[title=Python Implementation]
+Knwon that we have taken a look at the theory behind convolutional neural networks, let us look at an implementation of one.
+The nerual network we are going to be looking at is one written by 
+Alejandro Escontrela.
+It is written in Python using the NumPy library and is publicly avaliable at \url[github]
+
+The network is going to tackle the classic neural network problem.
+Categorizing the handwritten digits in the MNIST database.
+Compared to other problems convolutional neural networks are commonly faced with, categorizing the MNIST images is rather simple.
+So the network will use a comperativly simple architecture as shown in Figure~\in[net-architecture] on page~\at[net-architecture].
+The network uses no zero padding.
+The first two layer consists of two indentical convolutional layers.
+They are in turn follwed by a single max-polling layer which notably, uses a stride of 2.
+The output is then flattened and passed to a dense layer with 128 neurons.
+The output of this layer is passed to the final dense layer, which necessarly consists of 10 neurons.
+
+\startplacefigure[reference=net-architecture,
+                   title={The architecture of the network},
+                   location=top]
+\externalfigure[Images/conv-net-alej.png]
+\stopplacefigure
+
+\startsubsection[title=Various functions]
+The network uses ReLU for its activation function, 
+
+\stopsubsection
+
+
+
+\starttyping
+def convolution(image, filt, bias, s=1):
+    '''
+    Confolves `filt` over `image` using stride `s`
+    '''
+    (n_f, n_c_f, f, _) = filt.shape # filter dimensions
+    n_c, in_dim, _ = image.shape # image dimensions
+    
+    out_dim = int((in_dim - f)/s)+1 # calculate output dimensions
+    
+    assert n_c == n_c_f, "Dimensions of filter must match dimensions of input image"
+    
+    out = np.zeros((n_f,out_dim,out_dim))
+    
+    # convolve the filter over every part of the image, adding the bias at each step. 
+    for curr_f in range(n_f):
+        curr_y = out_y = 0
+        while curr_y + f <= in_dim:
+            curr_x = out_x = 0
+            while curr_x + f <= in_dim:
+                out[curr_f, out_y, out_x] = np.sum(filt[curr_f] * image[:,curr_y:curr_y+f, curr_x:curr_x+f]) + bias[curr_f]
+                curr_x += s
+                out_x += 1
+            curr_y += s
+            out_y += 1
+        
+    return out
+\stoptyping
+
+\starttyping
+def maxpool(image, f=2, s=2):
+    '''
+    Downsample `image` using kernel size `f` and stride `s`
+    '''
+    n_c, h_prev, w_prev = image.shape
+    
+    h = int((h_prev - f)/s)+1
+    w = int((w_prev - f)/s)+1
+    
+    downsampled = np.zeros((n_c, h, w))
+    for i in range(n_c):
+        # slide maxpool window over each part of the image and assign the max value at each step to the output
+        curr_y = out_y = 0
+        while curr_y + f <= h_prev:
+            curr_x = out_x = 0
+            while curr_x + f <= w_prev:
+                downsampled[i, out_y, out_x] = np.max(image[i, curr_y:curr_y+f, curr_x:curr_x+f])
+                curr_x += s
+                out_x += 1
+            curr_y += s
+            out_y += 1
+    return downsampled
+\stoptyping
+
+\starttyping
+def convolutionBackward(dconv_prev, conv_in, filt, s):
+    '''
+    Backpropagation through a convolutional layer. 
+    '''
+    (n_f, n_c, f, _) = filt.shape
+    (_, orig_dim, _) = conv_in.shape
+    ## initialize derivatives
+    dout = np.zeros(conv_in.shape) 
+    dfilt = np.zeros(filt.shape)
+    dbias = np.zeros((n_f,1))
+    for curr_f in range(n_f):
+        # loop through all filters
+        curr_y = out_y = 0
+        while curr_y + f <= orig_dim:
+            curr_x = out_x = 0
+            while curr_x + f <= orig_dim:
+                # loss gradient of filter (used to update the filter)
+                dfilt[curr_f] += dconv_prev[curr_f, out_y, out_x] * conv_in[:, curr_y:curr_y+f, curr_x:curr_x+f]
+                # loss gradient of the input to the convolution operation (conv1 in the case of this network)
+                dout[:, curr_y:curr_y+f, curr_x:curr_x+f] += dconv_prev[curr_f, out_y, out_x] * filt[curr_f] 
+                curr_x += s
+                out_x += 1
+            curr_y += s
+            out_y += 1
+        # loss gradient of the bias
+        dbias[curr_f] = np.sum(dconv_prev[curr_f])
+    
+    return dout, dfilt, dbias
+\stoptyping
+
+\starttyping
+def maxpoolBackward(dpool, orig, f, s):
+    '''
+    Backpropagation through a maxpooling layer. The gradients are passed through the indices of greatest value in the original maxpooling during the forward step.
+    '''
+    (n_c, orig_dim, _) = orig.shape
+    
+    dout = np.zeros(orig.shape)
+    
+    for curr_c in range(n_c):
+        curr_y = out_y = 0
+        while curr_y + f <= orig_dim:
+            curr_x = out_x = 0
+            while curr_x + f <= orig_dim:
+                # obtain index of largest value in input for current window
+                (a, b) = nanargmax(orig[curr_c, curr_y:curr_y+f, curr_x:curr_x+f])
+                dout[curr_c, curr_y+a, curr_x+b] = dpool[curr_c, out_y, out_x]
+                
+                curr_x += s
+                out_x += 1
+            curr_y += s
+            out_y += 1
+        
+    return dout
+\stoptyping
+
 \startitemize
 \startitem 
 The problem the network is going to tackle (classic MNIST image recognition)
