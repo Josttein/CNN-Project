@@ -20,13 +20,8 @@ The output of this layer is passed to the final dense layer, which necessarly co
 \externalfigure[Images/conv-net-alej.png]
 \stopplacefigure
 
-\startsubsection[title=Various functions]
-The network uses ReLU for its activation function, 
-
-\stopsubsection
-
-
-
+\startsubsection[title=Convolution function]
+Here is the python code for the forward convolution operation of the network
 \starttyping
 def convolution(image, filt, bias, s=1):
     '''
@@ -55,6 +50,20 @@ def convolution(image, filt, bias, s=1):
         
     return out
 \stoptyping
+\stopsubsection
+
+\startsubsection[title=Max pooling]
+Here is the python code for the forward max-pooling operation of the network
+\stopsubsection
+
+\startsubsection[title=Various functions]
+The network uses ReLU for its activation function, 
+
+\stopsubsection
+
+
+
+
 
 \starttyping
 def maxpool(image, f=2, s=2):
