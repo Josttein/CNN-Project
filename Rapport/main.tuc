@@ -4,7 +4,7 @@ utilitydata.comment={
  ["escape"]="[===[ ... ]===]",
  ["file"]="main",
  ["format"]="cont-en",
- ["stamp"]="2020.06.14 22:04",
+ ["stamp"]="2020.06.20 13:33",
  ["version"]=0x1.4f5c28f5c28f6p+0,
 }
 
@@ -280,7 +280,7 @@ utilitydata.structures.lists.collected={
   },
   ["titledata"]={
    ["label"]="section",
-   ["title"]="Introduction",
+   ["title"]="Introducti on",
   },
  },
  {

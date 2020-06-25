@@ -1,6 +1,6 @@
 open source     > level 1, order 1, name '/opt/context-minimals/texmf-context/tex/context/base/mkiv/cont-yes.mkiv'
 system          > 
-system          > ConTeXt  ver: 2020.06.14 22:04 MKIV beta  fmt: 2020.6.16  int: english/english
+system          > ConTeXt  ver: 2020.06.20 13:33 MKIV beta  fmt: 2020.6.24  int: english/english
 system          > 
 system          > 'cont-new.mkiv' loaded
 open source     > level 2, order 2, name '/opt/context-minimals/texmf-context/tex/context/base/mkiv/cont-new.mkiv'
@@ -9,13 +9,13 @@ close source    > level 2, order 2, name '/opt/context-minimals/texmf-context/te
 system          > files > jobname 'main', input './main', result 'main'
 fonts           > latin modern fonts are not preloaded
 languages       > language 'en' is active
-open source     > level 2, order 3, name '/home/jostein/CNN-Project/Rapport/main.tex'
+open source     > level 2, order 3, name '/home/jostein/GIT/CNN-Project/Rapport/main.tex'
 fonts           > preloading latin modern fonts (third stage)
 fonts           > 'fallback modern-designsize rm 10pt' is loaded
 colors          > 'rgb' color space is supported
 colors          > 'cmyk' color space is supported
 open source     > level 3, order 4, name 'intro.tex'
-structure       > sectioning > subject @ level 3 : 0.0.0 -> Introduction
+structure       > sectioning > subject @ level 3 : 0.0.0 -> Introducti on
 close source    > level 3, order 4, name 'intro.tex'
 backend         > xmp > using file '/opt/context-minimals/texmf-context/tex/context/base/mkiv/lpdf-pdx.xml'
 pages           > flushing realpage 1, userpage 1, subpage 1
@@ -55,7 +55,7 @@ structure       > sectioning > section @ level 3 : 0.0.4 -> Conclusion
 close source    > level 3, order 8, name 'conc.tex'
 pages           > flushing realpage 8, userpage 8, subpage 8
 pages           > flushing realpage 9, userpage 9, subpage 9
-close source    > level 2, order 8, name '/home/jostein/CNN-Project/Rapport/main.tex'
+close source    > level 2, order 8, name '/home/jostein/GIT/CNN-Project/Rapport/main.tex'
 close source    > level 1, order 8, name '/opt/context-minimals/texmf-context/tex/context/base/mkiv/cont-yes.mkiv'
 
 system          > start used files
@@ -73,11 +73,11 @@ system          >    3: filename=publ-imp-default.lua filetype=scripts foundname
 system          >    4: filename=cont-new.mkiv filetype=tex foundname=/opt/context-minimals/texmf-context/tex/context/base/mkiv/cont-new.mkiv fullname=/opt/context-minimals/texmf-context/tex/context/base/mkiv/cont-new.mkiv usedmethod=database
 system          >    5: filename=lang-exc.lua filetype=scripts foundname=/opt/context-minimals/texmf-context/tex/context/base/mkiv/lang-exc.lua fullname=/opt/context-minimals/texmf-context/tex/context/base/mkiv/lang-exc.lua usedmethod=database
 system          >    6: filename=lang-us.lua filetype=scripts foundname=/opt/context-minimals/texmf-context/tex/context/patterns/mkiv/lang-us.lua fullname=/opt/context-minimals/texmf-context/tex/context/patterns/mkiv/lang-us.lua usedmethod=database
-system          >    7: filename=/home/jostein/CNN-Project/Rapport/main.tex foundname=/home/jostein/CNN-Project/Rapport/main.tex fullname=/home/jostein/CNN-Project/Rapport/main.tex usedmethod=direct
+system          >    7: filename=/home/jostein/GIT/CNN-Project/Rapport/main foundname=/home/jostein/GIT/CNN-Project/Rapport/main.tex fullname=/home/jostein/GIT/CNN-Project/Rapport/main.tex usedmethod=qualified
 system          >    8: filename=lm.lfg filetype=tex foundname=/opt/context-minimals/texmf-context/tex/context/fonts/mkiv/lm.lfg fullname=/opt/context-minimals/texmf-context/tex/context/fonts/mkiv/lm.lfg usedmethod=database
 system          >    9: filename=lmroman10-regular filetype=otf format=otf foundname=/opt/context-minimals/texmf/fonts/opentype/public/lm/lmroman10-regular.otf fullname=/opt/context-minimals/texmf/fonts/opentype/public/lm/lmroman10-regular.otf usedmethod=database
 system          >   10: filename=latinmodern-math.otf filetype=opentypefonts foundname=/opt/context-minimals/texmf/fonts/opentype/public/lm-math/latinmodern-math.otf fullname=/opt/context-minimals/texmf/fonts/opentype/public/lm-math/latinmodern-math.otf usedmethod=database
-system          >   11: filename=intro.tex foundname=intro.tex fullname=/home/jostein/CNN-Project/Rapport/intro.tex usedmethod=direct
+system          >   11: filename=intro.tex foundname=intro.tex fullname=/home/jostein/GIT/CNN-Project/Rapport/intro.tex usedmethod=direct
 system          >   12: filename=lmroman10-italic filetype=otf format=otf foundname=/opt/context-minimals/texmf/fonts/opentype/public/lm/lmroman10-italic.otf fullname=/opt/context-minimals/texmf/fonts/opentype/public/lm/lmroman10-italic.otf usedmethod=database
 system          >   13: filename=pdftex.map filetype=map format=map foundname=/opt/context-minimals/texmf/fonts/map/pdftex/plain/pdftex.map fullname=/opt/context-minimals/texmf/fonts/map/pdftex/plain/pdftex.map usedmethod=database
 system          >   14: filename=lpdf-pdx.xml filetype=tex foundname=/opt/context-minimals/texmf-context/tex/context/base/mkiv/lpdf-pdx.xml fullname=/opt/context-minimals/texmf-context/tex/context/base/mkiv/lpdf-pdx.xml usedmethod=database
@@ -85,32 +85,32 @@ system          >   15: filename=lmroman10-bold filetype=otf format=otf foundnam
 system          >   16: filename=lmroman8-bold filetype=otf format=otf foundname=/opt/context-minimals/texmf/fonts/opentype/public/lm/lmroman8-bold.otf fullname=/opt/context-minimals/texmf/fonts/opentype/public/lm/lmroman8-bold.otf usedmethod=database
 system          >   17: filename=lmroman8-regular filetype=otf format=otf foundname=/opt/context-minimals/texmf/fonts/opentype/public/lm/lmroman8-regular.otf fullname=/opt/context-minimals/texmf/fonts/opentype/public/lm/lmroman8-regular.otf usedmethod=database
 system          >   18: filename=lmromanslant10-bold filetype=otf format=otf foundname=/opt/context-minimals/texmf/fonts/opentype/public/lm/lmromanslant10-bold.otf fullname=/opt/context-minimals/texmf/fonts/opentype/public/lm/lmromanslant10-bold.otf usedmethod=database
-system          >   19: filename=nn.tex foundname=nn.tex fullname=/home/jostein/CNN-Project/Rapport/nn.tex usedmethod=direct
+system          >   19: filename=nn.tex foundname=nn.tex fullname=/home/jostein/GIT/CNN-Project/Rapport/nn.tex usedmethod=direct
 system          >   20: filename=lmroman12-bold filetype=otf format=otf foundname=/opt/context-minimals/texmf/fonts/opentype/public/lm/lmroman12-bold.otf fullname=/opt/context-minimals/texmf/fonts/opentype/public/lm/lmroman12-bold.otf usedmethod=database
 system          >   21: filename=lmroman12-regular filetype=otf format=otf foundname=/opt/context-minimals/texmf/fonts/opentype/public/lm/lmroman12-regular.otf fullname=/opt/context-minimals/texmf/fonts/opentype/public/lm/lmroman12-regular.otf usedmethod=database
-system          >   22: filename=cnn.tex foundname=cnn.tex fullname=/home/jostein/CNN-Project/Rapport/cnn.tex usedmethod=direct
+system          >   22: filename=cnn.tex foundname=cnn.tex fullname=/home/jostein/GIT/CNN-Project/Rapport/cnn.tex usedmethod=direct
 system          >   23: filename=lmromanslant10-regular filetype=otf format=otf foundname=/opt/context-minimals/texmf/fonts/opentype/public/lm/lmromanslant10-regular.otf fullname=/opt/context-minimals/texmf/fonts/opentype/public/lm/lmromanslant10-regular.otf usedmethod=database
-system          >   24: filename=/home/jostein/CNN-Project/Rapport/Images/conv-0.jpg format=tex foundname=/home/jostein/CNN-Project/Rapport/Images/conv-0.jpg fullname=/home/jostein/CNN-Project/Rapport/Images/conv-0.jpg usedmethod=direct
-system          >   25: filename=/home/jostein/CNN-Project/Rapport/Images/conv-1.jpg format=tex foundname=/home/jostein/CNN-Project/Rapport/Images/conv-1.jpg fullname=/home/jostein/CNN-Project/Rapport/Images/conv-1.jpg usedmethod=direct
-system          >   26: filename=/home/jostein/CNN-Project/Rapport/Images/conv-2.jpg format=tex foundname=/home/jostein/CNN-Project/Rapport/Images/conv-2.jpg fullname=/home/jostein/CNN-Project/Rapport/Images/conv-2.jpg usedmethod=direct
-system          >   27: filename=/home/jostein/CNN-Project/Rapport/Images/conv-3.jpg format=tex foundname=/home/jostein/CNN-Project/Rapport/Images/conv-3.jpg fullname=/home/jostein/CNN-Project/Rapport/Images/conv-3.jpg usedmethod=direct
-system          >   28: filename=/home/jostein/CNN-Project/Rapport/Images/conv-4.jpg format=tex foundname=/home/jostein/CNN-Project/Rapport/Images/conv-4.jpg fullname=/home/jostein/CNN-Project/Rapport/Images/conv-4.jpg usedmethod=direct
-system          >   29: filename=/home/jostein/CNN-Project/Rapport/Images/conv-5.jpg format=tex foundname=/home/jostein/CNN-Project/Rapport/Images/conv-5.jpg fullname=/home/jostein/CNN-Project/Rapport/Images/conv-5.jpg usedmethod=direct
-system          >   30: filename=/home/jostein/CNN-Project/Rapport/Images/conv-6.jpg format=tex foundname=/home/jostein/CNN-Project/Rapport/Images/conv-6.jpg fullname=/home/jostein/CNN-Project/Rapport/Images/conv-6.jpg usedmethod=direct
-system          >   31: filename=/home/jostein/CNN-Project/Rapport/Images/conv-7.jpg format=tex foundname=/home/jostein/CNN-Project/Rapport/Images/conv-7.jpg fullname=/home/jostein/CNN-Project/Rapport/Images/conv-7.jpg usedmethod=direct
-system          >   32: filename=/home/jostein/CNN-Project/Rapport/Images/conv-8.jpg format=tex foundname=/home/jostein/CNN-Project/Rapport/Images/conv-8.jpg fullname=/home/jostein/CNN-Project/Rapport/Images/conv-8.jpg usedmethod=direct
-system          >   33: filename=imp.tex foundname=imp.tex fullname=/home/jostein/CNN-Project/Rapport/imp.tex usedmethod=direct
-system          >   34: filename=conc.tex foundname=conc.tex fullname=/home/jostein/CNN-Project/Rapport/conc.tex usedmethod=direct
+system          >   24: filename=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-0.jpg format=tex foundname=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-0.jpg fullname=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-0.jpg usedmethod=direct
+system          >   25: filename=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-1.jpg format=tex foundname=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-1.jpg fullname=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-1.jpg usedmethod=direct
+system          >   26: filename=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-2.jpg format=tex foundname=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-2.jpg fullname=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-2.jpg usedmethod=direct
+system          >   27: filename=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-3.jpg format=tex foundname=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-3.jpg fullname=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-3.jpg usedmethod=direct
+system          >   28: filename=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-4.jpg format=tex foundname=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-4.jpg fullname=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-4.jpg usedmethod=direct
+system          >   29: filename=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-5.jpg format=tex foundname=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-5.jpg fullname=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-5.jpg usedmethod=direct
+system          >   30: filename=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-6.jpg format=tex foundname=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-6.jpg fullname=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-6.jpg usedmethod=direct
+system          >   31: filename=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-7.jpg format=tex foundname=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-7.jpg fullname=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-7.jpg usedmethod=direct
+system          >   32: filename=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-8.jpg format=tex foundname=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-8.jpg fullname=/home/jostein/GIT/CNN-Project/Rapport/Images/conv-8.jpg usedmethod=direct
+system          >   33: filename=imp.tex foundname=imp.tex fullname=/home/jostein/GIT/CNN-Project/Rapport/imp.tex usedmethod=direct
+system          >   34: filename=conc.tex foundname=conc.tex fullname=/home/jostein/GIT/CNN-Project/Rapport/conc.tex usedmethod=direct
 
 system          > stop used files
 
 
 system          > start commandline options
 
-system          > currentrun="1"
-system          > fulljobname="./main.tex"
-system          > input="./main.tex"
-system          > kindofrun="1"
+system          > currentrun="2"
+system          > fulljobname="./main"
+system          > input="./main"
+system          > kindofrun="2"
 system          > maxnofruns="9"
 system          > texmfbinpath="/opt/context-minimals/texmf-linux-64/bin"
 
@@ -119,7 +119,7 @@ system          > stop commandline options
 
 system          > start commandline files
 
-system          >    1: ./main.tex
+system          >    1: ./main
 
 system          > stop commandline files
 
@@ -131,29 +131,28 @@ modules         > stop used modules
 
 
 mkiv lua stats  > used config file: selfautoparent:/texmf/web2c/texmfcnf.lua
-mkiv lua stats  > used cache path: /home/jostein/.cache/context-minimals/luatex-cache/context/5fe67e0bfe781ce0dde776fb1556f32e
-mkiv lua stats  > resource resolver: loadtime 0.007 seconds, 0 scans with scantime 0.000 seconds, 0 shared scans, 34 found files, scanned paths: <none>
-mkiv lua stats  > stored bytecode data: 452 modules (0.224 sec), 93 tables (0.013 sec), 545 chunks (0.238 sec)
-mkiv lua stats  > traced context: maxstack: 1409, freed: 0, unreachable: 1409
+mkiv lua stats  > used cache path: /home/jostein/.cache/context/luatex-cache/context/5fe67e0bfe781ce0dde776fb1556f32e
+mkiv lua stats  > resource resolver: loadtime 0.006 seconds, 0 scans with scantime 0.000 seconds, 0 shared scans, 34 found files, scanned paths: <none>
+mkiv lua stats  > stored bytecode data: 452 modules (0.212 sec), 93 tables (0.012 sec), 545 chunks (0.224 sec)
+mkiv lua stats  > traced context: maxstack: 1411, freed: 0, unreachable: 1411
 mkiv lua stats  > cleaned up reserved nodes: 63 nodes, 9 lists of 442
 mkiv lua stats  > node memory usage: 18 attribute, 5 attribute_list, 2 glue, 52 glue_spec, 3 kern, 2 penalty, 2 temp, 2 user_defined
 mkiv lua stats  > node list callback tasks: 8 unique task lists, 9 instances (re)created, 1552 calls
-mkiv lua stats  > h-node processing time: 0.056 seconds including kernel
-mkiv lua stats  > attribute processing time: 0.016 seconds front- and backend
-mkiv lua stats  > driver time: 0.036 seconds 
+mkiv lua stats  > h-node processing time: 0.035 seconds including kernel
+mkiv lua stats  > driver time: 0.027 seconds 
 mkiv lua stats  > used backend: pdf (backend for directly generating pdf output)
-mkiv lua stats  > jobdata time: 0.003 seconds saving, 0.001 seconds loading
-mkiv lua stats  > callbacks: internal: 3120, file: 559, direct: 11, late: 41, function 1731, total: 5462 (683 per page)
+mkiv lua stats  > jobdata time: 0.003 seconds saving, 0.002 seconds loading
+mkiv lua stats  > callbacks: internal: 3120, file: 561, direct: 11, late: 41, function 1731, total: 5464 (683 per page)
 mkiv lua stats  > randomizer: resumed with value 0.45820444030687
 mkiv lua stats  > result saved in file: main.pdf, compresslevel 3, objectcompresslevel 1
 mkiv lua stats  > loaded patterns: en::1, load time: 0.000
 mkiv lua stats  > loaded fonts: 10 files: latinmodern-math.otf, lmroman10-bold.otf, lmroman10-italic.otf, lmroman10-regular.otf, lmroman12-bold.otf, lmroman12-regular.otf, lmroman8-bold.otf, lmroman8-regular.otf, lmromanslant10-bold.otf, lmromanslant10-regular.otf
-mkiv lua stats  > font engine: otf 3.111, afm 1.513, tfm 1.000, 31 instances, 19 shared in backend, 3 common vectors, 16 common hashes, load time 0.500 seconds 
-mkiv lua stats  > math processing time: 0.016 seconds 
-mkiv lua stats  > graphics processing time: 0.015 seconds including tex, 9 processed images, 9 unique asked, 9 bad names
+mkiv lua stats  > font engine: otf 3.111, afm 1.513, tfm 1.000, 31 instances, 19 shared in backend, 3 common vectors, 16 common hashes, load time 0.483 seconds 
+mkiv lua stats  > math processing time: 0.011 seconds 
+mkiv lua stats  > graphics processing time: 0.009 seconds including tex, 9 processed images, 9 unique asked, 9 bad names
 mkiv lua stats  > used platform: linux-64, type: unix, binary subtree: texmf-linux-64
 mkiv lua stats  > used engine: luatex version: 1.1102, functionality level: 7226, banner: this is luatex, version 1.11.2 (tex live 2020/dev)
-mkiv lua stats  > used hash slots: 46112 of 65536 + 100000
-mkiv lua stats  > lua properties: engine: lua 5.3, used memory: 132 MB, ctx: 132 MB, max: unknown MB, hash chars: min(64,40), symbol mask: utf (τεχ)
-mkiv lua stats  > runtime: 1.344 seconds, 9 processed pages, 9 shipped pages, 6.696 pages/second
+mkiv lua stats  > used hash slots: 46025 of 65536 + 100000
+mkiv lua stats  > lua properties: engine: lua 5.3, used memory: 143 MB, ctx: 143 MB, max: unknown MB, hash chars: min(64,40), symbol mask: utf (τεχ)
+mkiv lua stats  > runtime: 1.164 seconds, 9 processed pages, 9 shipped pages, 7.732 pages/second
 
