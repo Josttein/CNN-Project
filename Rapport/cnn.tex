@@ -134,21 +134,25 @@ b^{(l,\color[red]{c})}
 \stopformula
 \stopplaceformula
 
-Derivative with respecto to $Z$
+Derivative with respect to $Z$.
+$\color[magenta]{c^*} \in [\color[red]{c} \, .. \, \color[red]{c} + \color[magenta]{c^*}]$.
+$\color[magenta]{y^*} \in [\color[red]{y} \, .. \, \color[red]{y} + \color[magenta]{y^*}]$.
+$\color[magenta]{x^*} \in [\color[red]{x} \, .. \, \color[red]{x} + \color[magenta]{x^*}]$.
+
 \startplaceformula
 \startformula
 \startmathalignment
 \NC \frac
    {\partial \color[green]{Z}_{\color[red]{x},\color[red]{y},\color[red]{c}}^{(l+1)}}
-   {\partial Z_{\color[red]{x}, \color[red]{y}, \color[magenta]{c^*}}^{(l)}}
+   {\partial Z_{\color[magenta]{x^*}, \color[magenta]{y^*}, \color[magenta]{c^*}}^{(l)}}
 = \NC
 \frac
    {\partial}
-   {\partial Z_{\color[red]{x}, \color[red]{y}, \color[magenta]{c^*}}^{(l)}}
+   {\partial Z_{\color[magenta]{x^*}, \color[magenta]{y^*}, \color[magenta]{c^*}}^{(l)}}
 \left(
-\sum_{\color[blue]{c'} = 0}^{\delta c_Z^{(l)}}
-\sum_{\color[blue]{y'} = 0}^{\delta y_Z^{(l)}}
-\sum_{\color[blue]{x'} = 0}^{\delta x_Z^{(l)}}
+\sum_{\color[blue]{c'} = 0}^{\delta c_W^{(l)}}
+\sum_{\color[blue]{y'} = 0}^{\delta y_W^{(l)}}
+\sum_{\color[blue]{x'} = 0}^{\delta x_W^{(l)}}
 \Bigl(
 W_{\color[blue]{x'}, \color[blue]{y'}, \color[blue]{c'}}^{(l, \color[red]{c})}
 Z_{\color[red]{x} + \color[blue]{x'}, \color[red]{y} + \color[blue]{y'}, \color[blue]{c'}}^{(l)}
@@ -157,12 +161,12 @@ Z_{\color[red]{x} + \color[blue]{x'}, \color[red]{y} + \color[blue]{y'}, \color[
 b^{(l,\color[red]{c})}
 \right) \NR
 \NC = \NC
-\sum_{\color[blue]{c'} = 0}^{\delta c_Z^{(l)}}
-\sum_{\color[blue]{y'} = 0}^{\delta y_Z^{(l)}}
-\sum_{\color[blue]{x'} = 0}^{\delta x_Z^{(l)}}
+\sum_{\color[blue]{c'} = 0}^{\delta c_W^{(l)}}
+\sum_{\color[blue]{y'} = 0}^{\delta y_W^{(l)}}
+\sum_{\color[blue]{x'} = 0}^{\delta x_W^{(l)}}
 \frac
    {\partial}
-   {\partial Z_{\color[red]{x}, \color[red]{y}, \color[magenta]{c^*}}^{(l)}}
+   {\partial Z_{\color[magenta]{x^*}, \color[magenta]{y^*}, \color[magenta]{c^*}}^{(l)}}
 \left(
 \Bigl(
 W_{\color[blue]{x'}, \color[blue]{y'}, \color[blue]{c'}}^{(l, \color[red]{c})}
@@ -171,13 +175,17 @@ Z_{\color[red]{x} + \color[blue]{x'}, \color[red]{y} + \color[blue]{y'}, \color[
 +
 b^{(l,\color[red]{c})}
 \right) \NR
-\NC = \NC 
-Z_{\color[red]{x}, \color[red]{y}, \color[magenta]{c^*}}^{(l)}
+\NC = \NC
+W_{\color[blue]{x'}, \color[blue]{y'}, \color[blue]{c'}}^{(l, \color[red]{c})}
 \stopmathalignment
 \stopformula
 \stopplaceformula
 
-Derivative with respecto to $W$
+Derivative with respecto to $W$.
+$\color[magenta]{c^*} \in [0 \, .. \, \delta c_W^{(l)}]$.
+$\color[magenta]{y^*} \in [0 \, .. \, \delta y_W^{(l)}]$.
+$\color[magenta]{x^*} \in [0 \, .. \, \delta x_W^{(l)}]$.
+
 \startplaceformula
 \startformula
 \startmathalignment
@@ -189,9 +197,9 @@ Derivative with respecto to $W$
    {\partial}
    {\partial W_{\color[magenta]{x^*}, \color[magenta]{y^*}, \color[magenta]{c^*}}^{(l, \color[red]{c})}}
 \left(
-\sum_{\color[blue]{c'} = 0}^{\delta c_Z^{(l)}}
-\sum_{\color[blue]{y'} = 0}^{\delta y_Z^{(l)}}
-\sum_{\color[blue]{x'} = 0}^{\delta x_Z^{(l)}}
+\sum_{\color[blue]{c'} = 0}^{\delta c_W^{(l)}}
+\sum_{\color[blue]{y'} = 0}^{\delta y_W^{(l)}}
+\sum_{\color[blue]{x'} = 0}^{\delta x_W^{(l)}}
 \Bigl(
 W_{\color[blue]{x'}, \color[blue]{y'}, \color[blue]{c'}}^{(l, \color[red]{c})}
 Z_{\color[red]{x} + \color[blue]{x'}, \color[red]{y} + \color[blue]{y'}, \color[blue]{c'}}^{(l)}
@@ -200,9 +208,9 @@ Z_{\color[red]{x} + \color[blue]{x'}, \color[red]{y} + \color[blue]{y'}, \color[
 b^{(l,\color[red]{c})}
 \right) \NR
 \NC = \NC
-\sum_{\color[blue]{c'} = 0}^{\delta c_Z^{(l)}}
-\sum_{\color[blue]{y'} = 0}^{\delta y_Z^{(l)}}
-\sum_{\color[blue]{x'} = 0}^{\delta x_Z^{(l)}}
+\sum_{\color[blue]{c'} = 0}^{\delta c_W^{(l)}}
+\sum_{\color[blue]{y'} = 0}^{\delta y_W^{(l)}}
+\sum_{\color[blue]{x'} = 0}^{\delta x_W^{(l)}}
 \frac
    {\partial}
    {\partial W_{\color[magenta]{x^*}, \color[magenta]{y^*}, \color[magenta]{c^*}}^{(l, \color[red]{c})}}
@@ -232,9 +240,9 @@ Derivative with respect to $b$
    {\partial}
    {\partial b^{(l,\color[red]{c})}}
 \left(
-\sum_{\color[blue]{c'} = 0}^{\delta c_Z^{(l)}}
-\sum_{\color[blue]{y'} = 0}^{\delta y_Z^{(l)}}
-\sum_{\color[blue]{x'} = 0}^{\delta x_Z^{(l)}}
+\sum_{\color[blue]{c'} = 0}^{\delta c_W^{(l)}}
+\sum_{\color[blue]{y'} = 0}^{\delta y_W^{(l)}}
+\sum_{\color[blue]{x'} = 0}^{\delta x_W^{(l)}}
 \Bigl(
 W_{\color[blue]{x'}, \color[blue]{y'}, \color[blue]{c'}}^{(l, \color[red]{c})}
 Z_{\color[red]{x} + \color[blue]{x'}, \color[red]{y} + \color[blue]{y'}, \color[blue]{c'}}^{(l)}
