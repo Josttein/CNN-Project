@@ -2,55 +2,93 @@
 NN can be used for solving a wide array of problems in computer science, arguably the most common of which lies in computer vision.
  As such, for the purpose of demonstration, we will explain the structural motivation of a typical NN, the Multi-Layered Perceptron (MLP), in the context of computer vision.  
 
-Say for instance you have an image containing an animal and you want to identify what animal it is, or to classify the image using a NN.
-The network itself can then be considered a function with a number of inputs equal to the number of pixels in the image times three in the case of an RGB.
-The number of outputs is in this case the number of animal types.
+The MLP performs well in image classification. 
+The network can be considered a function with a number of inputs equal to the number of pixels in the image times three in the case of an RGB.
+The number of outputs is in this case the number of classes.
 This is obviously an extremely complicated function and finding the exact function is near impossible.
-A more intelligent approach is to approximate f with composition of several easily computed functions, such as linear functions (affine) (Figure 1).
-The structured is loosely based on neuroscience, hence neurons, weights, biases.
+A more intelligent approach is to approximate it with composition of several easily computed functions, such as linear functions.
+
+
+The structured is loosely based on neuroscience; the nodes are often called neurons, which in reality is a number describing whether or not the neuron is active.
+The connections between neurons are called weights, noted W, and translates how much the activation of one neuron should impact the activation of a following neuron.
+Lastly, we usually add constant values called biases noted b. 
+These values can be seen as thresholds in order for a neuron to activate. 
+Parallel neurons are joined in layers noted X.
+
+An MLP is a so-called fully connected neural network. 
+This means that each neuron in layer $X^{(l)}$, impacts the activation of each neuron in the following layer $X^{(l+1)}$.
+With these notations, the passage from layer to the next can be written
+\startformula
+X^{(l+1)} = WX^{(l)} + b
+\stopformula
+  
 A simple network might consist of two such layers with Y number of neurons each.
 This means (Y) number of adjustable parameters! With the structure defined, we have yet to determine the parameters.
 This is where the training phase enters.  
 
 \startsubsection[title=Training phase]
-The idea is simple. We start out with a large dataset with classified examples, called a training set and we adjust our network to fit these data.
+The idea is simple. We start out with a large dataset with n classified examples, called a training set and we adjust our network to fit these data.
 The hope is then that the network will be able to classify new images with these same parameters.
-In order to quantify the performance of the NN during the training phase, we introduce a cost function.
-Knowing the desired output with the corresponding input, we look to minimize this cost function by adjusting the parameters of the NN i.e. its weights and biases.
+In order to quantify the performance of the MLP during the training phase, we introduce a cost function that, in short, is a non-negative function that is closer to zero the better the network performs.
+Knowing the desired output with the corresponding input, we look to minimize this cost function by adjusting the parameters of the MLP i.e. its weights and biases.
 This can be seen as an optimization problem with thousands of inputs (in our case, Y weights and biases).
 For demonstration purposes, we will explain the concept of gradient descent, an intuitive and common optimization algorithm.  
 \stopsubsection
 
 \startsubsection[title=Optimization using gradient descent]
-We have a function f that we want to minimize while avoiding calculating all its possible values.
-The gradient of f is an operation that tells us which inputs to adjust and by what weight to adjust them in order to increase f by as much as possible in a given point.
-Visually, it can be considered the direction in the input space that increases the output the most.
-In our case, we want to decrease f by as much as possible so, assuming f is continuous, we take the negative value of the gradient.
-As such, the gradient descent algorithm consists of, at each iteration, calculating f and gradf, adjusting the input by “stepping in the direction of gradf” (Figure 2) and repeating until we have found a local minimum or until the value of f is sufficiently low.  
+We have a function that we want to minimize without calculating all its possible values. 
+The gradient of the function is an operation that tells us which inputs to adjust and by how much, in order to increase the function by as much as possible in a given point. 
+Visually, it can be considered the direction in the input space that increases the output the most. 
+In our case, we want to decrease the cost by as much as possible so we take the negative value of the gradient. 
+As such, the gradient descent algorithm consists of, at each iteration, calculating the cost and its gradient, adjusting the inputs by “stepping in the direction of the gradient" (Figure 2) and repeating until we have found a local minimum or until the cost is sufficiently low. 
+A limitation to this algorithm, is that there can be several local minima and there is no guarantee of finding the lowest one. 
+In practice, though, the local minima in the context of neural networks are usually sufficiently low. 
 
-In the context of training a neural network, we have yet to introduce a way to calculate this crucial gradient of the cost function.
-To do so, we first need to determine a mathematical expression of the neural network itself.
-In fact, the network typically consists of more than just linear functions. 
+In the context of training a neural network, we have yet to introduce a way to calculate this very important gradient of the cost function. 
+To do so, we first need to determine a mathematical expression of the neural network itself. 
+In fact, the network typically consists of more than just linear functions.
+ 
 \stopsubsection
  
 
 \startsubsection[title=Activation function] 
-There are a few different motivations behind an activation function.
-Firstly, it introduces non-linearity to a problem that is manifestly not linear.
-For optimization purposes, we also want this function to be continuous.
-Better still if we know the expression of its derivate.
-Both the sigmoid function defined as _ and the arctan function have the desired properties, though the simple ReLU (Figure 3) is shown to be more efficient for optimization (source) and thus more common in practice. 
+Up until now, we have introduced a transition from one layer to the next as a linear transformation. 
+The problems we want the network to solve are usually far from linear, which is why we introduce a non-linear activation function phi. We now have
+\startformula
+X^{(l+1)} = \phi(WX^{(l)} + b)
+\stopformula
+There are different variants of activation functions. In some cases, we want to avoid too large values.  
+For optimization purposes, we also want the activation function to be derivable. 
+Both the sigmoid function defined as 
+\startformula
+\phi(x) = \frac{1}{1+ e^{-x}}
+\stopformula
+and the arctan function have these desired properties, though the simple ReLU defined as 
+\startformula
+\phi(x) = \max(0,x) 
+\stopformula
+is shown to be more efficient for optimization (source Goodfellow) and thus more common in practice.
+
 \stopsubsection
 
 \startsubsection[title=Softmax, loss and cost function ]
-Before evaluating a loss function, we transform the output layer in a way that their values are positive and their sum is equal to 1.
+Before evaluating a cost function, we transform the output layer in a way that their values are positive and their sum is equal to 1. 
 In this way, each value in the output layer can be interpreted as the probability that a given input is classified as such.
-While in the training phase, we obviously know the desired output to each input, thus we want that specific “neuron” to have a value close to 1, and all the others to be close to 0.
+This is done using the softmax function defined as
+\startformula
+\sigma(z_i) = \frac{\exp(z_i)}{\sum_{j=1}^k \exp(z_j)} 
+\stopformula
+where $k$ is equal to the number of outputs. 
+ 
+While in the training phase, we obviously know the desired output to each input, thus we want that specific neuron to have a value close to 1, and all the others to be close to 0. 
 The loss function, which quantifies “how close” the network’s guess is to a given output, can have different definitions depending on the problem.
-A common loss function is the so called ilogit defined as _ .
-In order to quantify how well the network performs on the entire training set, we want to evaluate the loss function on each data-input.
-The cost function can then be defined as _.
-Or the average of losses.
+For instance, a common loss function that pairs well with the softmax function, is the negative log-likelihood defined as
+\startformula
+L_i = -\log(y_i)
+\stopformula 
+
+In order to quantify how well the network performs on the entire training set, we want to evaluate the loss function on each data-input. 
+The cost function can then be defined as $\sum_{i=1}^n L_i$. Or the sum of losses. 
 \stopsubsection
 
 \startsubsection[title=Forward propagation]
