@@ -86,19 +86,23 @@ In this scenario, the indices of $M$ range in $[0 \, .. \, n_x(M) - 1] \times [0
 
 Let us say that the kernel scans its input one column and one row at a time.
 In this scenario, the output feature map will have dimentions
+\stopsubsection
+
+\startsubsection[title=The convolutional layer]
+Okay this is where I will start developing the mathematics.
+First we need to define the various variables used and some terminology.
+A network has several layers and each layer has its own specific attributes.
+A supersricpt encolsed in parantheses will be used as the layer index.
+
 
 \startplaceformula[reference=dimen-feature-1]
 \startformula
 \startmathalignment[n=1]
-\NC n_x(F) = n_x(M) - n_x(K) + 1 \NR
-\NC n_y(F) = n_y(M) - n_y(K) + 1 \NR
+\NC \delta x_Z^{(l+1)} = \delta x_W^{(l)} - \delta x_Z^{(l)} + 1 \NR
+\NC y_Z^{(l+1)} = \delta y_W^{(l)} - \delta y_Z^{(l)} + 1 \NR
 \stopmathalignment
 \stopformula
 \stopplaceformula
-
-Let $\color[red]{x}$ and $\color[red]{y}$ denote the indices in the feature map.
-Let $\color[blue]{x}$ and $\color[blue]{y}$ denote the indices in the kernel.
-These indices range in the sets
 
 \startplaceformula
 \startformula
@@ -110,18 +114,136 @@ These indices range in the sets
 \stopplaceformula
 
 \indentation
-The entries in the inital $F_*$ (before activation) are produced by applying the Hadamard product (Eq.~(\in[hdprod])) to each area of dimentions $n_x(K)\,{\rm x}\,n_y(K)$ in the input.
-Which yields the following formula.
+The product in layer $l$ before activation, here denoted $\color[blue]{Z}$ is given by the following formula
 
+
+Regular formula
 \startplaceformula[reference=devel-feature-1]
 \startformula
-F_*(\color[red]{x},\color[red]{y})
-= 
-\sum_{\color[blue]{y}}^{} 
-\sum_{\color[blue]{x}}^{} 
-K(\color[blue]{x},\color[blue]{y})
-\cdot
-M(\color[red]{x} + \color[blue]{x}, \color[red]{y} + \color[blue]{y})
+\color[green]{Z}_{\color[red]{x},\color[red]{y},\color[red]{c}}^{(l+1)}
+=
+\sum_{\color[blue]{c'} = 0}^{\delta c_Z^{(l)}}
+\sum_{\color[blue]{y'} = 0}^{\delta y_Z^{(l)}}
+\sum_{\color[blue]{x'} = 0}^{\delta x_Z^{(l)}}
+\Bigl(
+W_{\color[blue]{x'}, \color[blue]{y'}, \color[blue]{c'}}^{(l, \color[red]{c})}
+Z_{\color[red]{x} + \color[blue]{x'}, \color[red]{y} + \color[blue]{y'}, \color[blue]{c'}}^{(l)}
+\Bigr)
++
+b^{(l,\color[red]{c})}
+\stopformula
+\stopplaceformula
+
+Derivative with respecto to $Z$
+\startplaceformula
+\startformula
+\startmathalignment
+\NC \frac
+   {\partial \color[green]{Z}_{\color[red]{x},\color[red]{y},\color[red]{c}}^{(l+1)}}
+   {\partial Z_{\color[red]{x}, \color[red]{y}, \color[magenta]{c^*}}^{(l)}}
+= \NC
+\frac
+   {\partial}
+   {\partial Z_{\color[red]{x}, \color[red]{y}, \color[magenta]{c^*}}^{(l)}}
+\left(
+\sum_{\color[blue]{c'} = 0}^{\delta c_Z^{(l)}}
+\sum_{\color[blue]{y'} = 0}^{\delta y_Z^{(l)}}
+\sum_{\color[blue]{x'} = 0}^{\delta x_Z^{(l)}}
+\Bigl(
+W_{\color[blue]{x'}, \color[blue]{y'}, \color[blue]{c'}}^{(l, \color[red]{c})}
+Z_{\color[red]{x} + \color[blue]{x'}, \color[red]{y} + \color[blue]{y'}, \color[blue]{c'}}^{(l)}
+\Bigr)
++
+b^{(l,\color[red]{c})}
+\right) \NR
+\NC = \NC
+\sum_{\color[blue]{c'} = 0}^{\delta c_Z^{(l)}}
+\sum_{\color[blue]{y'} = 0}^{\delta y_Z^{(l)}}
+\sum_{\color[blue]{x'} = 0}^{\delta x_Z^{(l)}}
+\frac
+   {\partial}
+   {\partial Z_{\color[red]{x}, \color[red]{y}, \color[magenta]{c^*}}^{(l)}}
+\left(
+\Bigl(
+W_{\color[blue]{x'}, \color[blue]{y'}, \color[blue]{c'}}^{(l, \color[red]{c})}
+Z_{\color[red]{x} + \color[blue]{x'}, \color[red]{y} + \color[blue]{y'}, \color[blue]{c'}}^{(l)}
+\Bigr)
++
+b^{(l,\color[red]{c})}
+\right) \NR
+\NC = \NC 
+Z_{\color[red]{x}, \color[red]{y}, \color[magenta]{c^*}}^{(l)}
+\stopmathalignment
+\stopformula
+\stopplaceformula
+
+Derivative with respecto to $W$
+\startplaceformula
+\startformula
+\startmathalignment
+\NC \frac
+   {\partial \color[green]{Z}_{\color[red]{x},\color[red]{y},\color[red]{c}}^{(l+1)}}
+   {\partial W_{\color[magenta]{x^*}, \color[magenta]{y^*}, \color[magenta]{c^*}}^{(l, \color[red]{c})}}
+= \NC
+\frac
+   {\partial}
+   {\partial W_{\color[magenta]{x^*}, \color[magenta]{y^*}, \color[magenta]{c^*}}^{(l, \color[red]{c})}}
+\left(
+\sum_{\color[blue]{c'} = 0}^{\delta c_Z^{(l)}}
+\sum_{\color[blue]{y'} = 0}^{\delta y_Z^{(l)}}
+\sum_{\color[blue]{x'} = 0}^{\delta x_Z^{(l)}}
+\Bigl(
+W_{\color[blue]{x'}, \color[blue]{y'}, \color[blue]{c'}}^{(l, \color[red]{c})}
+Z_{\color[red]{x} + \color[blue]{x'}, \color[red]{y} + \color[blue]{y'}, \color[blue]{c'}}^{(l)}
+\Bigr)
++
+b^{(l,\color[red]{c})}
+\right) \NR
+\NC = \NC
+\sum_{\color[blue]{c'} = 0}^{\delta c_Z^{(l)}}
+\sum_{\color[blue]{y'} = 0}^{\delta y_Z^{(l)}}
+\sum_{\color[blue]{x'} = 0}^{\delta x_Z^{(l)}}
+\frac
+   {\partial}
+   {\partial W_{\color[magenta]{x^*}, \color[magenta]{y^*}, \color[magenta]{c^*}}^{(l, \color[red]{c})}}
+\left(
+\Bigl(
+W_{\color[blue]{x'}, \color[blue]{y'}, \color[blue]{c'}}^{(l, \color[red]{c})}
+Z_{\color[red]{x} + \color[blue]{x'}, \color[red]{y} + \color[blue]{y'}, \color[blue]{c'}}^{(l)}
+\Bigr)
++
+b^{(l,\color[red]{c})}
+\right) \NR
+\NC = \NC
+Z_{\color[magenta]{x^*} + \color[red]{x'}, \color[magenta]{y^*} + \color[red]{y'}, \color[magenta]{c^*}}^{(l)} \NR
+\stopmathalignment
+\stopformula
+\stopplaceformula
+
+Derivative with respect to $b$
+\startplaceformula
+\startformula
+\startmathalignment
+\NC \frac
+   {\partial \color[green]{Z}_{\color[red]{x},\color[red]{y},\color[red]{c}}^{(l+1)}}
+   {\partial b^{(l,\color[red]{c})}}
+= \NC
+\frac
+   {\partial}
+   {\partial b^{(l,\color[red]{c})}}
+\left(
+\sum_{\color[blue]{c'} = 0}^{\delta c_Z^{(l)}}
+\sum_{\color[blue]{y'} = 0}^{\delta y_Z^{(l)}}
+\sum_{\color[blue]{x'} = 0}^{\delta x_Z^{(l)}}
+\Bigl(
+W_{\color[blue]{x'}, \color[blue]{y'}, \color[blue]{c'}}^{(l, \color[red]{c})}
+Z_{\color[red]{x} + \color[blue]{x'}, \color[red]{y} + \color[blue]{y'}, \color[blue]{c'}}^{(l)}
+\Bigr)
++
+b^{(l,\color[red]{c})}
+\right) \NR
+\NC = \NC 1 \NR
+\stopmathalignment
 \stopformula
 \stopplaceformula
 
