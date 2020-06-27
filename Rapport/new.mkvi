@@ -1,0 +1,325 @@
+\startsection[title=Convolutional neural networks and their components]
+About the basic principle underlying all neural networks.
+The divide of the network into layers consisting of neurons.
+Introduction of layer index and neuron index notation.
+First we develop the equations governing the interactions of a single neuron.
+Then we go on to \quote{scale} them up to the level of the layer.
+Introduce the {\em product} term.
+Introduce the $\eta$ notation for the dimentions of the layer components.
+
+\startsubsection[title=Fully-connected layer]
+Admit that the choice of index is a bit odd but that it will make sense later.
+Regular formula.
+\startplaceformula
+\startformula
+Z^{(l+1)}_{\color[red]{c}} = 
+\sum_{\color[blue]{c'} = 0}^{\eta_c^{(l)}}
+\Bigl(
+W_{\color[blue]{c'}}^{(l, \color[red]{c})} 
+Z_{\color[blue]{c'}}^{(l)}
+\Bigr) + 
+b^{(l, \color[red]{c})}
+\stopformula
+\stopplaceformula
+
+Derivative with respect to a $Z^{(l)}$.
+\startplaceformula
+\startformula
+\startmathalignment
+\NC \frac
+    {\partial Z^{(l+1)}_{\color[red]{c}}}
+    {\partial Z^{(l)}_{\color[magenta]{c^*}}} \NC =
+\frac
+    {\partial}
+    {\partial Z^{(l)}_{\color[magenta]{c^*}}} 
+\left(
+\sum_{\color[blue]{c'} = 0}^{\eta_c^{(l)}}
+\Bigl(
+W_{\color[blue]{c'}}^{(l, \color[red]{c})} 
+Z_{\color[blue]{c'}}^{(l)}
+\Bigr) + 
+b^{(l, \color[red]{c})}
+\right) \NR
+\NC \NC = 
+\sum_{\color[blue]{c'} = 0}^{\eta_c^{(l)}}
+\left(
+\frac
+    {\partial}
+    {\partial Z^{(l)}_{\color[magenta]{c^*}}} 
+\Bigl(
+W_{\color[blue]{c'}}^{(l, \color[red]{c})}
+Z_{\color[blue]{c'}}^{(l)}
+\Bigr)
+\right) + 
+0 \NR
+\NC \NC =
+W_{\color[magenta]{c^*}}^{(l, \color[red]{c})}
+\stopmathalignment
+\stopformula
+\stopplaceformula
+
+Derivative with respect to a $W^{(l, \color[red]{c})}$.
+\startplaceformula
+\startformula
+\startmathalignment
+\NC \frac
+    {\partial Z^{(l+1)}_{\color[red]{c}}}
+    {\partial W^{(l, \color[red]{c})}_{\color[magenta]{c^*}}} \NC =
+\frac
+    {\partial}
+    {\partial W^{(l, \color[red]{c})}_{\color[magenta]{c^*}}} 
+\left(
+\sum_{\color[blue]{c'} = 0}^{\eta_c^{(l)}}
+\Bigl(
+W_{\color[blue]{c'}}^{(l, \color[red]{c})} 
+Z_{\color[blue]{c'}}^{(l)}
+\Bigr) + 
+b^{(l, \color[red]{c})}
+\right) \NR
+\NC \NC = 
+\sum_{\color[blue]{c'} = 0}^{\eta_c^{(l)}}
+\left(
+\frac
+    {\partial}
+    {\partial W^{(l, \color[red]{c})}_{\color[magenta]{c^*}}} 
+\Bigl(
+W_{\color[blue]{c'}}^{(l, \color[red]{c})}
+Z_{\color[blue]{c'}}^{(l)}
+\Bigr)
+\right) + 
+0 \NR
+\NC \NC =
+Z_{\color[magenta]{c^*}}^{(l)}
+\stopmathalignment
+\stopformula
+\stopplaceformula
+
+Derivative with respect to the bias $b^{(l, \color[red]{c})}$.
+\startplaceformula
+\startformula
+\startmathalignment
+\NC \frac
+    {\partial Z^{(l+1)}_{\color[red]{c}}}
+    {\partial b^{(l, \color[red]{c})}} \NC =
+\frac
+    {\partial}
+    {\partial b^{(l, \color[red]{c})}} 
+\left(
+\sum_{\color[blue]{c'} = 0}^{\eta_c^{(l)}}
+\Bigl(
+W_{\color[blue]{c'}}^{(l, \color[red]{c})} 
+Z_{\color[blue]{c'}}^{(l)}
+\Bigr) + 
+b^{(l, \color[red]{c})}
+\right) \NR
+\NC \NC = 
+\sum_{\color[blue]{c'} = 0}^{\eta_c^{(l)}}
+\left(
+\frac
+    {\partial}
+    {\partial b^{(l, \color[red]{c})}} 
+\Bigl(
+W_{\color[blue]{c'}}^{(l, \color[red]{c})}
+Z_{\color[blue]{c'}}^{(l)}
+\Bigr)
+\right) + 
+1 \NR
+\NC \NC =
+1
+\stopmathalignment
+\stopformula
+\stopplaceformula
+
+Now let us move on up to the layer level.
+$Z$ without a subscript represents a column vector of all the entries.
+$W$ without a neuron index and without a subscript represents a matrix.
+The neruon index selects row and the channel index selects column?
+$b$ without a neuron index is a column vector of biases.
+Regular formula.
+\startplaceformula
+\startformula
+Z^{(l+1)} = W^{(l)} Z^{(l)} + b^{(l)}
+\stopformula
+\stopplaceformula
+
+Derivative with respect to a $Z^{(l)}$.
+\startplaceformula
+\startformula
+\frac
+    {Z^{(l+1)}}
+    {Z^{(l)}} = W^{(l)}
+\stopformula
+\stopplaceformula
+Derivative with respect to a $W^{(l)}$.
+\startplaceformula
+\startformula
+\frac
+    {Z^{(l+1)}}
+    {W^{(l)}} = Z^{(l)}
+\stopformula
+\stopplaceformula
+
+Gradient with respect to a $b^{(l, \color[red]{c})}$.
+\startplaceformula
+\startformula
+\frac
+    {Z^{(l+1)}}
+    {b^{(l)}} =
+\startmatrix[left={\left(},right={\right)}]
+\NC 1 \NR
+\NC 1 \NR
+\NC \vdots \NR
+\NC 1 \NR
+\stopmatrix
+\stopformula
+\stopplaceformula
+\stopsubsection
+
+
+\startsubsection[title=Convolutional layer]
+Regular formula
+\startplaceformula[reference=devel-feature-1]
+\startformula
+\color[green]{Z}_{\color[red]{x},\color[red]{y},\color[red]{c}}^{(l+1)}
+=
+\sum_{\color[blue]{c'} = 0}^{\delta c_Z^{(l)}}
+\sum_{\color[blue]{y'} = 0}^{\delta y_Z^{(l)}}
+\sum_{\color[blue]{x'} = 0}^{\delta x_Z^{(l)}}
+\Bigl(
+W_{\color[blue]{x'}, \color[blue]{y'}, \color[blue]{c'}}^{(l, \color[red]{c})}
+Z_{\color[red]{x} + \color[blue]{x'}, \color[red]{y} + \color[blue]{y'}, \color[blue]{c'}}^{(l)}
+\Bigr)
++
+b^{(l,\color[red]{c})}
+\stopformula
+\stopplaceformula
+
+Derivative with respect to $Z$.
+$\color[magenta]{c^*} \in [\color[red]{c} \, .. \, \color[red]{c} + \delta c_W^{(l)}]$.
+$\color[magenta]{y^*} \in [\color[red]{y} \, .. \, \color[red]{y} + \delta y_W^{(l)}]$.
+$\color[magenta]{x^*} \in [\color[red]{x} \, .. \, \color[red]{x} + \delta x_W^{(l)}]$.
+
+\startplaceformula
+\startformula
+\startmathalignment
+\NC \frac
+   {\partial \color[green]{Z}_{\color[red]{x},\color[red]{y},\color[red]{c}}^{(l+1)}}
+   {\partial Z_{\color[magenta]{x^*}, \color[magenta]{y^*}, \color[magenta]{c^*}}^{(l)}}
+= \NC
+\frac
+   {\partial}
+   {\partial Z_{\color[magenta]{x^*}, \color[magenta]{y^*}, \color[magenta]{c^*}}^{(l)}}
+\left(
+\sum_{\color[blue]{c'} = 0}^{\delta c_W^{(l)}}
+\sum_{\color[blue]{y'} = 0}^{\delta y_W^{(l)}}
+\sum_{\color[blue]{x'} = 0}^{\delta x_W^{(l)}}
+\Bigl(
+W_{\color[blue]{x'}, \color[blue]{y'}, \color[blue]{c'}}^{(l, \color[red]{c})}
+Z_{\color[red]{x} + \color[blue]{x'}, \color[red]{y} + \color[blue]{y'}, \color[blue]{c'}}^{(l)}
+\Bigr)
++
+b^{(l,\color[red]{c})}
+\right) \NR
+\NC = \NC
+\sum_{\color[blue]{c'} = 0}^{\delta c_W^{(l)}}
+\sum_{\color[blue]{y'} = 0}^{\delta y_W^{(l)}}
+\sum_{\color[blue]{x'} = 0}^{\delta x_W^{(l)}}
+\frac
+   {\partial}
+   {\partial Z_{\color[magenta]{x^*}, \color[magenta]{y^*}, \color[magenta]{c^*}}^{(l)}}
+\left(
+\Bigl(
+W_{\color[blue]{x'}, \color[blue]{y'}, \color[blue]{c'}}^{(l, \color[red]{c})}
+Z_{\color[red]{x} + \color[blue]{x'}, \color[red]{y} + \color[blue]{y'}, \color[blue]{c'}}^{(l)}
+\Bigr)
++
+b^{(l,\color[red]{c})}
+\right) \NR
+\NC = \NC
+W_{\color[blue]{x'}, \color[blue]{y'}, \color[blue]{c'}}^{(l, \color[red]{c})}
+\stopmathalignment
+\stopformula
+\stopplaceformula
+
+Derivative with respecto to $W$.
+$\color[magenta]{c^*} \in [0 \, .. \, \delta c_W^{(l)}]$.
+$\color[magenta]{y^*} \in [0 \, .. \, \delta y_W^{(l)}]$.
+$\color[magenta]{x^*} \in [0 \, .. \, \delta x_W^{(l)}]$.
+
+\startplaceformula
+\startformula
+\startmathalignment
+\NC \frac
+   {\partial \color[green]{Z}_{\color[red]{x},\color[red]{y},\color[red]{c}}^{(l+1)}}
+   {\partial W_{\color[magenta]{x^*}, \color[magenta]{y^*}, \color[magenta]{c^*}}^{(l, \color[red]{c})}}
+= \NC
+\frac
+   {\partial}
+   {\partial W_{\color[magenta]{x^*}, \color[magenta]{y^*}, \color[magenta]{c^*}}^{(l, \color[red]{c})}}
+\left(
+\sum_{\color[blue]{c'} = 0}^{\delta c_W^{(l)}}
+\sum_{\color[blue]{y'} = 0}^{\delta y_W^{(l)}}
+\sum_{\color[blue]{x'} = 0}^{\delta x_W^{(l)}}
+\Bigl(
+W_{\color[blue]{x'}, \color[blue]{y'}, \color[blue]{c'}}^{(l, \color[red]{c})}
+Z_{\color[red]{x} + \color[blue]{x'}, \color[red]{y} + \color[blue]{y'}, \color[blue]{c'}}^{(l)}
+\Bigr)
++
+b^{(l,\color[red]{c})}
+\right) \NR
+\NC = \NC
+\sum_{\color[blue]{c'} = 0}^{\delta c_W^{(l)}}
+\sum_{\color[blue]{y'} = 0}^{\delta y_W^{(l)}}
+\sum_{\color[blue]{x'} = 0}^{\delta x_W^{(l)}}
+\frac
+   {\partial}
+   {\partial W_{\color[magenta]{x^*}, \color[magenta]{y^*}, \color[magenta]{c^*}}^{(l, \color[red]{c})}}
+\left(
+\Bigl(
+W_{\color[blue]{x'}, \color[blue]{y'}, \color[blue]{c'}}^{(l, \color[red]{c})}
+Z_{\color[red]{x} + \color[blue]{x'}, \color[red]{y} + \color[blue]{y'}, \color[blue]{c'}}^{(l)}
+\Bigr)
++
+b^{(l,\color[red]{c})}
+\right) \NR
+\NC = \NC
+Z_{\color[magenta]{x^*} + \color[red]{x'}, \color[magenta]{y^*} + \color[red]{y'}, \color[magenta]{c^*}}^{(l)} \NR
+\stopmathalignment
+\stopformula
+\stopplaceformula
+
+Derivative with respect to $b$
+\startplaceformula
+\startformula
+\startmathalignment
+\NC \frac
+   {\partial \color[green]{Z}_{\color[red]{x},\color[red]{y},\color[red]{c}}^{(l+1)}}
+   {\partial b^{(l,\color[red]{c})}}
+= \NC
+\frac
+   {\partial}
+   {\partial b^{(l,\color[red]{c})}}
+\left(
+\sum_{\color[blue]{c'} = 0}^{\delta c_W^{(l)}}
+\sum_{\color[blue]{y'} = 0}^{\delta y_W^{(l)}}
+\sum_{\color[blue]{x'} = 0}^{\delta x_W^{(l)}}
+\Bigl(
+W_{\color[blue]{x'}, \color[blue]{y'}, \color[blue]{c'}}^{(l, \color[red]{c})}
+Z_{\color[red]{x} + \color[blue]{x'}, \color[red]{y} + \color[blue]{y'}, \color[blue]{c'}}^{(l)}
+\Bigr)
++
+b^{(l,\color[red]{c})}
+\right) \NR
+\NC = \NC 1 \NR
+\stopmathalignment
+\stopformula
+\stopplaceformula
+\stopsubsection
+
+\startsubsection[title=Pooling layer]
+A non thinking layer, good for adjusting the networks performance.
+\stopsubsection
+
+\startsubsection[title=Final layer]
+\stopsubsection
+\stopsection
