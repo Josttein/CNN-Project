@@ -46,15 +46,30 @@
 
 \useURL[github][https://github.com/Alescontrela/Numpy-CNN.git]
 
+
+\definebtxdataset[main]
+\usebtxdataset[main][src.bib]
+\setupbtx[dataset=main]
+\usebtxdefinitions[ieee]
+\definebtxrendering[mainlist][ieee][dataset=main]
+
 \starttext
+
+\startfrontmatter
 \input intro.tex
-
 \completecontent[alternative=c]
-\page[yes]
+\stopfrontmatter
 
-\input new.mkvi
+
+\startbodymatter
+\input new.tex
 \input nn.tex
 \input cnn.tex
 \input imp.tex
 \input conc.tex
+\stopbodymatter
+
+\startbackmatter
+\placebtxrendering[mainlist][method=global]
+\stopbackmatter
 \stoptext
