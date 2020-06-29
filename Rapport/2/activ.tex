@@ -1,0 +1,53 @@
+All the \quote{thinking} layers of a neural network---those layers with neurons in them---make use of some activation function.
+A function that is non-linear which ultimately determines wheter a neuron fires or not.
+When designing a network one can chose between several different possible activation functions.
+In this paper we are only going to be looking at the rectified linear unit (ReLu) activation function.
+Since it is the one that is used in our working example.
+We are going to be using the ReLU function with both scalars, vectors, matrices and tensors. 
+For the larger \quote{number structres} the ReLU function is applied to each entry individualy (i.e.\ each coordinate in a vector at a time). 
+The ReLU function is defined as
+\startformula
+\startmathalignment
+\NC {\rm ReLU}(z) \NC = \max(0,z) \NR
+\NC {\rm ReLU({\bi z})} \NC = 
+\startmatrix[
+    left={\left(},
+    right={\right)},
+]
+    \NC {\rm ReLU}(z_0) \NR
+    \NC {\rm ReLU}(z_1) \NR 
+    \NC \vdots \NR
+    \NC {\rm ReLU}(z_n) \NR
+\stopmatrix
+\NR
+\NC {\rm ReLU(Z)} \NC = 
+\startmatrix[
+    left={\left(},
+    right={\right)},
+]
+    \NC {\rm ReLU}(z_{0,0})
+    \NC {\rm ReLU}(z_{0,1})
+    \NC \dots
+    \NC {\rm ReLU}(z_{0,n})
+    \NR 
+    \NC {\rm ReLU}(z_{1,0})
+    \NC {\rm ReLU}(z_{1,1})
+    \NC \dots
+    \NC {\rm ReLU}(z_{1,n})
+    \NR 
+    \NC \vdots
+    \NC \vdots
+    \NC \ddots
+    \NC \vdots
+    \NR 
+    \NC {\rm ReLU}(z_{m,0})
+    \NC {\rm ReLU}(z_{m,1})
+    \NC \dots
+    \NC {\rm ReLU}(z_{m,n})
+    \NR 
+\stopmatrix
+\NR
+\NC {\rm ReLU}({\bi Z}) \NC = \ldots \NR
+\stopmathalignment
+\stopformula
+The index notation used here is only for illustration purposes with no semantic meaning.

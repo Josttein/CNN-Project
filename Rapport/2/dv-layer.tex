@@ -1,0 +1,81 @@
+Descriptive text \ldots
+
+Equations which give the dimensional relations.
+
+The equation which governs the forward operation of the layer is
+\startplaceformula[reference=pl:forward:neuron]
+\startformula
+\startmathalignment
+\NC a^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y}) \NC =
+{\rm maxpool}
+\left(
+    a^{(l-1)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y})
+\right)
+\NR
+\NC \NC =
+\max_{
+    \startsubstack
+        \NC r_x \in [0 \, .. \, \delta_x] \NR
+        \NC r_y \in [0 \, .. \, \delta_y] \NR
+    \stopsubstack
+} 
+\left(
+    a^{(l-1)}_{(\color[red]{c})} (\color[red]{x}s_x + r_x, \color[red]{y}s_y + r_y)
+\right)
+\NR
+\stopmathalignment
+\stopformula
+\stopplaceformula
+Going to the layer level is straightforward.
+\startformula
+A^{(l)}_{(\color[red]{c})} = 
+\startmatrix[
+    left={\left(},
+    right={\right)},
+]
+    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{0}, \color[red]{0}) 
+    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{0}, \color[red]{1}) 
+    \NC \dots 
+    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{0}, \color[red]{\eta^{(l)}_y}) 
+    \NR
+    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{1}, \color[red]{0}) 
+    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{1}, \color[red]{1}) 
+    \NC \dots 
+    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{1}, \color[red]{\eta^{(l)}_y}) 
+    \NR
+    \NC \vdots
+    \NC \vdots
+    \NC \ddots 
+    \NC \vdots
+    \NR
+    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{\eta^{(l)}_x}, \color[red]{0}) 
+    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{\eta^{(l)}_x}, \color[red]{1}) 
+    \NC \dots 
+    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{\eta^{(l)}_x}, \color[red]{\eta^{(l)}_y}) 
+    \NR
+\stopmatrix
+\stopformula
+
+Which yields the rather boring layer equation
+\startformula
+{\bi A}^{(l)} = 
+\startmatrix[
+    left={\left(},
+    right={\right)},
+]
+    \NC A^{(l)}_{(\color[red]{0})}
+    \NC A^{(l)}_{(\color[red]{1})}
+    \NC \dots
+    \NC A^{(l)}_{(\color[red]{\eta^{(l)}_c})}
+    \NR
+\stopmatrix
+\stopformula
+
+\startplaceformula[reference=mp:forward:layer]
+\startformula
+{\bi A}^{(l)} = {\rm maxpool}
+\left(
+    {\bi A}^{(l-1)}
+\right)
+\stopformula
+\stopplaceformula

@@ -1,11 +1,11 @@
 \startsection[title=Convolutional neural networks and their components]
-Let us start this paper with a {\bf brief} recall of what a neural network {\em is}.
+Let us start this section with a {\bf brief} recall of what a neural network {\em is}.
 A neural network is, intuitivly, a \quote{network} of \quote{neurons} which are connected together in a layerd structure.
 Each layer contains several neurons that are each connected to all the neurons of the previous layer. 
 The neurons are supposed to \quote{look} for certain \quote{features} in its input data.
 If the neuron \quote{thinks} that these features are present it \quote{fires}.
 If it does not think that the input data has the features it is looking for, the neuron does not fire.
-In addition to layers of neurons, nerual networks can also contain special \quote{non-thinking} layers.
+In addition to layers of neurons, nerual networks can also incorporate special \quote{non-thinking} layers.
 Layers in which there are no neurons.
 
 A neural network's job is to process some input data and produce a final \quote{ativation}.
@@ -14,499 +14,65 @@ A very common application of nerual networks sees them used to classify large da
 In this context, the output of the network is often interpreted as a probability which represents how confident the network is that one piece of data belongs to a particular class.
 The convolutional neural network that we are going to be using as an example in this paper, serves such a classification purpose.
 
-In this section we are going to develop the equations which govern the operation of each layer in a convolutional neural network.
-In other words, the equations governing the operation of each component.
-We will start by looking at the forward operation of the network and then proccede with the backward operation.
+In this section we are going to develop the equations which govern the operation of each component or layer in a convolutional neural network.
 
 \startsubsubject[title=Terminology and notation]
-Before we delve in to the components of a convolutional neural network we  need to introduce some terms and notation.
+Before we delve in to the components of a convolutional neural network, we need to introduce some terms and notation.
 Scalars will be represented with a lowercase letter (e.g.\ $x$).
 Vectors will be represented with a bold lowercase letter (e.g.\ $\bi x$).
 Matricies will be represented with an uppercase letter (e.g.\ $X$).
-Tensors (three dimensional matricies) will be represented with a bold uppercase letter (e.g.\ $\bi X$).
+Vectors of matricies---vectors where each entry is a matrix---will be represented with a bold uppercase letter (e.g.\ $\bi X$).
+This scheme has the added benefit that for the most part, aggregates of a layer will be represented in bold while data in individual channels will be represented in normal style letters.
 
-Neruons in a nerual network consit, in princple, of only two parts: a set of weights and a bias.
+Speaking of layers we need some symbols for the various parts that make up a layer.
+Firstly we will need symbols for the two principle components of a neuron.
+Namely its weights and its bias.
 Weights will be represented with the letter \quote{w} while the bias will be represented with the letter \quote{b}.
-The preliminary output of a neruon (or layer of neurons), before it is passed through an activation, will be represented with the letter \quote{z}.
+The preliminary output of a neruon (or layer of neurons), before it is passed through an activation function, will be represented with the letter \quote{z}.
 The output after activation will be represented with the letter \quote{a}.
+Where does one layer end and the next one begin?
+Everything after the previous layer's activation up until and including the current layer's activation constitues the layer in question.
 
-We need the ability to reference specific positions in the neural network and for that we need {\em a lot} of indexes.
-Since we want our mathematics to match our code to a certain extent, all the indices used in this paper will start at $0$.
+We need the ability to reference specific positions in each layer and for that we need {\em a lot} of indexes.
+Since we want our mathematics to match our code, to a certain extent, all the indices used in this paper will start at $0$.
 The layer index which tells us which layer we are looking at will be written using a parenthetical superscript (e.g.\ ${\bi a}^{(l)}$ is the activation vector of layer $l$).
-Layers in a nerual network are divided up by activations.
-Everything after an activation up until the next activation is part of the next layer.
-Furthermore, the layers in a neural network all have one or more channels.
-The neurons within a layer are connected to all the channels in that layer.
-It is through these channels that input data is sent to a neuron. 
 The channel index which tells us which channel we are looking at will be written using a parenthetical subscript (e.g.\ $a^{(l)}_{(c)}$ is the scalar activation of layer $l$ in channel $c$).
 The output of each neuron in a layer becomes a channel in the next layer.
-To reference both the input and output channel, a double parenthetical subscript will be used (e.g.\ $w^{(l)}_{(c,c')}$ is the scalar weight in layer $l$ connecting channel $c'$ from layer $l$ to channel $c$ in layer $l+1$).
+To reference both the input and output channel, a double parenthetical subscript will be used (e.g.\ $w^{(l)}_{(c,c')}$ is the scalar weight in layer $l$ connecting channel $c$ from layer $l$ to channel $c'$ in layer $l-1$).
 To reference positions within a matrix we will use regular xy-coordinates (e.g.\ $a(x,y)$ is the scalar in row $x$ at column $y$).
-Equations which relate a previous layer to the next one will generally use blue color for indicies belonging to the previous layer.
-Red color will be used for the indices beloning to the next layer.
+Equations which relate a previous layer to the next one will generally use blue color to makr indicies belonging to the previous layer.
+Red color will be used to mark indices beloning to the next layer.
 
 We will often need to know the {\em dimensions} of layer.
 How many channels does it have and what are the sizes of the matrices in that layer.
-These dimensions will be written using the greek letter eta ($\eta$) with a layer index and a subscript denoting which dimension is in question.
+These dimensions will be written using the greek letter eta ($\eta$) with a layer index and a subscript to identify which dimention is expressed.
 A \quote{c} subscript means it is the number of channels in the layer {\em minus one}.
 A \quote{x} and \quote{y} subscript means it is row and column length {\em minus one} respectivly.
 We use the letter $\eta$ instead of $n$ to remind the reader that all dimensions are substracted 1, because we want all our indices to start at zero.
 As an example, if layer $3$ has eight individual channels then $\eta^{(3)}_c = 7$.
+In addition to the $\eta$ dimentions we are going to need the dimentions of various weight matricies (kernels).
+These will use the same kind of notation but with $k$ instead of $\eta$.
 
 The inital input to a network can be though of as the first activation to the network.
 So we are going to denote the inital input using the appropriate \quote{a} letter with a zero in parenthetical subscript.
 \stopsubsubject
 
-\startsubsection[title=Forward operation]
 
-\startsubsubsection[title=The activation function]
-All the \quote{thinking} layers of a neural network---those layers with neurons in them---make use of some activation function.
-A function that is non-linear which ultimately determines wheter a neuron fires or not.
-When designing a network one can chose between several different possible activation functions.
-In this paper we are only going to be looking at the rectified linear unit (ReLu) activation function.
-Since it is the one that is used in our working example.
-We are going to be using the ReLU function with both scalars, vectors, matrices and tensors. 
-For the larger \quote{number structres} the ReLU function is applied to each entry individualy (i.e.\ each coordinate in a vector at a time). 
-The ReLU function is defined as
-\startformula
-\startmathalignment
-\NC {\rm ReLU}(z) \NC = \max(0,z) \NR
-\NC {\rm ReLU({\bi z})} \NC = 
-\startmatrix[
-    left={\left(},
-    right={\right)},
-]
-    \NC {\rm ReLU}(z_0) \NR
-    \NC {\rm ReLU}(z_1) \NR 
-    \NC \vdots \NR
-    \NC {\rm ReLU}(z_n) \NR
-\stopmatrix
-\NR
-\NC {\rm ReLU(Z)} \NC = 
-\startmatrix[
-    left={\left(},
-    right={\right)},
-]
-    \NC {\rm ReLU}(z_{0,0})
-    \NC {\rm ReLU}(z_{0,1})
-    \NC \dots
-    \NC {\rm ReLU}(z_{0,n})
-    \NR 
-    \NC {\rm ReLU}(z_{1,0})
-    \NC {\rm ReLU}(z_{1,1})
-    \NC \dots
-    \NC {\rm ReLU}(z_{1,n})
-    \NR 
-    \NC \vdots
-    \NC \vdots
-    \NC \ddots
-    \NC \vdots
-    \NR 
-    \NC {\rm ReLU}(z_{m,0})
-    \NC {\rm ReLU}(z_{m,1})
-    \NC \dots
-    \NC {\rm ReLU}(z_{m,n})
-    \NR 
-\stopmatrix
-\NR
-\NC {\rm ReLU}({\bi Z}) \NC = \ldots \NR
-\stopmathalignment
-\stopformula
-The index notation used here is only for illustration purposes with no semantic meaning.
-\stopsubsubsection
+\startsubsection[title=Fully-connected layer]
+\input 2/fc-layer.tex
+\stopsubsection
 
-\startsubsubsection[title=Fully-connected layer]
-The fully-connected layer of a convolutional neural network is exactly the same as a regular layer of neurons from a classical multi-layer percepetron network.
-The layer takes a vector of scalar values as its input and returns a vector of scalar values as its output.
-Each neuron in a fully-connected layer contains a vector of weights and a bias.
-For the remainder of this section, let layer number $l$ denote a fully-connected layer. 
+\startsubsection[title=Convolutional layer]
+\input 2/cv-layer.tex
+\stopsubsection
 
-The equation governing the forward operation for this layer at the level of the individual neuron is
-\startplaceformula[reference=fc:forward:neuron]
-\startformula
-\startmathalignment
-\NC z^{(l)}_{(\color[red]{c})} \NC = 
-\sum_{\color[blue]{c'} = 0}^{\eta^{(l-1)}_c}
-\Bigl( 
-        w^{(l)}_{(\color[red]{c}, \color[blue]{c'})}
-        \, a^{(l-1)}_{(\color[blue]{c'})}
-\Bigr) +
-b^{(l)}_{(\color[red]{c})}
-\NR
-\NC a^{(l)}_{(\color[red]{c})} \NC = {\rm ReLU}
-\left(
-    z^{(l)}_{(\color[red]{c})}
-\right) \NR
-\stopmathalignment
-\stopformula
-\stopplaceformula
-We can scale this equation up to the layer level.
-But first we need the following definitions.
+\startsubsection[title=Downsampling layer]
+\input 2/dv-layer.tex
+\stopsubsection
 
-\startformula
-{\bi z}^{(l)} =
-\startmatrix[
-    left={\left(},
-    right={\right)},
-]
-    \NC z^{(l)}_{(\color[red]{1})} \NR
-    \NC z^{(l)}_{(\color[red]{2})} \NR
-    \NC \vdots \NR
-    \NC z^{(l)}_{(\color[red]{\eta^{(l+1)}_c})} \NR
-\stopmatrix
-\stopformula
-
-\startformula
-W^{(l)} = 
-\startmatrix[
-    left={\left(},
-    right={\right)},
-]
-    \NC w^{(l)}_{(\color[red]{0}, \color[blue]{0})} 
-    \NC w^{(l)}_{(\color[red]{0}, \color[blue]{1})}
-    \NC \dots
-    \NC w^{(l)}_{(\color[red]{0}, \color[blue]{\eta^{(l)}_c})}
-    \NR 
-    \NC w^{(l)}_{(\color[red]{1}, \color[blue]{0})} 
-    \NC w^{(l)}_{(\color[red]{1}, \color[blue]{1})}
-    \NC \dots
-    \NC w^{(l)}_{(\color[red]{1}, \color[blue]{\eta^{(l)}_c})}
-    \NR 
-    \NC \vdots
-    \NC \vdots
-    \NC \ddots
-    \NC \vdots
-    \NR 
-    \NC w^{(l)}_{(\color[red]{\eta^{(l+1)}_c}, \color[blue]{0})} 
-    \NC w^{(l)}_{(\color[red]{\eta^{(l+1)}_c}, \color[blue]{1})}
-    \NC \dots
-    \NC w^{(l)}_{(\color[red]{\eta^{(l+1)}_c}, \color[blue]{\eta^{(l)}_c})}
-    \NR 
-\stopmatrix
-\stopformula
-
-\startformula
-{\bi a}^{(l-1)} =
-\startmatrix[
-    left={\left(},
-    right={\right)}]
-    \NC a^{(l-1)}_{(\color[blue]{1})} \NR
-    \NC a^{(l-1)}_{(\color[blue]{2})} \NR
-    \NC \vdots \NR
-    \NC a^{(l-1)}_{(\color[blue]{\eta^{(l)}_c})} \NR
-\stopmatrix
-\stopformula
-
-\startformula
-{\bi b}^{(l)} =
-\startmatrix[
-    left={\left(},
-    right={\right)}]
-    \NC b^{(l)}_{(\color[red]{c})} \NR
-    \NC b^{(l)}_{(\color[red]{c})} \NR
-    \NC \vdots \NR
-    \NC b^{(l)}_{(\color[red]{c})} \NR
-\stopmatrix
-\stopformula
-
-Using these definitions we can write equation~(\in[fc:forward:neuron]) at the layer level using matrix multiplication.
-
-\startplaceformula[reference=fc:forward:layer]
-\startformula
-\startmathalignment
-\NC {\bi z}^{(l)} \NC = 
-W^{(l)}
-{\bi a}^{(l-1)}
- +
-{\bi b}^{(l)}
-\NR
-\NC {\bi a}^{(l)} \NC = {\rm ReLU}
-\left(
-    {\bi z}^{(l)}
-\right) \NR
-\stopmathalignment
-\stopformula
-\stopplaceformula
-\stopsubsubsection
-
-\startsubsubsection[title=Convolutional layer]
-Descriptive text \ldots
-
-The equation governing the forward operation for this layer at the level of the individual neuron is
-\startplaceformula[reference=cv:forward:neuron]
-\startformula
-\startmathalignment
-\NC z^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y}) = \NC
-\sum_{\color[blue]{c'}}^{\eta^{(l-1)}_c}
-\left(
-    \sum_{\color[blue]{y'}}^{\eta^{(l-1)}_y}
-    \sum_{\color[blue]{x'}}^{\eta^{(l-1)}_x}
-    \Bigl(
-        w^{(l)}_{(\color[red]{c}, \color[blue]{c'})}
-            (\color[blue]{x'}, \color[blue]{y'})
-        \, a^{(l-1)}_{(\color[blue]{c})}
-            (\color[red]{x} + \color[blue]{x'}, \color[red]{x} + \color[blue]{y'})
-    \Bigr)
-\right)
-+ b^{(l)}_{(\color[red]{c})}
-\NR 
-\NC a^{(l)}_{(\color[red]{c})}(\color[red]{x}, \color[red]{y}) = \NC
-{\rm ReLU}
-\left(
-    z^{(l)}_{(\color[red]{c})}(\color[red]{x}, \color[red]{y})
-\right)
-\NR
-\stopmathalignment
-\stopformula
-\stopplaceformula
-This equation is rather complex and \quote{scaling} it up to the layer level is not trivial at all.
-First we have to introduce the intermediary Hadamard product variable $h$.
-\startformula
-\startmathalignment
-\NC h^{(l)}_{(\color[red]{c}, \color[blue]{c'})} (\color[red]{x}, \color[red]{y}) \NC =
-\sum_{\color[blue]{y'}}^{\eta^{(l-1)}_y}
-\sum_{\color[blue]{x'}}^{\eta^{(l-1)}_x}
-\Bigl(
-    w^{(l)}_{(\color[red]{c}, \color[blue]{c'})}
-        (\color[blue]{x'}, \color[blue]{y'})
-    \, a^{(l-1)}_{(\color[blue]{c})}
-        (\color[red]{x} + \color[blue]{x'}, \color[red]{x} + \color[blue]{y'})
-\Bigr)
-\NR
-\NC h^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y}) \NC =
-\sum_{\color[blue]{c'}}^{\eta^{(l-1)}_c}
-h^{(l)}_{(\color[red]{c}, \color[blue]{c'})} (\color[red]{x}, \color[red]{y})
-\NR
-\stopmathalignment
-\stopformula
-We call it the Hadamard product because the mathematical operation that correspond to the sum over $\color[blue]{y'}$ and $\color[blue]{x'}$ is the Hadamard product.
-From here we can scale up the variables in a straight forward way.
-\startformula
-Z^{(l)}_{(\color[red]{c})} =
-\startmatrix[
-    left={\left(},
-    right={\right)},
-]
-    \NC z^{(l)}_{\color[red]{c}} (\color[red]{0}, \color[red]{0})
-    \NC z^{(l)}_{\color[red]{c}} (\color[red]{0}, \color[red]{1})
-    \NC \dots
-    \NC z^{(l)}_{\color[red]{c}} (\color[red]{0}, \color[red]{\eta^{(l)}_y})
-    \NR 
-    \NC z^{(l)}_{\color[red]{c}} (\color[red]{1}, \color[red]{0})
-    \NC z^{(l)}_{\color[red]{c}} (\color[red]{1}, \color[red]{1})
-    \NC \dots
-    \NC z^{(l)}_{\color[red]{c}} (\color[red]{1}, \color[red]{\eta^{(l)}_y})
-    \NR 
-    \NC \vdots
-    \NC \vdots
-    \NC \ddots
-    \NC \vdots
-    \NR 
-    \NC z^{(l)}_{\color[red]{c}} (\color[red]{\eta^{(l)}_x}, \color[red]{0})
-    \NC z^{(l)}_{\color[red]{c}} (\color[red]{\eta^{(l)}_x}, \color[red]{1})
-    \NC \dots
-    \NC z^{(l)}_{\color[red]{c}} (\color[red]{\eta^{(l)}_x}, \color[red]{\eta^{(l)}_y})
-    \NR 
-\stopmatrix
-\stopformula
-
-\startformula
-H^{(l)}_{(\color[red]{c})} =
-\startmatrix[
-    left={\left(},
-    right={\right)},
-]
-    \NC h^{(l)}_{\color[red]{c}} (\color[red]{0}, \color[red]{0})
-    \NC h^{(l)}_{\color[red]{c}} (\color[red]{0}, \color[red]{1})
-    \NC \dots
-    \NC h^{(l)}_{\color[red]{c}} (\color[red]{0}, \color[red]{\eta^{(l)}_y})
-    \NR 
-    \NC h^{(l)}_{\color[red]{c}} (\color[red]{1}, \color[red]{0})
-    \NC h^{(l)}_{\color[red]{c}} (\color[red]{1}, \color[red]{1})
-    \NC \dots
-    \NC h^{(l)}_{\color[red]{c}} (\color[red]{1}, \color[red]{\eta^{(l)}_y})
-    \NR 
-    \NC \vdots
-    \NC \vdots
-    \NC \ddots
-    \NC \vdots
-    \NR 
-    \NC h^{(l)}_{\color[red]{c}} (\color[red]{\eta^{(l)}_x}, \color[red]{0})
-    \NC h^{(l)}_{\color[red]{c}} (\color[red]{\eta^{(l)}_x}, \color[red]{1})
-    \NC \dots
-    \NC h^{(l)}_{\color[red]{c}} (\color[red]{\eta^{(l)}_x}, \color[red]{\eta^{(l)}_y})
-    \NR 
-\stopmatrix
-\stopformula
-
-\startformula
-B^{(l)}_{(\color[red]{c})} =
-\startmatrix[
-    left={\left(},
-    right={\right)},
-]
-    \NC b^{(l)}_{\color[red]{c}}
-    \NC b^{(l)}_{\color[red]{c}}
-    \NC \dots
-    \NC b^{(l)}_{\color[red]{c}}
-    \NR 
-    \NC b^{(l)}_{\color[red]{c}}
-    \NC b^{(l)}_{\color[red]{c}}
-    \NC \dots
-    \NC b^{(l)}_{\color[red]{c}}
-    \NR 
-    \NC \vdots
-    \NC \vdots
-    \NC \ddots
-    \NC \vdots
-    \NR 
-    \NC b^{(l)}_{\color[red]{c}}
-    \NC b^{(l)}_{\color[red]{c}}
-    \NC \dots
-    \NC b^{(l)}_{\color[red]{c}}
-    \NR 
-\stopmatrix
-\stopformula
-Before we can write down the equation which governs the operation at the layer level, we need to remove one more index.
-\startformula
-{\bi Z}^{(l)} =
-\startmatrix[
-    left={\left(},
-    right={\right)},
-]
-    \NC Z^{(l)}_{(\color[red]{0})}
-    \NC Z^{(l)}_{(\color[red]{1})}
-    \NC \dots
-    \NC Z^{(l)}_{(\color[red]{\eta^{(l)}_c})}
-    \NR
-\stopmatrix
-\stopformula
-
-\startformula
-{\bi H}^{(l)} =
-\startmatrix[
-    left={\left(},
-    right={\right)},
-]
-    \NC H^{(l)}_{(\color[red]{0})}
-    \NC H^{(l)}_{(\color[red]{1})}
-    \NC \dots
-    \NC H^{(l)}_{(\color[red]{\eta^{(l)}_c})}
-    \NR
-\stopmatrix
-\stopformula
-
-\startformula
-{\bi B}^{(l)} =
-\startmatrix[
-    left={\left(},
-    right={\right)},
-]
-    \NC B^{(l)}_{(\color[red]{0})}
-    \NC B^{(l)}_{(\color[red]{1})}
-    \NC \dots
-    \NC B^{(l)}_{(\color[red]{\eta^{(l)}_c})}
-    \NR
-\stopmatrix
-\stopformula
-
-We can now write down the equation which governs the forward operation at the layer level.
-\startplaceformula[reference=cv:forward:layer]
-\startformula
-\startmathalignment
-\NC {\bi Z}^{(l)} \NC = {\bi H}^{(l)} + {\bi B}^{(l)} \NR
-\NC {\bi A}^{(l)} \NC = {\rm ReLU}
-\left(
-    {\bi Z}^{(l)}
-\right) \NR
-\stopmathalignment
-\stopformula
-\stopplaceformula
-\stopsubsubsection
-
-\startsubsubsection[title=Pooling layer]
-Descriptive text \ldots
-
-Equations which give the dimensional relations.
-
-The equation which governs the forward operation of the layer is
-\startplaceformula[reference=pl:forward:neuron]
-\startformula
-\startmathalignment
-\NC a^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y}) \NC =
-{\rm maxpool}
-\left(
-    a^{(l-1)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y})
-\right)
-\NR
-\NC \NC =
-\max_{
-    \startsubstack
-        \NC r_x \in [0 \, .. \, \delta_x] \NR
-        \NC r_y \in [0 \, .. \, \delta_y] \NR
-    \stopsubstack
-} 
-\left(
-    a^{(l-1)}_{(\color[red]{c})} (\color[red]{x}s_x + r_x, \color[red]{y}s_y + r_y)
-\right)
-\NR
-\stopmathalignment
-\stopformula
-\stopplaceformula
-Going to the layer level is straightforward.
-\startformula
-A^{(l)}_{(\color[red]{c})} = 
-\startmatrix[
-    left={\left(},
-    right={\right)},
-]
-    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{0}, \color[red]{0}) 
-    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{0}, \color[red]{1}) 
-    \NC \dots 
-    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{0}, \color[red]{\eta^{(l)}_y}) 
-    \NR
-    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{1}, \color[red]{0}) 
-    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{1}, \color[red]{1}) 
-    \NC \dots 
-    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{1}, \color[red]{\eta^{(l)}_y}) 
-    \NR
-    \NC \vdots
-    \NC \vdots
-    \NC \ddots 
-    \NC \vdots
-    \NR
-    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{\eta^{(l)}_x}, \color[red]{0}) 
-    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{\eta^{(l)}_x}, \color[red]{1}) 
-    \NC \dots 
-    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{\eta^{(l)}_x}, \color[red]{\eta^{(l)}_y}) 
-    \NR
-\stopmatrix
-\stopformula
-
-Which yields the rather boring layer equation
-\startformula
-{\bi A}^{(l)} = 
-\startmatrix[
-    left={\left(},
-    right={\right)},
-]
-    \NC A^{(l)}_{(\color[red]{0})}
-    \NC A^{(l)}_{(\color[red]{1})}
-    \NC \dots
-    \NC A^{(l)}_{(\color[red]{\eta^{(l)}_c})}
-    \NR
-\stopmatrix
-\stopformula
-
-\startplaceformula[reference=mp:forward:layer]
-\startformula
-{\bi A}^{(l)} = {\rm maxpool}
-\left(
-    {\bi A}^{(l-1)}
-\right)
-\stopformula
-\stopplaceformula
-\stopsubsubsection
+\startsubsection[title=The activation function]
+\input 2/activ.tex
+\stopsubsection
 
 \startsubsubsection[title=Output layer]
 Descriptive text \ldots
@@ -543,8 +109,6 @@ y_{(\color[red]{c})}
 \stopformula
 \stopplaceformula
 \stopsubsubsection
-
-\stopsubsection
 
 \startsubsection[title=Backward propagation]
 

@@ -1,0 +1,375 @@
+The fully-connected layer of a convolutional neural network is exactly the same as a regular layer of neurons from a classical multi-layer percepetron network.
+The concept of a layer of neurons that think and fire if they find the feature they are looking for is implemented in the following way in a fully-connected layer.
+The layer takes as its input a multi-channel scalar stream of data.
+Each such stream is connected to each neuron in the layer.
+The neurons all contain a vector of scalar weights that is equal in length to the number of input streams that the neuron has.
+In addition, each neuron has its own bias.
+The data in the input streams is multiplied with their corresponding weights and subsequently added together with the bias added as well.
+This forms the preliminary output of the neurons which are then sent through some activation function responsible for determining if the neuron fires or not.
+The amount of output streams from the layer is equal to the amount of neurons in the layer.
+Figure~\in[fc-handdraw] shows a diagram representing this kind of layer.
+For the remainder of this section $l$ is the index of a fully-connected layer.
+
+As far as relating the dimentions from layer $l$ to those of layer $l-1$ go, there are none.
+The input and output data is scalar values so there are no $\eta_x$ nor $\eta_y$ to speak of.
+The amount of channels in the output is equal to the number of neurons in the layer which is chossen by the designer of the network and not dictated by some equation.
+
+The equation governing the forward operation for these kinds of layers at the level of the individual neuron is:
+\startplaceformula[reference=fc:forward:neuron]
+\startformula
+z^{(l)}_{(\color[red]{c})} = 
+\sum_{\color[blue]{c'} = 0}^{\eta^{(l-1)}_c}
+\Bigl( 
+        w^{(l)}_{(\color[red]{c}, \color[blue]{c'})}
+        \, a^{(l-1)}_{(\color[blue]{c'})}
+\Bigr) +
+b^{(l)}_{(\color[red]{c})}
+\stopformula
+\stopplaceformula
+The final output is obtained by sending $z$ through the choosen activation function.
+We can easily extend this equation up to the layer level by using the follwing scheme:
+\startformula
+{\bi z}^{(l)} =
+\startmatrix[
+    left={\left(},
+    right={\right)},
+]
+    \NC z^{(l)}_{(\color[red]{1})} \NR
+    \NC z^{(l)}_{(\color[red]{2})} \NR
+    \NC \vdots \NR
+    \NC z^{(l)}_{(\color[red]{\eta^{(l)}_c})} \NR
+\stopmatrix
+\stopformula
+
+\startformula
+W^{(l)} = 
+\startmatrix[
+    left={\left(},
+    right={\right)},
+]
+    \NC w^{(l)}_{(\color[red]{0}, \color[blue]{0})} 
+    \NC w^{(l)}_{(\color[red]{0}, \color[blue]{1})}
+    \NC \dots
+    \NC w^{(l)}_{(\color[red]{0}, \color[blue]{\eta^{(l-1)}_c})}
+    \NR 
+    \NC w^{(l)}_{(\color[red]{1}, \color[blue]{0})} 
+    \NC w^{(l)}_{(\color[red]{1}, \color[blue]{1})}
+    \NC \dots
+    \NC w^{(l)}_{(\color[red]{1}, \color[blue]{\eta^{(l-1)}_c})}
+    \NR 
+    \NC \vdots
+    \NC \vdots
+    \NC \ddots
+    \NC \vdots
+    \NR 
+    \NC w^{(l)}_{(\color[red]{\eta^{(l)}_c}, \color[blue]{0})} 
+    \NC w^{(l)}_{(\color[red]{\eta^{(l)}_c}, \color[blue]{1})}
+    \NC \dots
+    \NC w^{(l)}_{(\color[red]{\eta^{(l)}_c}, \color[blue]{\eta^{(l-1)}_c})}
+    \NR 
+\stopmatrix
+\stopformula
+
+\startformula
+{\bi a}^{(l-1)} =
+\startmatrix[
+    left={\left(},
+    right={\right)}]
+    \NC a^{(l-1)}_{(\color[blue]{1})} \NR
+    \NC a^{(l-1)}_{(\color[blue]{2})} \NR
+    \NC \vdots \NR
+    \NC a^{(l-1)}_{(\color[blue]{\eta^{(l-1)}_c})} \NR
+\stopmatrix
+\stopformula
+
+\startformula
+{\bi b}^{(l)} =
+\startmatrix[
+    left={\left(},
+    right={\right)}]
+    \NC b^{(l)}_{(\color[red]{0})} \NR
+    \NC b^{(l)}_{(\color[red]{1})} \NR
+    \NC \vdots \NR
+    \NC b^{(l)}_{(\color[red]{\eta^{(l)}_c})} \NR
+\stopmatrix
+\stopformula
+Which allows us to write equation~(\in[fc:forward:neuron]) as:
+\startplaceformula[reference=fc:forward:layer]
+\startformula
+{\bi z}^{(l)} = 
+W^{(l)}
+{\bi a}^{(l-1)}
+ +
+{\bi b}^{(l)}
+\stopformula
+\stopplaceformula
+
+Now that we know how to move forwards through a fully-connected layer we need to be able to propagate backwars through it as well.
+The backpropagation through this layer starts at its output with a gradient vector.
+Recall that we denote the loss of the network by $\ell$ so we write this gradient vector as:
+\startformula
+\frac
+    {
+        \partial \ell
+    }{
+        \partial {\bi z}^{(l)}
+    }
+=
+\startmatrix[
+    left={\left(},
+    right={\right)},
+]
+    \NC \frac
+    {
+        \partial \ell
+    }{
+        \partial z^{(l)}_{\color[red]{0}}
+    }
+    \NR
+    \NC \frac
+    {
+        \partial \ell
+    }{
+        \partial z^{(l)}_{\color[red]{1}}
+    }
+    \NR
+    \NC \vdots
+    \NR
+    \NC \frac
+    {
+        \partial \ell
+    }{
+        \partial z^{(l)}_{\color[red]{\eta^{(l)}_c}}
+    }
+    \NR 
+\stopmatrix
+\stopformula
+Using equation~\in[fc:forward:neuron] we can calculate the equations governing backpropagation.
+The partial derivative which relates each $z$ to an $a$ in the previous layer is:
+\startformula
+\frac
+    {
+        \partial z^{(l)}_{(\color[red]{c})}
+    }{
+        \partial a^{(l-1)}_{(\color[magenta]{c''})}
+    }
+=
+\frac
+    {
+        \partial
+    }{
+        \partial a^{(l-1)}_{(\color[magenta]{c''})}
+    }
+\left(
+    \sum_{\color[blue]{c'} = 0}^{\eta^{(l-1)}_c}
+    \Bigl( 
+            w^{(l)}_{(\color[red]{c}, \color[blue]{c'})}
+            \, a^{(l-1)}_{(\color[blue]{c'})}
+    \Bigr) +
+    b^{(l)}_{(\color[red]{c})}
+\right)
+=
+w^{(l)}_{(\color[red]{c}, \color[magenta]{c''})}
+\stopformula
+Using the chain rule for partial derivatices we then obtain:
+\startformula
+\frac
+    {
+        \partial \ell
+    }{
+        \partial a^{(l-1)}_{(\color[magenta]{c''})}
+    }
+=
+\sum_{\color[red]{c} = 0}^{\eta^{(l)}_c}
+\frac
+    {
+        \partial \ell
+    }{
+        \partial z^{(l)}_{(\color[red]{c})}
+    }
+\frac
+    {
+        \partial z^{(l)}_{\color[red]{c}}
+    }{
+        \partial a^{(l-1)}_{(\color[magenta]{c''})}
+    }
+=
+\sum_{\color[red]{c} = 0}^{\eta^{(l)}_c}
+\frac
+    {
+        \partial \ell
+    }{
+        \partial z^{(l)}_{(\color[red]{c})}
+    }
+w^{(l)}_{(\color[red]{c}, \color[magenta]{c''})}
+\stopformula
+Therefore the gradient vector which is passed onto the previous layer is:
+\startplaceformula[reference=fc:backward:layer]
+\startformula
+\frac
+    {
+        \partial \ell
+    }{
+        \partial {\bi a}^{(l-1)}
+    }
+=
+\startmatrix[
+    left={\left(},
+    right={\right)},
+]
+    \NC 
+    \sum_{\color[red]{c} = 0}^{\eta^{(l)}_c}
+    \frac
+        {
+            \partial \ell
+        }{
+            \partial z^{(l)}_{(\color[red]{c})}
+        }
+    w^{(l)}_{(\color[red]{c}, \color[blue]{0})}
+    \NR
+    \NC
+    \sum_{\color[red]{c} = 0}^{\eta^{(l)}_c}
+    \frac
+        {
+            \partial \ell
+        }{
+            \partial z^{(l)}_{(\color[red]{c})}
+        }
+    w^{(l)}_{(\color[red]{c}, \color[blue]{1})}
+    \NR
+    \NC \vdots
+    \NR
+    \NC
+    \sum_{\color[red]{c} = 0}^{\eta^{(l)}_c}
+    \frac
+        {
+            \partial \ell
+        }{
+            \partial z^{(l)}_{(\color[red]{c})}
+        }
+    w^{(l)}_{(\color[red]{c}, \color[blue]{\eta^{(l-1)}_c})}
+    \NR 
+\stopmatrix
+\stopformula
+\stopplaceformula
+
+\indentation
+Equation~\in[fc:forward:neuron] also lets us calculate the partial derivaties with respect to all the weights and the bias in the layer.
+\startformula
+\startmathalignment
+\NC 
+\frac
+    {
+        \partial z^{(l)}_{(\color[red]{c})}
+    }{
+        \partial w^{(l)}_{(\color[red]{c}, \color[magenta]{c''})}
+    }
+\NC =
+\frac
+    {
+        \partial
+    }{
+        \partial w^{(l)}_{(\color[red]{c}, \color[magenta]{c''})}
+    }
+\left(
+    \sum_{\color[blue]{c'} = 0}^{\eta^{(l-1)}_c}
+    \Bigl( 
+            w^{(l)}_{(\color[red]{c}, \color[blue]{c'})}
+            \, a^{(l-1)}_{(\color[blue]{c'})}
+    \Bigr) +
+    b^{(l)}_{(\color[red]{c})}
+\right)
+=
+a^{(l-1)}_{(\color[magenta]{c''})}
+\NR 
+\NC 
+\frac
+    {
+        \partial z^{(l)}_{(\color[red]{c})}
+    }{
+        \partial b^{(l)}_{(\color[red]{c})}
+    }
+\NC =
+\frac
+    {
+        \partial
+    }{
+        \partial b^{(l)}_{(\color[red]{c})}
+    }
+\left(
+    \sum_{\color[blue]{c'} = 0}^{\eta^{(l-1)}_c}
+    \Bigl( 
+            w^{(l)}_{(\color[red]{c}, \color[blue]{c'})}
+            \, a^{(l-1)}_{(\color[blue]{c'})}
+    \Bigr) +
+    b^{(l)}_{(\color[red]{c})}
+\right)
+=
+1
+\NR
+\stopmathalignment
+\stopformula
+Applying the chain rule again we get:
+\startplaceformula
+\startformula
+\startmathalignment
+\NC 
+\frac
+    {
+        \partial \ell
+    }{
+        \partial w^{(l)}_{(\color[red]{c}, \color[magenta]{c''})}
+    }
+\NC =
+\frac
+    {
+        \partial \ell
+    }{
+        \partial z^{(l)}_{(\color[red]{c})}
+    }
+\frac
+    {
+        \partial z^{(l)}_{(\color[red]{c})}
+    }{
+        \partial w^{(l)}_{(\color[red]{c}, \color[magenta]{c''})}
+    }
+=
+a^{(l-1)}_{(\color[magenta]{c''})}
+\frac
+    {
+        \partial \ell
+    }{
+        \partial z^{(l)}_{(\color[red]{c})}
+    }
+\NR[reference=fc:backward:weight]
+\NC 
+\frac
+    {
+        \partial \ell
+    }{
+        \partial b^{(l)}_{(\color[red]{c})}
+    }
+\NC =
+\frac
+    {
+        \partial \ell
+    }{
+        \partial z^{(l)}_{(\color[red]{c})}
+    }
+\frac
+    {
+        \partial z^{(l)}_{(\color[red]{c})}
+    }{
+        \partial b^{(l)}_{(\color[red]{c})}
+    }
+=
+\frac
+    {
+        \partial \ell
+    }{
+        \partial z^{(l)}_{(\color[red]{c})}
+    }
+\NR[reference=fc:backward:bias]
+\stopmathalignment
+\stopformula
+\stopplaceformula

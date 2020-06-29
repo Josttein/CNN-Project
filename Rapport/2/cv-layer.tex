@@ -1,0 +1,481 @@
+The convolutional layer is an extension of the regular fully-connected layer.
+One of the issues with regular fully-connected layers is that these kinds of layers only accept input that is in the form of a vector.
+This means that for applications where it is not natural for the input to be in a vector format, say image recognition, the input first has to be translated to a vector format.
+Usually this results in a loss of information contained in the input.
+In the typical case of image recongition, the input is in the form of one or more arrays of two dimensions.
+For a multilayer percepetron to treat this input, the images has to be \quote{flattend} into a vector of one dimention before it can be passed on to the network.
+This procedure eliminates some of the pixel relations in the image.
+To deduce this, consider the process of reconstructing a flattend image.
+If the image's dimensions prior to being flattend is not known, it is impossible, without the aid of pattern recognition, to reconstruct the image and be sure the reconstruction is equal to the original image.
+
+To fix this problem, we can use a \quote{simple} solution.
+Instead of having the neuron contain a vector of weights, let it have an array of weights.
+If we change the neuron's vector of weights into an array, we also need to change the operation that is used to combine the weights with the input (which in a neuron of a multilayer percepetron is the dot product).
+There are two things to consider here.
+The purpose of the weights is to look for features or {\em patterns} in the input---by emphasizing or deemphasizing certain aspects---and the operation must reflect this purpose of the weights.
+Furthermore, the result of the operation should be a single number which, in a sense, representes the neurons \quote{initial} confidence that the feature it is looking for is present in the input.
+The operation which does both of these things is the {\em Hadamard product}.
+The Hadamard product can be viewed as an extension of the dot product for two dimentional arrays.
+It combines two arrays---of the same dimensions---by multiplying corresponding entries together and summing the results.
+Which is precisly what the dot product does with two vectors.
+
+Another thing we need to take into account is the dimentions of our new weight array.
+If we were to proceed analogically to how a multilayer percepetron works, the array should have the same size as the input to the neuron.
+\quote{Connecting} each value in the input to an individual weight in the neuron.
+But this approach means that each neuron, in principle, looks for a single feature in the entire input at once.
+A more refined approach, is to let the neuron's weight array be smaller in size than its input.
+Instead of applying the weight array (using the Hadamard product) to the entire input at once, we apply it (still using the Hadamard product) to portions of the input seperately.
+Intuitivly, this means that the weight arrays are \quote{scanned} across the entire input image.
+Figure~\in[conv-operation] illustrates this concept.
+
+This allows the neuron to be trained to look for a single feature, such as a \quote{sharp edge} or a \quote{round corner}, in multiple areas of the input.
+The result of this method will no longer be a single number representing how \quote{initialy} confident the neuron is that a particular feature is present in the input {\em\bf as a whole}.
+Rather, the result becomes a {\em feature map}.
+Another two dimentional array which representes how \quote{initialy} confident the neuron is that a particular feature is present in {\em\bf specific locations} of the input.
+
+\startplacefigure[reference=conv-operation,
+                   title={The basic forward operation of a convolutional layer.\par
+                   Original available at: \url[conv-operation-source]},
+                   location=top]
+\startcombination[3*3]
+{\externalfigure[./Images/conv-0.jpg][width=.3\textwidth]}{}
+{\externalfigure[./Images/conv-1.jpg][width=.3\textwidth]}{}
+{\externalfigure[./Images/conv-2.jpg][width=.3\textwidth]}{}
+{\externalfigure[./Images/conv-3.jpg][width=.3\textwidth]}{}
+{\externalfigure[./Images/conv-4.jpg][width=.3\textwidth]}{}
+{\externalfigure[./Images/conv-5.jpg][width=.3\textwidth]}{}
+{\externalfigure[./Images/conv-6.jpg][width=.3\textwidth]}{}
+{\externalfigure[./Images/conv-7.jpg][width=.3\textwidth]}{}
+{\externalfigure[./Images/conv-8.jpg][width=.3\textwidth]}{}
+\stopcombination
+\stopplacefigure
+
+Going one step further, we can allow the neuron to treat inputs of not only a single two dimentional array, but several two dimentional arrays.
+A typical example where the input would consists of several interlinked two dimentional arrays is RGB images.
+An RGB image consists of three arrays of pixel values (numbers) that desribe how red, green and blue an image is in each pixel.
+The number of interlinked two dimentional arrays present in the input, is known as the number of {\em channels} that the input has.
+In order for our neuron to treat inputs with more than one channel we let the neuron have as many channels as the input.
+That is to say, we equip the neuron with a weight array for each channel in the input.
+For each channel the weight arrays are applied to the input (using Hadamard) and the result in each channel is combined to form a final single feature map.
+
+For the remainder of this section $l$ is the index of a convolutional layer.
+
+The dimentions of the input matricies and the kernel directly determine the dimentions of the output matricies.
+\startplaceformula[reference=cv:dimen:relations]
+\startformula
+\startmathalignment
+\NC \eta^{(l)}_x \NC = \eta^{(l-1)}_x - k^{(l)}_x + 1 \NR
+\NC \eta^{(l)}_y \NC = \eta^{(l-1)}_y - k^{(l)}_y + 1 \NR
+\stopmathalignment
+\stopformula
+\stopplaceformula
+The equation governing the forward operation for this layer at the level of the individual neuron is:
+\startplaceformula[reference=cv:forward:neuron]
+\startformula
+z^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y}) =
+\sum_{\color[blue]{c'}}^{\eta^{(l-1)}_c}
+\left(
+    \sum_{\color[darkgreen]{x'}}^{k^{(l)}_x}
+    \sum_{\color[darkgreen]{y'}}^{k^{(l)}_y}
+    \Bigl(
+        w^{(l)}_{(\color[red]{c}, \color[blue]{c'})}
+            (\color[darkgreen]{x'}, \color[darkgreen]{y'})
+        \, a^{(l-1)}_{(\color[blue]{c})}
+            (\color[red]{x} + \color[darkgreen]{x'}, \color[red]{x} + \color[darkgreen]{y'})
+    \Bigr)
+\right)
++ b^{(l)}_{(\color[red]{c})}
+\stopformula
+\stopplaceformula
+This equation has so much detail in it that scaling it up to the layer level necessarly removes most of the information in it.
+But with it is possible with the following scheme which makes use of the intermediary $h$ variables.
+\startformula
+\startmathalignment
+\NC h^{(l)}_{(\color[red]{c}, \color[blue]{c'})} (\color[red]{x}, \color[red]{y}) \NC =
+\sum_{\color[darkgreen]{x'}}^{k^{(l)}_x}
+\sum_{\color[darkgreen]{y'}}^{k^{(l)}_y}
+\Bigl(
+    w^{(l)}_{(\color[red]{c}, \color[blue]{c'})}
+        (\color[darkgreen]{x'}, \color[darkgreen]{y'})
+    \, a^{(l-1)}_{(\color[blue]{c'})}
+        (\color[red]{x} + \color[darkgreen]{x'}, \color[red]{x} + \color[darkgreen]{y'})
+\Bigr)
+\NR
+\NC h^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y}) \NC =
+\sum_{\color[blue]{c'}}^{\eta^{(l-1)}_c}
+h^{(l)}_{(\color[red]{c}, \color[blue]{c'})} (\color[red]{x}, \color[red]{y})
+\NR
+\NC H^{(l)}_{(\color[red]{c})} \NC =
+\startmatrix[
+    left={\left(},
+    right={\right)},
+]
+    \NC h^{(l)}_{\color[red]{c}} (\color[red]{0}, \color[red]{0})
+    \NC h^{(l)}_{\color[red]{c}} (\color[red]{0}, \color[red]{1})
+    \NC \dots
+    \NC h^{(l)}_{\color[red]{c}} (\color[red]{0}, \color[red]{\eta^{(l)}_y})
+    \NR 
+    \NC h^{(l)}_{\color[red]{c}} (\color[red]{1}, \color[red]{0})
+    \NC h^{(l)}_{\color[red]{c}} (\color[red]{1}, \color[red]{1})
+    \NC \dots
+    \NC h^{(l)}_{\color[red]{c}} (\color[red]{1}, \color[red]{\eta^{(l)}_y})
+    \NR 
+    \NC \vdots
+    \NC \vdots
+    \NC \ddots
+    \NC \vdots
+    \NR 
+    \NC h^{(l)}_{\color[red]{c}} (\color[red]{\eta^{(l)}_x}, \color[red]{0})
+    \NC h^{(l)}_{\color[red]{c}} (\color[red]{\eta^{(l)}_x}, \color[red]{1})
+    \NC \dots
+    \NC h^{(l)}_{\color[red]{c}} (\color[red]{\eta^{(l)}_x}, \color[red]{\eta^{(l)}_y})
+    \NR 
+\stopmatrix
+\NR
+\NC Z^{(l)}_{(\color[red]{c})} \NC =
+\startmatrix[
+    left={\left(},
+    right={\right)},
+]
+    \NC z^{(l)}_{\color[red]{c}} (\color[red]{0}, \color[red]{0})
+    \NC z^{(l)}_{\color[red]{c}} (\color[red]{0}, \color[red]{1})
+    \NC \dots
+    \NC z^{(l)}_{\color[red]{c}} (\color[red]{0}, \color[red]{\eta^{(l)}_y})
+    \NR 
+    \NC z^{(l)}_{\color[red]{c}} (\color[red]{1}, \color[red]{0})
+    \NC z^{(l)}_{\color[red]{c}} (\color[red]{1}, \color[red]{1})
+    \NC \dots
+    \NC z^{(l)}_{\color[red]{c}} (\color[red]{1}, \color[red]{\eta^{(l)}_y})
+    \NR 
+    \NC \vdots
+    \NC \vdots
+    \NC \ddots
+    \NC \vdots
+    \NR 
+    \NC z^{(l)}_{\color[red]{c}} (\color[red]{\eta^{(l)}_x}, \color[red]{0})
+    \NC z^{(l)}_{\color[red]{c}} (\color[red]{\eta^{(l)}_x}, \color[red]{1})
+    \NC \dots
+    \NC z^{(l)}_{\color[red]{c}} (\color[red]{\eta^{(l)}_x}, \color[red]{\eta^{(l)}_y})
+    \NR 
+\stopmatrix
+\NR 
+\NC B^{(l)}_{(\color[red]{c})} \NC =
+\startmatrix[
+    left={\left(},
+    right={\right)},
+]
+    \NC b^{(l)}_{\color[red]{c}}
+    \NC b^{(l)}_{\color[red]{c}}
+    \NC \dots
+    \NC b^{(l)}_{\color[red]{c}}
+    \NR 
+    \NC b^{(l)}_{\color[red]{c}}
+    \NC b^{(l)}_{\color[red]{c}}
+    \NC \dots
+    \NC b^{(l)}_{\color[red]{c}}
+    \NR 
+    \NC \vdots
+    \NC \vdots
+    \NC \ddots
+    \NC \vdots
+    \NR 
+    \NC b^{(l)}_{\color[red]{c}}
+    \NC b^{(l)}_{\color[red]{c}}
+    \NC \dots
+    \NC b^{(l)}_{\color[red]{c}}
+    \NR 
+\stopmatrix
+\NR
+\NC {\bi H}^{(l)} \NC =
+\startmatrix[
+    left={\left(},
+    right={\right)},
+]
+    \NC H^{(l)}_{(\color[red]{0})} 
+    \NR
+    \NC H^{(l)}_{(\color[red]{1})}
+    \NR
+    \NC \dots
+    \NR
+    \NC H^{(l)}_{(\color[red]{\eta^{(l)}_c})}
+    \NR
+\stopmatrix
+\NR 
+\NC {\bi Z}^{(l)} \NC =
+\startmatrix[
+    left={\left(},
+    right={\right)},
+]
+    \NC Z^{(l)}_{(\color[red]{0})}
+    \NR
+    \NC Z^{(l)}_{(\color[red]{1})}
+    \NR
+    \NC \dots
+    \NR
+    \NC Z^{(l)}_{(\color[red]{\eta^{(l)}_c})}
+    \NR
+\stopmatrix
+\NR 
+\NC {\bi B}^{(l)} \NC =
+\startmatrix[
+    left={\left(},
+    right={\right)},
+]
+    \NC B^{(l)}_{(\color[red]{0})}
+    \NR
+    \NC B^{(l)}_{(\color[red]{1})}
+    \NR
+    \NC \dots
+    \NR
+    \NC B^{(l)}_{(\color[red]{\eta^{(l)}_c})}
+    \NR
+\stopmatrix
+\NR
+\stopmathalignment
+\stopformula
+
+With this scheme we can write equation~\in[cv:forward:neuron] as:
+\startplaceformula[reference=cv:forward:layer]
+\startformula
+{\bi Z}^{(l)} = {\bi H}^{(l)} + {\bi B}^{(l)}
+\stopformula
+\stopplaceformula
+
+Now that we know how to move forwards through a convolutional layer we need to be able to propagate backwars through it as well.
+The backpropagation through this layer starts at its output with a gradient vector of matricies.
+We are not going to try and write this vector of matricies down directly, it suffices to note that we have access to all partial derivatives of the form:
+\startformula
+\frac
+    {
+        \partial \ell
+    }{
+        \partial z^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y})
+    }
+\stopformula
+
+Using equation~\in[cv:forward:neuron] we can calculate the equations governing backpropagation.
+\startformula
+\startmathalignment
+\NC \frac
+    {
+        \partial z^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y})
+    }{
+        \partial a^{(l-1)}_{(\color[magenta]{c''})} (\color[magenta]{x''}, \color[magenta]{y''})
+    }
+\NC =
+\frac
+    {
+        \partial 
+    }{
+        \partial a^{(l-1)}_{(\color[magenta]{c''})} (\color[magenta]{x''}, \color[magenta]{y''})
+    }
+\left(
+    \sum_{\color[blue]{c'} = 0}^{\eta^{(l-1)}_c}
+    \left(
+        \sum_{\color[darkgreen]{x'} = 0}^{k^{(l)}_x}
+        \sum_{\color[darkgreen]{y'} = 0}^{k^{(l)}_y}
+        \Bigl(
+            w^{(l)}_{(\color[red]{c}, \color[blue]{c'})}
+                (\color[darkgreen]{x'}, \color[darkgreen]{y'})
+            \, a^{(l-1)}_{(\color[blue]{c'})}
+                (\color[red]{x} + \color[darkgreen]{x'}, \color[red]{x} + \color[darkgreen]{y'})
+        \Bigr)
+    \right)
+    + b^{(l)}_{(\color[red]{c})}
+\right)
+\NR
+\NC \NC =
+\frac
+    {
+        \partial 
+    }{
+        \partial a^{(l-1)}_{(\color[magenta]{c''})} (\color[magenta]{x''}, \color[magenta]{y''})
+    }
+\left(
+    \sum_{\color[darkgreen]{x'} = 0}^{k^{(l)}_x}
+    \sum_{\color[darkgreen]{y'} = 0}^{k^{(l)}_y}
+    \Bigl(
+        w^{(l)}_{(\color[red]{c}, \color[magenta]{c''})}
+            (\color[darkgreen]{x'}, \color[darkgreen]{y'})
+        \, a^{(l-1)}_{(\color[magenta]{c''})}
+            (\color[red]{x} + \color[darkgreen]{x'}, \color[red]{x} + \color[darkgreen]{y'})
+    \Bigr)
+\right)
+\NR
+\NC \NC =
+w^{(l)}_{(\color[red]{c}, \color[magenta]{c''})} 
+(\color[magenta]{x''} - \color[red]{x}, 
+ \color[magenta]{y''} - \color[red]{y})
+\NR
+\stopmathalignment
+\stopformula
+
+With the chain rule we then obtain:
+\startplaceformula[reference=fc:backward:neuron]
+\startformula
+\frac
+    {
+        \partial \ell
+    }{
+        \partial a^{(l-1)}_{(\color[magenta]{c''})} (\color[magenta]{x''}, \color[magenta]{y''})
+    }
+=
+\sum_{\color[red]{c} = 0}^{\eta^{(l)}_c}
+\sum_{\color[red]{x} = 0}^{\eta^{(l)}_x}
+\sum_{\color[red]{y} = 0}^{\eta^{(l)}_y}
+\frac
+    {
+        \partial \ell
+    }{
+        \partial z^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y})
+    }
+\frac
+    {
+        \partial z^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y})
+    }{
+        \partial a^{(l-1)}_{(\color[magenta]{c''})} (\color[magenta]{x''}, \color[magenta]{y''})
+    }
+\stopformula
+\stopplaceformula
+
+\indentation
+Equation~\in[cv:forward:neuron] also lets us calculate the partial derivaties with respect to all the weights and the bias in the layer.
+\startformula
+\startmathalignment
+\NC \frac
+    {
+        \partial z^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y})
+    }{
+        \partial w^{(l)}_{(\color[red]{c}, \color[magenta]{c''})}
+            (\color[darkyellow]{x''}, \color[darkyellow]{y''})
+    }
+\NC =
+\frac
+    {
+        \partial
+    }{
+        \partial w^{(l)}_{(\color[red]{c}, \color[magenta]{c''})}
+            (\color[darkyellow]{x''}, \color[darkyellow]{y''})
+    }
+\left(
+    \sum_{\color[blue]{c'} = 0}^{\eta^{(l-1)}_c}
+    \left(
+        \sum_{\color[darkgreen]{x'} = 0}^{k^{(l)}_x}
+        \sum_{\color[darkgreen]{y'} = 0}^{k^{(l)}_y}
+        \Bigl(
+            w^{(l)}_{(\color[red]{c}, \color[blue]{c'})}
+                (\color[darkgreen]{x'}, \color[darkgreen]{y'})
+            \, a^{(l-1)}_{(\color[blue]{c'})}
+                (\color[red]{x} + \color[darkgreen]{x'}, \color[red]{x} + \color[darkgreen]{y'})
+        \Bigr)
+    \right)
+    + b^{(l)}_{(\color[red]{c})}
+\right)
+\NR
+\NC \NC =
+\frac
+    {
+        \partial
+    }{
+        \partial w^{(l)}_{(\color[red]{c}, \color[magenta]{c''})}
+            (\color[darkyellow]{x''}, \color[darkyellow]{y''})
+    }
+\left(
+    \sum_{\color[darkgreen]{x'} = 0}^{k^{(l)}_x}
+    \sum_{\color[darkgreen]{y'} = 0}^{k^{(l)}_y}
+    \Bigl(
+        w^{(l)}_{(\color[red]{c}, \color[magenta]{c''})}
+            (\color[darkgreen]{x'}, \color[darkgreen]{y'})
+        \, a^{(l-1)}_{(\color[magenta]{c''})}
+            (\color[red]{x} + \color[darkgreen]{x'}, \color[red]{x} + \color[darkgreen]{y'})
+    \Bigr)
+\right)
+\NR
+\NC \NC =
+a^{(l-1)}_{(\color[magenta]{c''})}
+            (\color[red]{x} + \color[darkyellow]{x''}, \color[red]{x} + \color[darkyellow]{y''})
+\stopmathalignment
+\stopformula
+
+With the chain rule we then obtain:
+\startplaceformula
+\startformula
+\frac
+    {
+        \partial \ell
+    }{
+        \partial w^{(l)}_{(\color[red]{c}, \color[magenta]{c''})}
+            (\color[darkyellow]{x''}, \color[darkyellow]{y''})
+    }
+=
+\sum_{\color[red]{x} = 0}^{\eta^{(l)}_x}
+\sum_{\color[red]{y} = 0}^{\eta^{(l)}_y}
+\frac
+    {
+        \partial \ell
+    }{
+        \partial z^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y})
+    }
+\frac
+    {
+        \partial z^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y})
+    }{
+        \partial w^{(l)}_{(\color[red]{c}, \color[magenta]{c''})}
+            (\color[darkyellow]{x''}, \color[darkyellow]{y''})
+    }
+\stopformula
+\stopplaceformula
+
+Repating the same calculation for the bias.
+\startformula
+\startmathalignment
+\NC \frac
+    {
+        \partial z^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y})
+    }{
+        \partial b^{(l)}_{(\color[red]{c})}
+    }
+\NC =
+\frac
+    {
+        \partial
+    }{
+        \partial b^{(l)}_{(\color[red]{c})}
+    }
+\left(
+    \sum_{\color[blue]{c'} = 0}^{\eta^{(l-1)}_c}
+    \left(
+        \sum_{\color[darkgreen]{x'} = 0}^{k^{(l)}_x}
+        \sum_{\color[darkgreen]{y'} = 0}^{k^{(l)}_y}
+        \Bigl(
+            w^{(l)}_{(\color[red]{c}, \color[blue]{c'})}
+                (\color[darkgreen]{x'}, \color[darkgreen]{y'})
+            \, a^{(l-1)}_{(\color[blue]{c'})}
+                (\color[red]{x} + \color[darkgreen]{x'}, \color[red]{x} + \color[darkgreen]{y'})
+        \Bigr)
+    \right)
+    + b^{(l)}_{(\color[red]{c})}
+\right)
+\NR
+\NC \NC = 1 \NR
+\stopmathalignment
+\stopformula
+
+With the chain rule we then obtain:
+\startplaceformula
+\startformula
+\frac
+    {
+        \partial \ell
+    }{
+        b^{(l)}_{(\color[red]{c})}
+    }
+=
+\frac
+    {
+        \partial \ell
+    }{
+        \partial z^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y})
+    }
+\stopformula
+\stopplaceformula
