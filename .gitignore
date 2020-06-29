@@ -1,3 +1,4 @@
 # Ignore conTeXt compilation files
 *.tuc
 *.log
+*.synctex
