@@ -147,6 +147,183 @@ def maxpoolBackward(dpool, orig, f, s):
     return dout
 \stoptyping
 
+\starttyping
+def conv(image, label, params, conv_s, pool_f, pool_s):
+    
+    [f1, f2, w3, w4, b1, b2, b3, b4] = params 
+    
+    ################################################
+    ############## Forward Operation ###############
+    ################################################
+    conv1 = convolution(image, f1, b1, conv_s) # convolution operation
+    conv1[conv1<=0] = 0 # pass through ReLU non-linearity
+    
+    conv2 = convolution(conv1, f2, b2, conv_s) # second convolution operation
+    conv2[conv2<=0] = 0 # pass through ReLU non-linearity
+    
+    pooled = maxpool(conv2, pool_f, pool_s) # maxpooling operation
+    
+    (nf2, dim2, _) = pooled.shape
+    fc = pooled.reshape((nf2 * dim2 * dim2, 1)) # flatten pooled layer
+    
+    z = w3.dot(fc) + b3 # first dense layer
+    z[z<=0] = 0 # pass through ReLU non-linearity
+    
+    out = w4.dot(z) + b4 # second dense layer
+     
+    probs = softmax(out) # predict class probabilities with the softmax activation function
+    
+    ################################################
+    #################### Loss ######################
+    ################################################
+    
+    loss = categoricalCrossEntropy(probs, label) # categorical cross-entropy loss
+        
+    ################################################
+    ############# Backward Operation ###############
+    ################################################
+    dout = probs - label # derivative of loss w.r.t. final dense layer output
+    dw4 = dout.dot(z.T) # loss gradient of final dense layer weights
+    db4 = np.sum(dout, axis = 1).reshape(b4.shape) # loss gradient of final dense layer biases
+    
+    dz = w4.T.dot(dout) # loss gradient of first dense layer outputs 
+    dz[z<=0] = 0 # backpropagate through ReLU 
+    dw3 = dz.dot(fc.T)
+    db3 = np.sum(dz, axis = 1).reshape(b3.shape)
+    
+    dfc = w3.T.dot(dz) # loss gradients of fully-connected layer (pooling layer)
+    dpool = dfc.reshape(pooled.shape) # reshape fully connected into dimensions of pooling layer
+    
+    dconv2 = maxpoolBackward(dpool, conv2, pool_f, pool_s) # backprop through the max-pooling layer(only neurons with highest activation in window get updated)
+    dconv2[conv2<=0] = 0 # backpropagate through ReLU
+    
+    dconv1, df2, db2 = convolutionBackward(dconv2, conv1, f2, conv_s) # backpropagate previous gradient through second convolutional layer.
+    dconv1[conv1<=0] = 0 # backpropagate through ReLU
+    
+    dimage, df1, db1 = convolutionBackward(dconv1, image, f1, conv_s) # backpropagate previous gradient through first convolutional layer.
+    
+    grads = [df1, df2, dw3, dw4, db1, db2, db3, db4] 
+    
+    return grads, loss
+\stoptyping
+
+\startsection[title= Batch Optimization]
+When you have a large training set, it can be time consuming to evaluate a cost function on the data set in its entirety.
+A common way to avoid this is by instead evaluating the cost function in batches, or subsets of the training data.
+In other words, for each batch, we evaluate the cost function and adjust the paramaters accordingly. 
+After using all the training data to tweak the paramaters, we have finished an epoch.
+This process can then be repeated over several epochs, but in our case, we have found that two epochs works sufficiently.
+The fact that we adjust the paramaters after each batch, means that we have to choose a suitable optimization algorithm such as Stochastic Gradient Descent.
+In this implementation, however, the author has used an algorithm that is shown to be very efficent in terms of batch optimization, namely the Adam Gradient Descent algorithm.
+We will not spend time explaining how it works, but its main principles are very similar to that of the classic gradient descent.
+For each training data in the batch, we evaluate the output of the loss by the forward opartion and retrieve the gradients using the backward operation described earlier. 
+Afterwards, we evaluate the cost function of the batch and adjust the parameters.
+The implementation of this concept in python, is summarized in figure ()
+
+
+
+  
+
+\stopsection
+
+\starttyping
+def adamGD(batch, num_classes, lr, dim, n_c, beta1, beta2, params, cost):
+    '''
+    update the parameters through Adam gradient descnet.
+    '''
+    [f1, f2, w3, w4, b1, b2, b3, b4] = params
+    
+    X = batch[:,0:-1] # get batch inputs
+    X = X.reshape(len(batch), n_c, dim, dim)
+    Y = batch[:,-1] # get batch labels
+    
+    cost_ = 0
+    batch_size = len(batch)
+    
+    # initialize gradients and momentum,RMS params
+
+    for i in range(batch_size):
+        
+        x = X[i]
+        y = np.eye(num_classes)[int(Y[i])].reshape(num_classes, 1) # convert label to one-hot
+        
+        # Collect Gradients for training example
+        grads, loss = conv(x, y, params, 1, 2, 2)
+        [df1_, df2_, dw3_, dw4_, db1_, db2_, db3_, db4_] = grads
+        
+        df1+=df1_
+        db1+=db1_
+        df2+=df2_
+        db2+=db2_
+        dw3+=dw3_
+        db3+=db3_
+        dw4+=dw4_
+        db4+=db4_
+
+        cost_+= loss
+
+    # Parameter Update  
+
+    
+
+    cost_ = cost_/batch_size
+    cost.append(cost_)
+
+    params = [f1, f2, w3, w4, b1, b2, b3, b4]
+    
+    return params, cost
+
+
+\stoptyping
+
+\starttyping
+def train(num_classes = 10, lr = 0.01, beta1 = 0.95, beta2 = 0.99, img_dim = 28, img_depth = 1, f = 5, num_filt1 = 8, num_filt2 = 8, batch_size = 32, num_epochs = 2, save_path = 'params.pkl'):
+
+    # training data
+    m =50000
+    X = extract_data('train-images-idx3-ubyte.gz', m, img_dim)
+    y_dash = extract_labels('train-labels-idx1-ubyte.gz', m).reshape(m,1)
+    X-= int(np.mean(X))
+    X/= int(np.std(X))
+    train_data = np.hstack((X,y_dash))
+    
+    np.random.shuffle(train_data)
+
+    ## Initializing all the parameters
+    f1, f2, w3, w4 = (num_filt1 ,img_depth,f,f), (num_filt2 ,num_filt1,f,f), (128,800), (10, 128)
+    f1 = initializeFilter(f1)
+    f2 = initializeFilter(f2)
+    w3 = initializeWeight(w3)
+    w4 = initializeWeight(w4)
+
+    b1 = np.zeros((f1.shape[0],1))
+    b2 = np.zeros((f2.shape[0],1))
+    b3 = np.zeros((w3.shape[0],1))
+    b4 = np.zeros((w4.shape[0],1))
+
+    params = [f1, f2, w3, w4, b1, b2, b3, b4]
+
+    cost = []
+
+    print("LR:"+str(lr)+", Batch Size:"+str(batch_size))
+
+    for epoch in range(num_epochs):
+        np.random.shuffle(train_data)
+        batches = [train_data[k:k + batch_size] for k in range(0, int(train_data.shape[0]/16), batch_size)]
+
+        t = tqdm(batches)
+        for x,batch in enumerate(t):
+            params, cost = adamGD(batch, num_classes, lr, img_dim, img_depth, beta1, beta2, params, cost)
+            t.set_description("Cost: %.2f" % (cost[-1]))
+            
+    to_save = [params, cost]
+    
+    with open(save_path, 'wb') as file:
+        pickle.dump(to_save, file)
+        
+    return cost
+\stoptyping
+
 \startitemize
 \startitem 
 The problem the network is going to tackle (classic MNIST image recognition)
