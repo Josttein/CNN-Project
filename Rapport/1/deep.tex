@@ -1,9 +1,9 @@
 \startsection[title=Machine learning concepts]
 First of all we need to answer the question \quote{what is a neural network?} from a conceptual level.
-Conceptualy, a nerual network is a large network of numerous \quote{neurons}.
+Conceptualy, a neural network is a large network of numerous \quote{neurons}.
 These neruons are connected to one another through so called \quote{channels} of data streams.
 
-A neuron in a neural network is supposed to {\em look} for certain {\em features} in the input data it recives from upstream.
+A neuron in a neural network is supposed to {\em look} for certain {\em features} in the input data it recieves from upstream.
 These features that the neuron is looking for are those that it has been trained to look for.
 Neurons in a neural network are not told explicitly what features they are supposed to look for.
 If the neuron {\em thinks} that the data it is looking at possess the features it is looking for---it {\em fires} or {\em activates}.
@@ -14,20 +14,20 @@ Neurons are grupped together in specific layers.
 Neruons in the same layer possess the same internal structure and thus process the same kinds of input data.
 Of course this also means that they produce the same kind of output data.
 The structure of neural networks bears some resemblance to actuall neural networks as studied in neuroscience.
-Figure~\in[network-general-structure] shows the overall structure of a nerual network.
+Figure~\in[network-general-structure] shows the overall structure of a neural network.
 The figure also illustrates the common terminology of calling the layer inbetween the input and output layer for {\em hidden} layers.
 
 \startplacefigure[
     reference=network-general-structure,
     location=bottom,
-    title={Overview of a nerual network structure~\cite[noah_2018]},
+    title={Overview of a neural network structure~\cite[noah_2018]},
 ]
 \externalfigure[Images/structure.png]
 \stopplacefigure
 
-In addition to layers of neurons, nerual networks can also incorporate special \quote{non-thinking} layers.
+In addition to layers of neurons, neural networks can also incorporate special \quote{non-thinking} layers.
 Layers in which there are no neurons.
-These layers may serve a different purposes but a commonly, such layers are used to reduce the computational complexity of a nerual network.
+These layers may serve a different purposes but a commonly, such layers are used to reduce the computational complexity of a neural network.
 Furthermore, these layers may protect the network from the non-desirable phenomena of \quote{overfitting} data.
 Having too many parameters than what is justifible for the problem that the network is treating.
 
@@ -35,7 +35,7 @@ This leads us to the question: what is the kinds of problems that neural network
 A neural network's job is to process some input data and produce a final \quote{ativation}.
 This final activation represents what the nerural network \quote{thinks} about the input it has processed.
 This output of the network, its final activation, can be used for many different purposes such opening a door or turning the wheel of a self-driving car.
-Perhaps one of the simplest, and a very common application, of nerual networks ses them used to classify large amounts of data.
+Perhaps one of the simplest, and a very common application, of neural networks ses them used to classify large amounts of data.
 In this context, the output of the network is interpreted as a probability.
 The probability represents how confident the network is that one piece of data belongs to a particular class.
 Networks used for classification purposes often output several probabilites which is interpreted as the networks confidence that a particular input data belongs to any one of the classes that the network knows about.

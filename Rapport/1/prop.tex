@@ -7,7 +7,7 @@ Backward propagation refers to ensuing mode of operation.
 After the cost has been determined, the network now propagets backwards through itself in order to determine its gradient.
 It determines its gradient this way because of how the chain rule works.
 A neural network can be seen as a function with hundreds if not thousands of individual parameters.
-But the real observation, is that a nerual network can be seen as a {\em nested} function of functions.
+But the real observation, is that a neural network can be seen as a {\em nested} function of functions.
 In such a hierarchy, each function represents the output of some layer that is then passed onto the next function in the hierarchy---the next layer.
 The chain rule tells us that in order to calculate the derivative of such a nested function it, roughly speaking, suffices to calculate the derivate of each function in the nesting and multiplying the results.
 Which can be thought of as {\em unwinding} the nested functions.

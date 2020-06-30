@@ -27,18 +27,18 @@ The channel index which tells us which channel we are looking at will be written
 The output of each neuron in a layer becomes a channel in the next layer.
 To reference both the input and output channel, a double parenthetical subscript will be used (e.g.\ $w^{(l)}_{(c,c')}$ is the scalar weight in layer $l$ connecting channel $c$ from layer $l$ to channel $c'$ in layer $l-1$).
 To reference positions within a matrix we will use regular xy-coordinates (e.g.\ $a(x,y)$ is the scalar in row $x$ at column $y$).
-Equations which relate a previous layer to the next one will generally use blue color to makr indicies belonging to the previous layer.
-Red color will be used to mark indices beloning to the next layer.
+Equations which relate a previous layer to the next one will generally use blue color to make indicies belonging to the previous layer.
+Red color will be used to mark indices belonging to the next layer.
 
 We will often need to know the {\em dimensions} of layer.
 How many channels does it have and what are the sizes of the matrices in that layer.
-These dimensions will be written using the greek letter eta ($\eta$) with a layer index and a subscript to identify which dimention is expressed.
+These dimensions will be written using the greek letter eta ($\eta$) with a layer index and a subscript to identify which dimension is expressed.
 A \quote{c} subscript means it is the number of channels in the layer {\em minus one}.
-A \quote{x} and \quote{y} subscript means it is row and column length {\em minus one} respectivly.
+A \quote{x} and \quote{y} subscript means it is row and column length {\em minus one} respectively.
 We use the letter $\eta$ instead of $n$ to remind the reader that all dimensions are substracted 1, because we want all our indices to start at zero.
 As an example, if layer $3$ has eight individual channels then $\eta^{(3)}_c = 7$.
 
-The inital input to a network can be though of as the first activation to the network.
+The inital input to a network can be thought of as the first activation to the network.
 So we are going to denote the inital input using the appropriate \quote{a} letter with a zero in parenthetical subscript.
 \stopsubsubject
 

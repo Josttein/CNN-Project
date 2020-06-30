@@ -3,10 +3,10 @@ One of the issues with regular fully-connected layers is that these kinds of lay
 This means that for applications where it is not natural for the input to be in a vector format, say image recognition, the input first has to be translated to a vector format.
 Usually this results in a loss of information contained in the input.
 In the typical case of image recongition, the input is in the form of one or more arrays of two dimensions.
-For a multilayer percepetron to treat this input, the images has to be \quote{flattend} into a vector of one dimention before it can be passed on to the network.
+For a multilayer percepetron to treat this input, the images has to be \quote{flattened} into a vector of one dimension before it can be passed on to the network.
 This procedure eliminates some of the pixel relations in the image.
-To deduce this, consider the process of reconstructing a flattend image.
-If the image's dimensions prior to being flattend is not known, it is impossible, without the aid of pattern recognition, to reconstruct the image and be sure the reconstruction is equal to the original image.
+To deduce this, consider the process of reconstructing a flattened image.
+If the image's dimensions prior to being flattened is not known, it is impossible, without the aid of pattern recognition, to reconstruct the image and be sure the reconstruction is equal to the original image.
 
 To fix this problem, we can use a \quote{simple} solution.
 Instead of having the neuron contain a vector of weights, let it have an array of weights.
@@ -14,9 +14,9 @@ These weight arrays are often called the neurons {\em kernel} or {\em filter}.
 If we change the neuron's vector of weights into an array, we also need to change the operation that is used to combine the weights with the input (which in a neuron of a multilayer percepetron is the dot product).
 There are two things to consider here.
 The purpose of the weights is to look for features or {\em patterns} in the input---by emphasizing or deemphasizing certain aspects---and the operation must reflect this purpose of the weights.
-Furthermore, the result of the operation should be a single number which, in a sense, representes the neurons \quote{initial} confidence that the feature it is looking for is present in the input.
+Furthermore, the result of the operation should be a single number which, in a sense, represents the neurons \quote{initial} confidence that the feature it is looking for is present in the input.
 The operation which does both of these things is the {\em Hadamard product}.
-The Hadamard product can be seen as an extension of the dot product for two dimentional arrays.
+The Hadamard product can be seen as an extension of the dot product for two dimensional arrays.
 We can express it as:
 \startformula
 {\rm Hp}(A,B) = \sum_{x} \sum_{y} a(x,y) b(x,y)
@@ -24,20 +24,20 @@ We can express it as:
 It combines two arrays---of the same dimensions---by multiplying corresponding entries together and summing the results.
 Which is precisly what the dot product does with two vectors.
 
-Another thing we need to take into account is the dimentions of our new weight array.
+Another thing we need to take into account is the dimensions of our new weight array.
 If we were to proceed analogically to how a multilayer percepetron works, the array should have the same size as the input to the neuron.
 \quote{Connecting} each value in the input to an individual weight in the neuron.
 But this approach means that each neuron, in principle, looks for a single feature in the entire input at once.
 A more refined approach, is to let the neuron's weight array be smaller in size than its input.
 Instead of applying the weight array (using the Hadamard product) on the entire input at once, we apply it (still using the Hadamard product) to portions of the input seperately.
-Intuitivly, this means that the weight arrays are \quote{scanned} across the entire input image.
+Intuitively, this means that the weight arrays are \quote{scanned} across the entire input image.
 Figure~\in[conv-operation] illustrates this idea of the weight array scanning the input matrix to produce the output matrix.
 
 A weight array that is smaller than the input matrix allows the neurons to be trained to look for a single small feature, such as a \quote{sharp edge} or a \quote{round corner}.
-Which in can look for in multiple areas of the input.
-As figure~\in[conv-operation] clearly shows, the output of the neurons is no longer be a single number representing how \quote{initialy} confident the neuron is that a particular feature is present in the input {\em\bf as a whole}.
+Which it can look for in multiple areas of the input.
+As figure~\in[conv-operation] clearly shows, the output of the neurons is no longer be a single number representing how \quote{initially} confident the neuron is that a particular feature is present in the input {\em\bf as a whole}.
 Rather, the result becomes a {\em feature map}.
-Another two dimentional array which representes how \quote{initialy} confident the neuron is that a particular feature is present in {\em\bf specific locations} of the input.
+Another two dimensional array which represents how \quote{initially} confident the neuron is that a particular feature is present in {\em\bf specific locations} of the input.
 
 \startplacefigure[
     reference=conv-operation,
@@ -59,11 +59,11 @@ Another two dimentional array which representes how \quote{initialy} confident t
 
 Of course each neuron must be able to handle more than one input data stream each with its own input data matrix.
 A typical example of a case where multiple streams are needed is the treatment of RGB images.
-An RGB image consists of three arrays of pixel values (numbers) that desribe how red, green and blue an image is in each pixel.
+An RGB image consists of three arrays of pixel values (numbers) that describe how red, green and blue an image is in each pixel.
 Such an input would be split into three channels before being passed to a convolutional layer.
-The neurons handle multiple data streams by simple adding together the feature maps produces by each data stream.
+The neurons handle multiple data streams by simply adding together the feature maps produces by each data stream.
 Figure~\in[cv-network] gives an overview of a convolutional layer.
-The channels are drawn as pipes to emhpasize that they contain matrix data rather than scalar values.
+The channels are drawn as pipes to emphasize that they contain matrix data rather than scalar values.
 
 \startplacefigure[
     reference=cv-network,
@@ -83,11 +83,11 @@ Increasing the stride reduces the size of the resulting feature map since it is 
 Which has the net effect that the {\em computational complexity} of the neuron is reduced.
 However, it also means that the neuron studies its input less which can result in vital information in the input being overlooked.
 This is not a big problem as long as the features of the input is judged to be larger than the kernel that the neuron uses.
-So long as this is the case, increasing the stride of a neuron can significantly reduce its computational complexity without resulting in it no longer surving its purpose.
+So long as this is the case, increasing the stride of a neuron can significantly reduce its computational complexity without resulting in it no longer serving its purpose.
 
 Zero padding in one way serve the opposite purpose of increasing the stride.
 Zero padding refers to the practice of \quote{padding} the input matrix with zeros around it.
-This allows the neuron to retain the dimentions of the original input image in its feature map, if this is desired, without much increased computational complexity.
+This allows the neuron to retain the dimensions of the original input image in its feature map, if this is desired, without much increased computational complexity.
 \stopsubsubsection
 
 \startsubsubject[title=The equations]
@@ -95,8 +95,8 @@ The equations we are going to look at here does not use an altered stride nor do
 To take the stride into account it suffices to multiply the red indices of the previous layer's activation with the stride value (e.g.\ $\color[red]{x}s$).
 
 Let $l$ be the index of a convolutional layer.
-Let $k_x$ and $k_y$ be the dimentions of the weight matricies in this layer.
-The dimentions between layer $l$ and layer $l-1$ are given by the following equations.
+Let $k_x$ and $k_y$ be the dimensions of the weight matricies in this layer.
+The dimensions between layer $l$ and layer $l-1$ are given by the following equations.
 \startplaceformula[reference=cv:dimen:relations]
 \startformula
 \startmathalignment
