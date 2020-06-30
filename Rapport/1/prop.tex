@@ -1,0 +1,24 @@
+Now that we have a clear concept of what we do to train neural networks, we need to undersand their two primary {\em modes} of operation.
+
+Forward propagation refers to the regular operation of a neural network.
+The network process some input and returns some output which is then passed to a cost function.
+
+Backward propagation refers to ensuing mode of operation.
+After the cost has been determined, the network now propagets backwards through itself in order to determine its gradient.
+It determines its gradient this way because of how the chain rule works.
+A neural network can be seen as a function with hundreds if not thousands of individual parameters.
+But the real observation, is that a nerual network can be seen as a {\em nested} function of functions.
+In such a hierarchy, each function represents the output of some layer that is then passed onto the next function in the hierarchy---the next layer.
+The chain rule tells us that in order to calculate the derivative of such a nested function it, roughly speaking, suffices to calculate the derivate of each function in the nesting and multiplying the results.
+Which can be thought of as {\em unwinding} the nested functions.
+
+The unwinding starts at the end of the network with the function at the top of the nesting hierarchy.
+The next function to unwind is the one before the last one, which in other terms is the second to last layer of the neural network.
+This procedure of unwinding the networks nested function from back to front is why we call this operation backward propagation.
+
+\startplacefigure[
+    title={Forward propagation and backward propagation \cite[agarwal_2017].},
+    location=bottom,
+]
+\externalfigure[Images/propagation.png]
+\stopplacefigure

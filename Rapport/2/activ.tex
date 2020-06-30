@@ -1,53 +1,130 @@
-All the \quote{thinking} layers of a neural network---those layers with neurons in them---make use of some activation function.
-A function that is non-linear which ultimately determines wheter a neuron fires or not.
+Let us now discuss for a brief moment the activation functions of our network.
+The ones responsible for turning our $z$'s into $a$'s.
+In principle, any suitable non-linear function can be used as an activation function.
+It has to be non-linear becasue the combination of two linear functions remains a linear function.
+Meaning that a layer directly followed by another layer without an activation function would in essence function as a single layer---a single linear function.
+
 When designing a network one can chose between several different possible activation functions.
-In this paper we are only going to be looking at the rectified linear unit (ReLu) activation function.
-Since it is the one that is used in our working example.
-We are going to be using the ReLU function with both scalars, vectors, matrices and tensors. 
-For the larger \quote{number structres} the ReLU function is applied to each entry individualy (i.e.\ each coordinate in a vector at a time). 
-The ReLU function is defined as
+The sigmoid function $\phi(x) = \frac{1}{1+ e^{-x}}$ and the $\arctan$ functions are possible candidates for activation functions.
+The one our example network uses, and the one shown to be more efficient for optimization \cite[Goodfellow-et-al-2016], is the rectified linear unit (ReLU) activation function.
+Our network also makes use of the softmax activation function at the very last layer.
+
+
+The ReLU fucntion is extremly simple, being nothing more than a max and a zero.
+\startplaceformula
+\startformula
+{\rm ReLU}(z) = \max(0, z)
+\stopformula
+\stopplaceformula
+The ReLU function is technicaly not derivable at $0$ but for nerual network applications this can safely be ignored.
+We simple set the derivative of it to be zero at zero most of the time.
+\startplaceformula
+\startformula
+\frac
+    {
+        \rm d
+    }{
+        \rm dz
+    }
+\Bigl(
+    {\rm ReLU}(z) = \max(0, z)
+\Bigr)
+= 
+\startcases
+\NC 1 \NC if $z \geq 0$ \NR
+\NC 0 \NC otherwise \NR
+\stopcases
+\stopformula
+\stopplaceformula
+
+The softmax activation function is interesting because it does not behave like a regular activation function.
+Its purpose is to map the activations of the previous layer into a vector where the entries sum to $1$.
+As such, it depends on all the preliminary outputs per activation.
+Letting $a^{(l)}_{(\color[red]{c})}$ be the activation of a softmax function in layer $l$ we have
+\startplaceformula
+\startformula
+a^{(l)}_{(\color[red]{c})} \NC =
+\frac
+    {
+        \exp 
+        \left(
+            z^{(l)}_{(\color[red]{c})} 
+        \right)
+    }{
+        \sum_{\color[red]{c^*} = 0}^{\eta^{(l)}_c}
+        \exp 
+        \left( 
+            z^{(l)}_{(\color[red]{c^*})}
+        \right)
+    }
+\stopformula
+\stopplaceformula 
+The partial derivatives of the softmax function are:
+\startplaceformula
 \startformula
 \startmathalignment
-\NC {\rm ReLU}(z) \NC = \max(0,z) \NR
-\NC {\rm ReLU({\bi z})} \NC = 
-\startmatrix[
-    left={\left(},
-    right={\right)},
-]
-    \NC {\rm ReLU}(z_0) \NR
-    \NC {\rm ReLU}(z_1) \NR 
-    \NC \vdots \NR
-    \NC {\rm ReLU}(z_n) \NR
-\stopmatrix
+\NC 
+\frac
+    {
+        \partial a^{(l)}_{(\color[red]{c})}
+    }{
+        z^{(l)}_{(\color[red]{c})}
+    }
+\NC = 
+\frac
+    {
+        \exp \left( z^{(l)}_{(\color[red]{c})} \right)
+        \sum_{\color[red]{c^*} = 0}^{\eta^{(l)}_c}
+        \exp 
+        \left( 
+            z^{(l)}_{(\color[red]{c^*})}
+        \right)
+        -
+        \left(
+            \exp \left( z^{(l)}_{(\color[red]{c})} \right)
+        \right)^2
+    }{
+        \left(
+            \sum_{\color[red]{c^*} = 0}^{\eta^{(l)}_c}
+            \exp 
+            \left( 
+                z^{(l)}_{(\color[red]{c^*})}
+            \right)
+        \right)^2
+    }
+= a^{(l)}_{(\color[red]{c})} - \left( a^{(l)}_{(\color[red]{c})} \right)^2
+= a^{(l)}_{(\color[red]{c})} (1 - a^{(l)}_{(\color[red]{c})})
 \NR
-\NC {\rm ReLU(Z)} \NC = 
-\startmatrix[
-    left={\left(},
-    right={\right)},
-]
-    \NC {\rm ReLU}(z_{0,0})
-    \NC {\rm ReLU}(z_{0,1})
-    \NC \dots
-    \NC {\rm ReLU}(z_{0,n})
-    \NR 
-    \NC {\rm ReLU}(z_{1,0})
-    \NC {\rm ReLU}(z_{1,1})
-    \NC \dots
-    \NC {\rm ReLU}(z_{1,n})
-    \NR 
-    \NC \vdots
-    \NC \vdots
-    \NC \ddots
-    \NC \vdots
-    \NR 
-    \NC {\rm ReLU}(z_{m,0})
-    \NC {\rm ReLU}(z_{m,1})
-    \NC \dots
-    \NC {\rm ReLU}(z_{m,n})
-    \NR 
-\stopmatrix
-\NR
-\NC {\rm ReLU}({\bi Z}) \NC = \ldots \NR
+\NC 
+\frac
+    {
+        \partial a^{(l)}_{(\color[red]{c})}
+    }{
+        z^{(l)}_{(\color[darkred]{c'})}
+    }
+\NC =
+- \frac
+    {
+        \exp 
+        \left( 
+            z^{(l)}_{(\color[red]{c})}
+        \right)
+                \exp 
+        \left( 
+            z^{(l)}_{(\color[darkred]{c'})}
+        \right)
+    }{
+        \left(
+            \sum_{\color[red]{c^*} = 0}^{\eta^{(l)}_c}
+            \exp 
+            \left( 
+                z^{(l)}_{(\color[red]{c^*})}
+            \right)
+        \right)^2
+    }
+=
+- a^{(l)}_{(\color[red]{c})} a^{(l)}_{(\color[darkred]{c'})}
 \stopmathalignment
 \stopformula
-The index notation used here is only for illustration purposes with no semantic meaning.
+\stopplaceformula
+Where $\color[darkred]{c'} \ne \color[red]{c}$.

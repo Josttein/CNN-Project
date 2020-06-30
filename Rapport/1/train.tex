@@ -1,0 +1,17 @@
+The major idea which is the reason why neural networks perform at so high levels is the idea of training them using a cost function.
+The cost function is a function that we insert at the end of a neural network.
+The cost function takes the output of the network as its input and, together with a predetermined set of correct values, it determines the score of the network.
+The score or {\em the cost} of a neural network is a single number that describes how well the network performed for a given input.
+The better the network performs the lower the cost will be.
+
+We use cost functions to train neural network by giving them several thousand inputs and calculating the average cost of all these inputs.
+This average cost is then used to enhance the parameters of the network by adjusting them according to the networks performance.
+
+The idea of the cost function lies at the heart of why neural networks work.
+But it is worth noting that it is also somewhat limiting.
+For us to have a cost function availiable, we need to have a dataset with not only suitable inputs for a neural network but also, correct values or {\em labels} for each of these inputs.
+More often than not, humans have to manually provide these labels which somewhat restricts what data we can train neural networks on.
+
+The cost function is also callled the loss function.
+In this paper we use the term loss function to refer to the function which calculates the {\em cost} of a network for a single output.
+While the cost function we use to refer to the average of all the loss function outputs.

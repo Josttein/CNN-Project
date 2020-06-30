@@ -1,75 +1,80 @@
-% Set the main language to French
 \mainlanguage[en]
-
 \setupbodyfont[10pt]
-
 \setupindenting[yes, medium]
-
 \setuppagenumbering[state=start, location={fotter,middle}]
 \setupuserpagenumber[state=start]
-
-% Allow for colors
 \setupcolors[state=start]
-
-% ToC and LoF setups
 \setupheadtext[content=Table of contents]
-% alternative=c, space to the page number is filled with dots
+\setuplist[section][
+   width=5mm,
+   after={\blank[small]},
+   style=bold,
+   color=red,
+]
+\setuplist[subsection][
+   margin=10mm,
+   width=1.8em,
+]
+\setuplist[subsubsection][
+   margin=15mm,
+   width=2.8em,
+]
+\setuphead[subject][
+   style=\tfb\it,
+   align=middle,
+   after={\blank[1cm]},
+]
+\setuphead[section][
+   style=\tfb\bf,
+]
+\setuphead[subsection][
+   style=\tfa\bf,
+]
+\setuphead[subsubsection][
+   style=\tf\bf,
+   alternative=paragraph,
+]
+\setuptyping[
+   margin=yes,
+   lines=yes,
+   numbering=line,
+   before={\blank[medium]},
+   after={\blank[medium]},
+]
 
-\setuplist[section]
-   [width=5mm,
-    after={\blank[small]},
-    style=bold,
-    color=red]
-
-\setuplist[subsection]
-   [margin=10mm,
-    width=1.8em]
-
-\setuplist[subsubsection]
-   [margin=15mm,
-    width=2.8em]
-
-\setuphead[subject]
-   [style=\tfb\it,
-    align=middle,
-    after={\blank[1cm]}]
-
-\setuphead[section]
-   [style=\tfb\bf]
-
-\setuphead[subsection]
-   [style=\tfa\bf]
-
-\setuphead[subsubsection]
-   [style=\tf\bf,
-    alternative=paragraph]
-
+\setupinteraction[state=start]
 \useURL[github][https://github.com/Alescontrela/Numpy-CNN.git]
 \useURL[conv-operation-source][https://miro.medium.com/max/1052/0*WW3aJq2B8V2gLzd3.]
 
-\definebtxdataset[main]
-\usebtxdataset[main][src.bib]
-\setupbtx[dataset=main]
-\usebtxdefinitions[ieee]
-\definebtxrendering[mainlist][ieee][dataset=main]
+\definebtxdataset[src]
+\usebtxdataset[src][src.bib]
+\setupbtx[dataset=src]
+\loadbtxdefinitionfile[aps]
+\definebtxrendering[mine][aps][
+   dataset=src,
+   numbering=yes,
+   method=dataset,
+]
+
 
 \starttext
 
 \startfrontmatter
-\input intro.tex
+\input 0/intro.tex
 \completecontent[alternative=c]
 \stopfrontmatter
 
-
 \startbodymatter
-\input new.tex
-\input nn.tex
-\input cnn.tex
-\input imp.tex
-\input conc.tex
+\input 1/deep.tex
+\input 2/comp.tex
+\input 3/imp.tex
+\input 4/conc.tex
 \stopbodymatter
 
 \startbackmatter
-\placebtxrendering[mainlist][method=global]
+\startsection[title=Bibliography]
+\placelistofpublications[mine]
+\stopsection
 \stopbackmatter
+
 \stoptext

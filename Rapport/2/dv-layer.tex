@@ -1,18 +1,71 @@
-Descriptive text \ldots
+The downsampling layer of a convolutional neural network is a special \quote{non-thinking} layer.
+The prupose of the downsampling is to reduce the data flowing through the network.
+Potentially reducing the redudancy present in the data.
+A downsampling layer also offers a significant speed improvment and reduced memory footprint of the network on the computer hardware.
 
-Equations which give the dimensional relations.
+There are two common methods of performing downsampling: average pooling and max pooling.
+Max pooling is in almost all cases the better alternative and the one used in our example network later.
+So here we are only going to be focusing on downsampling by max pooling.
 
-The equation which governs the forward operation of the layer is
-\startplaceformula[reference=pl:forward:neuron]
+A downsampling layer takes as its input a multi-channel data stream of scalar matricies.
+In maxpooling, the downsampling is performed by scanning a predetermined size of the input matrices at a time, selecting the largets value and placing it in an output matrix.
+
+Like the kernel in the convolutional layer the \quote{downsampler} can use strides larger than $1$ while scanning their input matrix.
+Figure~\in[max-demo] illustrates a maxpooling operation with a stride of two. 
+
+\startplacefigure[
+    reference=max-demo,
+    location=bottom,
+    title={Downsampling accross an input matrix \cite[escontrela_2018].}
+]
+\startcombination[2*2]
+{\externalfigure[Images/downsamp-1.jpg]}{}
+{\externalfigure[Images/downsamp-2.jpg]}{}
+{\externalfigure[Images/downsamp-3.jpg]}{}
+{\externalfigure[Images/downsamp-4.jpg]}{}
+\stopcombination
+\stopplacefigure
+
+The size of the downsampling region is for the designer of the neural network to decide.
+Let $\delta_x$ and $\delta_y$ denote this size.
+Let $s_x$ and $s_y$ be the strides in the xy-directions. 
+Let $l$ be the index of a downsampling layer.
+With these notations, we can write the relationship between the input and output layers dimentions.
+\startplaceformula
 \startformula
 \startmathalignment
-\NC a^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y}) \NC =
+\NC \eta^{(l)}_c \NC = \eta^{(l-1)}_c \NR
+\NC \eta^{(l)}_x \NC = 
+\left\lfloor
+    \frac
+        {
+            \eta^{(l-1)}_x - \delta_x 
+        }{
+            s_x
+        }
+\right\rfloor +1 \NR
+\NC \eta^{(l)}_y \NC = 
+\left\lfloor
+    \frac
+        {
+            \eta^{(l-1)}_y - \delta_y 
+        }{
+            s_y
+        }
+\right\rfloor +1 \NR
+\stopmathalignment
+\stopformula
+\stopplaceformula
+
+The equation which governs the forward operation of this layer is:
+\startplaceformula[reference=dv:forward:neuron]
+\startformula
+a^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y}) =
 {\rm maxpool}
 \left(
     a^{(l-1)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y})
 \right)
-\NR
-\NC \NC =
+ =
 \max_{
     \startsubstack
         \NC r_x \in [0 \, .. \, \delta_x] \NR
@@ -22,60 +75,49 @@ The equation which governs the forward operation of the layer is
 \left(
     a^{(l-1)}_{(\color[red]{c})} (\color[red]{x}s_x + r_x, \color[red]{y}s_y + r_y)
 \right)
-\NR
-\stopmathalignment
 \stopformula
 \stopplaceformula
-Going to the layer level is straightforward.
-\startformula
-A^{(l)}_{(\color[red]{c})} = 
-\startmatrix[
-    left={\left(},
-    right={\right)},
-]
-    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{0}, \color[red]{0}) 
-    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{0}, \color[red]{1}) 
-    \NC \dots 
-    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{0}, \color[red]{\eta^{(l)}_y}) 
-    \NR
-    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{1}, \color[red]{0}) 
-    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{1}, \color[red]{1}) 
-    \NC \dots 
-    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{1}, \color[red]{\eta^{(l)}_y}) 
-    \NR
-    \NC \vdots
-    \NC \vdots
-    \NC \ddots 
-    \NC \vdots
-    \NR
-    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{\eta^{(l)}_x}, \color[red]{0}) 
-    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{\eta^{(l)}_x}, \color[red]{1}) 
-    \NC \dots 
-    \NC a^{(l)}_{(\color[red]{c})} (\color[red]{\eta^{(l)}_x}, \color[red]{\eta^{(l)}_y}) 
-    \NR
-\stopmatrix
-\stopformula
+The use of the $a$ variables alert the reader that the downsampling layer does not need an activation function hence we skip the $z$ directly.
 
-Which yields the rather boring layer equation
+The equation which governs backpropagation can be calculated using equation~\in[dv:forward:neuron].
 \startformula
-{\bi A}^{(l)} = 
-\startmatrix[
-    left={\left(},
-    right={\right)},
-]
-    \NC A^{(l)}_{(\color[red]{0})}
-    \NC A^{(l)}_{(\color[red]{1})}
-    \NC \dots
-    \NC A^{(l)}_{(\color[red]{\eta^{(l)}_c})}
-    \NR
-\stopmatrix
-\stopformula
-
-\startplaceformula[reference=mp:forward:layer]
-\startformula
-{\bi A}^{(l)} = {\rm maxpool}
+\frac
+    {
+        \partial a^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y})
+    }{
+        \partial a^{(l-1)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y})
+    }
+=
+\startcases
+\NC 1 \NC if $a^{(l-1)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y}) = {\rm maxpool}
 \left(
-    {\bi A}^{(l-1)}
-\right)
+    a^{(l-1)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y})
+\right)$ \NR
+\NC 0 \NC otherwise \NR
+\stopcases
+\stopformula
+By the chain rule we get:
+\startplaceformula
+\startformula
+\frac
+    {
+        \partial \ell
+    }{
+        \partial a^{(l-1)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y})
+    }
+=
+\startcases
+\NC \frac
+    {
+        \partial \ell
+    }{
+        \partial a^{(l)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y})
+    }
+\NC if $a^{(l-1)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y}) = {\rm maxpool}
+\left(
+    a^{(l-1)}_{(\color[red]{c})} (\color[red]{x}, \color[red]{y})
+\right)$ \NR
+\NC 0 \NC otherwise \NR
+\stopcases
 \stopformula
 \stopplaceformula

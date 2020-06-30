@@ -1,0 +1,70 @@
+\startsection[title=Layers of convolutional neural networks]
+
+In this section we are going to look at the fundamental equations which govern the operation of each layer of a convolutional neural network.
+The equations we are going to be looking at are primarily the \quote{lowest level} ones, relating each number from the previous layer to each number in the next layer.
+
+\startsubsubject[title=Terminology and notation]
+Before we get started we need to introduce some terms and notation.
+Scalars will be represented with a lowercase letter (e.g.\ $x$).
+Vectors will be represented with a bold lowercase letter (e.g.\ $\bi x$).
+Matricies will be represented with an uppercase letter (e.g.\ $X$).
+Vectors of matricies---vectors where each entry is a matrix---will be represented with a bold uppercase letter (e.g.\ $\bi X$).
+This scheme has the added benefit that for the most part, aggregates of a layer will be represented in bold while data in individual channels will be represented in normal style letters.
+
+Speaking of layers we need some symbols for the various parts that make up a layer.
+Firstly we will need symbols for the two principle components of a neuron.
+Namely its weights and its bias.
+Weights will be represented with the letter \quote{w} while the bias will be represented with the letter \quote{b}.
+The preliminary output of a neruon (or layer of neurons), before it is passed through an activation function, will be represented with the letter \quote{z}.
+The output after activation will be represented with the letter \quote{a}.
+Where does one layer end and the next one begin?
+Everything after the previous layer's activation up until and including the current layer's activation constitues the layer in question.
+
+We need the ability to reference specific positions in each layer and for that we need {\em a lot} of indexes.
+Since we want our mathematics to match our code, to a certain extent, all the indices used in this paper will start at $0$.
+The layer index which tells us which layer we are looking at will be written using a parenthetical superscript (e.g.\ ${\bi a}^{(l)}$ is the activation vector of layer $l$).
+The channel index which tells us which channel we are looking at will be written using a parenthetical subscript (e.g.\ $a^{(l)}_{(c)}$ is the scalar activation of layer $l$ in channel $c$).
+The output of each neuron in a layer becomes a channel in the next layer.
+To reference both the input and output channel, a double parenthetical subscript will be used (e.g.\ $w^{(l)}_{(c,c')}$ is the scalar weight in layer $l$ connecting channel $c$ from layer $l$ to channel $c'$ in layer $l-1$).
+To reference positions within a matrix we will use regular xy-coordinates (e.g.\ $a(x,y)$ is the scalar in row $x$ at column $y$).
+Equations which relate a previous layer to the next one will generally use blue color to makr indicies belonging to the previous layer.
+Red color will be used to mark indices beloning to the next layer.
+
+We will often need to know the {\em dimensions} of layer.
+How many channels does it have and what are the sizes of the matrices in that layer.
+These dimensions will be written using the greek letter eta ($\eta$) with a layer index and a subscript to identify which dimention is expressed.
+A \quote{c} subscript means it is the number of channels in the layer {\em minus one}.
+A \quote{x} and \quote{y} subscript means it is row and column length {\em minus one} respectivly.
+We use the letter $\eta$ instead of $n$ to remind the reader that all dimensions are substracted 1, because we want all our indices to start at zero.
+As an example, if layer $3$ has eight individual channels then $\eta^{(3)}_c = 7$.
+In addition to the $\eta$ dimentions we are going to need the dimentions of various weight matricies (kernels).
+These will use the same kind of notation but with $k$ instead of $\eta$.
+
+The inital input to a network can be though of as the first activation to the network.
+So we are going to denote the inital input using the appropriate \quote{a} letter with a zero in parenthetical subscript.
+\stopsubsubject
+
+
+\startsubsection[title=Fully-connected layer]
+\input 2/fc-layer.tex
+\stopsubsection
+
+\startsubsection[title=Convolutional layer]
+\input 2/cv-layer.tex % TODO
+
+\startsubsubsection[title=Where is the convolution?]
+\input 2/where.tex % TODO
+\stopsubsubsection
+\stopsubsection
+
+\startsubsection[title=Downsampling layer]
+\input 2/dv-layer.tex
+\stopsubsection
+
+\startsubsection[title=The activation function]
+\input 2/activ.tex
+\stopsubsection
+
+\startsubsection[title=Output layer]
+\input 2/out.tex
+\stopsubsection

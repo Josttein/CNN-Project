@@ -1,0 +1,54 @@
+The output layer is not really a layer at all.
+Here we instead find the loss function of the network (asuming it is undergoing traning).
+There are a multitude of loss functions available which one can use at the end of a neural network.
+
+In the network that we are using for our example, the function in use is the {\em cross category entropy} loss function.
+Let $l$ be the last \quote{proper} layer of the network.
+The cross category entropy loss function with output here denoted by $\ell$ is defined as:
+\startplaceformula[reference=ot:forward]
+\startformula
+\ell = 
+- \sum_{\color[red]{c} = 0}^{\eta^{(l)}_c} 
+y_{(\color[red]{c})}
+\log \left(
+    a^{(l)}_{(\color[red]{c})}
+\right)
+\stopformula
+\stopplaceformula
+Where $y_{(\color[red]{c})}$ is the correct value for the data in channel $\color[red]{c}$.
+$a^{(l)}_{(\color[red]{c})}$ is the last activation of the network. 
+Which we here interprete as the probability the network assigned to $y_{(\color[red]{c})}$ being the correct answer.
+
+We can use equation~\in[ot:forward] to calculate the inital partial derivaties of the backward propagation operation.
+They turn out to be:
+\startplaceformula
+\startformula
+\frac
+    {
+        \partial \ell
+    }{
+        \partial a^{(l)}_{(\color[darkred]{c'})}
+    }
+=
+\frac
+    {
+        \partial
+    }{
+        \partial a^{(l)}_{(\color[darkred]{c'})}
+    }
+\left(
+    - \sum_{\color[red]{c} = 0}^{\eta^{(l)}_c} 
+    y_{(\color[red]{c})}
+    \log \left(
+        a^{(l)}_{(\color[red]{c})}
+    \right)
+\right)
+=
+- \frac
+    {
+        y_{(\color[darkred]{c'})}
+    }{
+        a^{(l)}_{(\color[darkred]{c'})}
+    }
+\stopformula
+\stopplaceformula

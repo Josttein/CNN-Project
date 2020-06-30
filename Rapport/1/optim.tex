@@ -1,0 +1,40 @@
+When we train a neural network we calculate its loss for several thousand inputs, average it to get the cost and use it to enhance the network.
+The way in which we enhance the network with this information is with various optimization algorithms.
+Note that the cost function is nothing more than a real valued non-negative function.
+Which we can use the tools of analysis to minimize.
+
+The most commonly used algorithm used to minimize nerual network cost functions is gradient descent (see Figure~\in[gradient]).
+The gradient of the cost function tells us which of the parameters in the network the cost function is most sensitive to.
+This tells us which parameters of the network we should adjust---namely the most sensitive ones---in order to minimize the cost function as much as possible.
+In geometric terms, the gradient shows which direction in the space of the networks parameters that would cause the highets increase in the value of the cost function.
+Incidently, the opposite direction is the direction in this space which lowers the cost function as much as possible.
+This is why we calculate the gradient and then use its negative inverse to adjust the networks parameters. 
+
+The gradient descent algorithm consists, in large parts, of the following:
+\startitemize[n]
+\startitem[step1]
+    Calculating the cost of the network for a large amount of input data.
+\stopitem
+\startitem[step2]
+    Adjusting the parameters of the network with the negative gradient of the cost function.
+\stopitem
+\startitem
+    Repating steps \in[step1] through \in[step2] enough times until the cost of the network is sufficiently low. 
+\stopitem
+\stopitemize
+
+An inherent limitation of the gradient descent algorithm is that the propoerties of the cost function's extrema are not known a priori.
+The cost function could have, and probably does have, local minima which the gradient descent algorithim will converge towards and then get stuck in.
+Luckily though, in practice it turns out that the local minima of the cost functions used to train neural networks are sufficiently low so as to not cause and problems.
+
+\startplacefigure[
+    reference=gradient,
+    location=bottom,
+    title={Visualization of gradient descent \cite[s_2019].},
+]
+\externalfigure[Images/gradient-descent-illustration.jpg][width=.5\textwidth]
+\stopplacefigure
+
+In the context of training a neural network, we have yet to introduce a way to calculate this very important gradient of the cost function. 
+To do so, we first need to determine a mathematical expression of the neural network itself.
+In fact, the network typically consists of more than just linear functions.
