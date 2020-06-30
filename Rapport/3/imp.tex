@@ -107,9 +107,6 @@ def maxpoolBackward(dpool, orig, f, s):
         
     return dout
 \stoptyping
-
-
-
 \stopsubsection
 
 \startsubsection[title=Various functions]
@@ -121,8 +118,7 @@ def softmax(X):
 
 def categoricalCrossEntropy(probs, label):
     return -np.sum(label * np.log(probs))
-\stopstyping
-
+\stoptyping
 \stopsubsection
 
 \startsubsection[title=Forward and backward operation of network]
@@ -280,8 +276,6 @@ def adamGD(batch, num_classes, lr, dim, n_c, beta1, beta2, params, cost):
     params = [f1, f2, w3, w4, b1, b2, b3, b4]
     
     return params, cost
-
-
 \stoptyping
 
 \starttyping
@@ -331,40 +325,13 @@ def train(num_classes = 10, lr = 0.01, beta1 = 0.95, beta2 = 0.99, img_dim = 28,
         
     return cost
 \stoptyping
-
-
-  
-
 \stopsubsection
 
 
-\startsubssection[title=Results]
+\startsubsection[title=Results]
 Using our own laptops, we initially trained the network on the entire MNIST data set, which is in fact 10.000 labeled images of handwritten digits.
 The results are are represented on figure ().
 Though the network's predictions were accurate, we found that the eight-hour total run-time of the training phase  was too long.
-To remedy this, we simply reduced the training set by a factor of 2 then by a factor of 16, respectively achieving a run-time of 4 hours and then 30 minutes. 
-
-
-
-
-
+To remedy this, we simply reduced the training set by a factor of 2 then by a factor of 16, respectively achieving a run-time of 4 hours and then 30 minutes.
 \stopsubsection
-
-\startitemize
-\startitem 
-The problem the network is going to tackle (classic MNIST image recognition)
-\stopitem
-\startitem
-The architecture of the network
-\stopitem
-\startitem
-Choice of various functions and their associated code
-\stopitem
-\startitem
-Results with time performance
-\stopitem
-\startitem
-Possible Modifications
-\stopitem
-\stopitemize
 \stopsection
