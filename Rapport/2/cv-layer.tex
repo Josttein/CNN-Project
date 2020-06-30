@@ -1,4 +1,4 @@
-The convolutional layer is an extension of the regular fully-connected layer.
+The convolutional layer is in many ways an extension of the regular fully-connected layer.
 One of the issues with regular fully-connected layers is that these kinds of layers only accept input that is in the form of a vector.
 This means that for applications where it is not natural for the input to be in a vector format, say image recognition, the input first has to be translated to a vector format.
 Usually this results in a loss of information contained in the input.
@@ -10,12 +10,13 @@ If the image's dimensions prior to being flattend is not known, it is impossible
 
 To fix this problem, we can use a \quote{simple} solution.
 Instead of having the neuron contain a vector of weights, let it have an array of weights.
+These weight arrays are often called the neurons {\em kernel} or {\em filter}.
 If we change the neuron's vector of weights into an array, we also need to change the operation that is used to combine the weights with the input (which in a neuron of a multilayer percepetron is the dot product).
 There are two things to consider here.
 The purpose of the weights is to look for features or {\em patterns} in the input---by emphasizing or deemphasizing certain aspects---and the operation must reflect this purpose of the weights.
 Furthermore, the result of the operation should be a single number which, in a sense, representes the neurons \quote{initial} confidence that the feature it is looking for is present in the input.
 The operation which does both of these things is the {\em Hadamard product}.
-The Hadamard product can be viewed as an extension of the dot product for two dimentional arrays.
+The Hadamard product can be seen as an extension of the dot product for two dimentional arrays.
 It combines two arrays---of the same dimensions---by multiplying corresponding entries together and summing the results.
 Which is precisly what the dot product does with two vectors.
 
@@ -24,12 +25,13 @@ If we were to proceed analogically to how a multilayer percepetron works, the ar
 \quote{Connecting} each value in the input to an individual weight in the neuron.
 But this approach means that each neuron, in principle, looks for a single feature in the entire input at once.
 A more refined approach, is to let the neuron's weight array be smaller in size than its input.
-Instead of applying the weight array (using the Hadamard product) to the entire input at once, we apply it (still using the Hadamard product) to portions of the input seperately.
+Instead of applying the weight array (using the Hadamard product) on the entire input at once, we apply it (still using the Hadamard product) to portions of the input seperately.
 Intuitivly, this means that the weight arrays are \quote{scanned} across the entire input image.
-Figure~\in[conv-operation] illustrates this concept.
+Figure~\in[conv-operation] illustrates this idea of the weight array scanning the input matrix to produce the output matrix.
 
-This allows the neuron to be trained to look for a single feature, such as a \quote{sharp edge} or a \quote{round corner}, in multiple areas of the input.
-The result of this method will no longer be a single number representing how \quote{initialy} confident the neuron is that a particular feature is present in the input {\em\bf as a whole}.
+A weight array that is smaller than the input matrix allows the neurons to be trained to look for a single small feature, such as a \quote{sharp edge} or a \quote{round corner}.
+Which in can look for in multiple areas of the input.
+As figure~\in[conv-operation] clearly shows, the output of the neurons is no longer be a single number representing how \quote{initialy} confident the neuron is that a particular feature is present in the input {\em\bf as a whole}.
 Rather, the result becomes a {\em feature map}.
 Another two dimentional array which representes how \quote{initialy} confident the neuron is that a particular feature is present in {\em\bf specific locations} of the input.
 
@@ -51,20 +53,26 @@ Another two dimentional array which representes how \quote{initialy} confident t
 \stopcombination
 \stopplacefigure
 
-Going one step further, we can allow the neuron to treat inputs of not only a single two dimentional array, but several two dimentional arrays.
-A typical example where the input would consists of several interlinked two dimentional arrays is RGB images.
+Of course each neuron must be able to handle more than one input data stream each with its own input data matrix.
+A typical example of a case where multiple streams are needed is the treatment of RGB images.
 An RGB image consists of three arrays of pixel values (numbers) that desribe how red, green and blue an image is in each pixel.
-The number of interlinked two dimentional arrays present in the input, is known as the number of {\em channels} that the input has.
-In order for our neuron to treat inputs with more than one channel we let the neuron have as many channels as the input.
-That is to say, we equip the neuron with a weight array for each channel in the input.
-For each channel the weight arrays are applied to the input (using Hadamard) and the result in each channel is combined to form a final single feature map.
+Such an input would be split into three channels before being passed to a convolutional layer.
+The neurons handle multiple data streams by simple adding together the feature maps produces by each data stream.
+Figure~\in[cv-network] gives an overview of a convolutional layer.
+The channels are drawn as pipes to emhpasize that they contain matrix data rather than scalar values.
 
-\startsubsubsection[title=The stride]
-So far we have considered a feature map produced by scanning the kernel over the input one {\em step} at a time.
-As is demonstrated in Figure~\in[conv-operation] on page~\at[conv-operation].
-However, we could let the kernel take longer steps instead of moving just one row or one column at a time.
-The \quote{length} of each step that the kernel takes while moving over the input is what is known as the {\em stride}.
-Which we can further divide into the horisontal stride $s_x$ and vertical stride $s_y$.
+\startplacefigure[
+    reference=cv-network,
+    location=bottom,
+    title={A diagram of a convolutional layer},
+]
+\externalfigure[Images/cv-network.pdf][width=.7\textwidth]
+\stopplacefigure
+
+\startsubsubsection[title=Strides and zero padding]
+There are two other aspects of convolutional layers that we have yet to discuss: strides and zero padding.
+The stride is the number of rows/columns that the kernel moves over the input matrix between each scanning.
+Figure~\in[conv-operation] shows a scenario where the stride is equal to one.
 
 What purpose does altering the stride serve?
 Increasing the stride reduces the size of the resulting feature map since it is computed at fewer areas.
