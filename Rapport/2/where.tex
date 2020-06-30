@@ -7,20 +7,20 @@ s(t) = (k * m)(t) = \int_{{-}\infty}^{{+}\infty} k(x) \cdot m(t-x) \, {\rm d}x
 \stopplaceformula
 \startplaceformula[reference=disc-conv]
 \startformula
-s(\color[red]{x}) = (k * m)(\color[red]{x}) = \sum_{\color[blue]{x} = {-}\infty}^{{+}\infty} k(\color[blue]{x}) \cdot m(\color[red]{x}-\color[blue]{x})
+s(\color[red]{x}) = (k * m)(\color[red]{x}) = \sum_{\color[blue]{x'} = {-}\infty}^{{+}\infty} k(\color[blue]{x'}) \cdot m(\color[red]{x}-\color[blue]{x'})
 \stopformula
 \stopplaceformula
 
-For continuous (Eq.~(\in[cont-conv])) and discrete (Eq.~(\in[disc-conv])) functions respectivly.
-On a computer, we are in practice always working with discrete convolutions so for us the convolution of interest is Eq.~(\in[disc-conv]).
+For continuous (eq.~\in[cont-conv]) and discrete (eq.~\in[disc-conv]) functions respectivly.
+On a computer, we are in practice always working with discrete convolutions so for us the convolution of interest is equation~\in[disc-conv].
 If we make the functions $k$ and $m$ two dimentional---they take two arguments as their input---their convolution also becomes two dimentional.
 
 \startplaceformula[reference=twodim-disc-conv]
 \startformula
 s(\color[red]{x}, \color[red]{y}) = (k * m)(\color[red]{x}, \color[red]{y}) =
-\sum_{\color[blue]{y} = {-}\infty}^{{+}\infty}
-\sum_{\color[blue]{x} = {-}\infty}^{{+}\infty}
-k(\color[blue]{x}, \color[blue]{y}) \cdot m(\color[red]{x}-\color[blue]{x}, \color[red]{y} - \color[blue]{y})
+\sum_{\color[blue]{y'} = {-}\infty}^{{+}\infty}
+\sum_{\color[blue]{x'} = {-}\infty}^{{+}\infty}
+k(\color[blue]{x'}, \color[blue]{y'}) \cdot m(\color[red]{x}-\color[blue]{x'}, \color[red]{y} - \color[blue]{y'})
 \stopformula
 \stopplaceformula
 
@@ -28,22 +28,23 @@ k(\color[blue]{x}, \color[blue]{y}) \cdot m(\color[red]{x}-\color[blue]{x}, \col
 Let us known say that $k$ and $m$ are two functions which each index an array of two dimentions.
 Meaning that the functions take two indexes as their input arguments.
 Let us further assume that $k$ and $m$'s arrays are zero at any index but for those contained in a small area.
-For $k$ that area is $[0 \, .. \, n_x(k) - 1] \times [0 \, .. \, n_y(k) - 1]$ and for $m$ it is $[0 \, .. \, n_x(m) - 1] \times [0 \, .. \, n_y(m) - 1]$.
+For $k$ that area is $[0 \, .. \, \eta_x(k)] \times [0 \, .. \, \eta_y(k)]$ and for $m$ it is $[0 \, .. \, \eta_x(m)] \times [0 \, .. \, \eta_y(m)]$.
 In this case, the convolution of $k$ and $m$ reduces to
 
 \startplaceformula[reference=twodim-disc-conv-finite]
 \startformula
 s(\color[red]{x}, \color[red]{y}) = (k * m)(\color[red]{x}, \color[red]{y}) = 
-\sum_{\color[blue]{y} = 0}^{n_y(k) - 1} 
-\sum_{\color[blue]{x} = 0}^{n_x(k) - 1} 
-k(\color[blue]{x}, \color[blue]{y}) \cdot m(\color[red]{x}-\color[blue]{x}, \color[red]{y} - \color[blue]{y})
+\sum_{\color[blue]{y'} = 0}^{\eta_y(k)} 
+\sum_{\color[blue]{x'} = 0}^{\eta_x(k)} 
+k(\color[blue]{x'}, \color[blue]{y'}) \cdot m(\color[red]{x}-\color[blue]{x'}, \color[red]{y} - \color[blue]{y'})
 \stopformula
 \stopplaceformula
 
-Where $\color[red]{x} \in [0 \, .. \, n_x(m) - 1]$ and $\color[red]{y} \in [0 \, .. \, n_y(m) - 1]$.
+Where $\color[red]{x} \in [0 \, .. \, \eta_x(m)]$ and $\color[red]{y} \in [0 \, .. \, \eta_y(m)]$.
 
-The resemblance to Eq.~(\in[devel-feature-1]) is already apparent but there is a subtle difference.
-Eq.~(\in[twodim-disc-conv-finite]) subtracts the blue indices from the red ones while Eq.~(\in[devel-feature-1]) adds them together.
+We can already see that equation~\in[twodim-disc-conv-finite] resembles the \quote{green} sum in equation~\in[cv:forward:neuron].
+But there is a subtle difference.
+In equation~\in[twodim-disc-conv-finite] that indices are subtracted from one another while in equation~\in[twodim-disc-conv-finite] we add them together.
 The effect of subtracting instead of adding renders the convolution operation $(*)$ commutative.
 
 \startplaceformula[reference=conv-commute]
@@ -57,11 +58,12 @@ The effect of subtracting instead of adding renders the convolution operation $(
 \stopplaceformula
 
 \indentation
-So what is the effect of replacing the pluses in Eq.~(\in[devel-feature-1]) with minuses?
+So what is the effect of replacing the pluses in equation~\in[cv:forward:neuron] with minuses?
 Well at first glance it seems that you cannot do it as you would end up with indexes that are out of bounds for the input image $M$.
 But let us assume that $M$ behaves as $m$ meaning that it is zero everywhere where the indices are out of bounds.
-What you find if you visualize the computation of $F$ using Eq.~(\in[twodim-disc-conv-finite]), is that it is effectivly the same as using Eq.~(\in[devel-feature-1]) with the kernel flipped about its horisontal and vertical axes.
+What you find if you visualize the computation of $z$ using equation~\in[twodim-disc-conv-finite], is that it is effectivly the same as using equation~\in[cv:forward:neuron] with the kernel flipped about its horisontal and vertical axes.
 Which in turn means that flipping the kernel relative to the input, renders the computation of the feature map commutative.
+
 But this is a property that is usefull in mathematical contexts and less so for computing neural networks.
-It is Eq.~(\in[devel-feature-1]) that is commonly used in macine learning applications and the associated mathematical operations is actually what is called the {\em cross-correlation}.
+It is equation~\in[cv:forward:neuron] that is commonly used in macine learning applications and the associated mathematical operations is actually what is called the {\em cross-correlation}.
 Despite this, neural networks that implement these kinds of neurons are called convolutional even if the underlying mathematical operations is more often than not a close relative of the proper convolution operation.
