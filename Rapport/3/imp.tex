@@ -23,7 +23,7 @@ The output of this layer is passed to the final dense layer, which necessarly co
 \stopplacefigure
 
 \startsubsection[title=Convolution function]
-Here is the python code for the forward convolution operation of a given layer.
+Here is the Python code for the forward convolution operation of a given layer.
 \starttyping
 def convolution(image, filt, bias, s=1):
     '''
@@ -55,7 +55,7 @@ def convolution(image, filt, bias, s=1):
 \stopsubsection
 
 \startsubsection[title=Max pooling]
-Here is the python code for the forward and backward max-pooling operation of the network
+Here is the Python code for the forward and backward max-pooling operation of the network
 
 \starttyping
 def maxpool(image, f=2, s=2):
@@ -228,7 +228,7 @@ In this implementation, however, the author has used an algorithm that is shown 
 We will not spend time explaining how it works, but its main principles are very similar to that of the classic gradient descent.
 For each training data in the batch, we evaluate the output of the loss by the forward opartion and retrieve the gradients using the backward operation described earlier. 
 Afterwards, we evaluate the cost function of the batch and adjust the parameters.
-The implementation of this concept in python, is summarized in figure ()
+Here is the implementation of this concept in Python.
 
 \starttyping
 def adamGD(batch, num_classes, lr, dim, n_c, beta1, beta2, params, cost):
@@ -330,8 +330,21 @@ def train(num_classes = 10, lr = 0.01, beta1 = 0.95, beta2 = 0.99, img_dim = 28,
 
 \startsubsection[title=Results]
 Using our own laptops, we initially trained the network on the entire MNIST data set, which is in fact 10.000 labeled images of handwritten digits.
-The results are are represented on figure ().
+The results are are represented on figure~\in[results].
 Though the network's predictions were accurate, we found that the eight-hour total run-time of the training phase  was too long.
 To remedy this, we simply reduced the training set by a factor of 2 then by a factor of 16, respectively achieving a run-time of 4 hours and then 30 minutes.
+
+\startplacefigure[
+    reference=results,
+    location=bottom,
+    title={The network's results},
+]
+\startalignment[center]
+\externalfigure[Images/acc1.PNG][width=.7\textwidth]
+\blank[small]
+\externalfigure[Images/acc3.PNG][width=.7\textwidth]
+\externalfigure[Images/Figure_acc1.png][width=.7\textwidth]
+\stopalignment
+\stopplacefigure
 \stopsubsection
 \stopsection
